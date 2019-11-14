@@ -1,0 +1,21 @@
+@import "src/styles/global/_colors";
+
+footer {
+    padding: 15px 0;
+    background-color: $medium-gray;
+}
+
+.footer-container {
+    padding: 0 30px;
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: baseline;
+    position: relative;
+}
+
+.logo {
+    padding-right: 35px;
+}
