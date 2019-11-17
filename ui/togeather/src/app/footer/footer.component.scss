@@ -1,4 +1,4 @@
-@import "src/styles/global/_colors";
+@import "~src/styles/global/_colors";
 
 footer {
     padding: 15px 0;
@@ -6,9 +6,7 @@ footer {
 }
 
 .footer-container {
-    padding: 0 30px;
-    max-width: 960px;
-    margin: 0 auto;
+    padding: 0 15px;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
