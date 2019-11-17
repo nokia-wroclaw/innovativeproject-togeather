@@ -1,4 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
+/* Here are defined global app styles */
 
 @import "styles/global/_breakpoints";
 @import "styles/global/_colors";
@@ -7,3 +7,10 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: $font-family; }
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 15px;
+  box-sizing: border-box;
+}

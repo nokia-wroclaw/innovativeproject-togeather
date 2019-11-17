@@ -1,0 +1,13 @@
+<header>
+    <div class="container nav">
+        <div class="nav__logo">togEATher</div>
+        <mat-menu #appMenu="matMenu" xPosition="before">
+            <button mat-menu-item>Settings</button>
+            <button mat-menu-item>Log out</button>
+        </mat-menu>
+        <button mat-raised-button [matMenuTriggerFor]="appMenu">
+            Profile
+            <mat-icon>more_vert</mat-icon>
+        </button>
+    </div>
+</header>
