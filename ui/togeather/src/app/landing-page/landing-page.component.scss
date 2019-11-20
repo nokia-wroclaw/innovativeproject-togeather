@@ -1,0 +1,18 @@
+.landing-map {
+  display: block;
+  width: 100%;
+  height: 400px;
+}
+
+.landing-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+
+  &__button {
+    flex-shrink: 1;
+    box-sizing: border-box;
+    width: 250px;
+    margin: 10px;
+  }
+}
