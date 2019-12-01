@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/go-redis/redis"
+	"github.com/jmoiron/sqlx"
 
 	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/server"
 )
@@ -15,6 +16,15 @@ func runServer() {
 	if err := http.ListenAndServe(":8000", srvr); err != nil {
 		log.Fatalf("http.ListenAndServe: %v", err)
 	}
+}
+
+// e.g. methods to connect to db, redis go here
+func dbConnect() (*sqlx.DB, error) {
+	connectionString := "user=postgres dbname=postgres password=postgres" +
+		" sslmode=disable"
+
+	db, err := sqlx.Connect("postgres", connectionString)
+	return db, err
 }
 
 func redisConnect() (*redis.Client, error) {
@@ -30,6 +40,3 @@ func redisConnect() (*redis.Client, error) {
 
 	return client, nil
 }
-
-
-// e.g. methods to connect to db, redis go here
