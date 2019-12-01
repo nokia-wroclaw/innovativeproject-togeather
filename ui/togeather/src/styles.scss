@@ -1,1 +1,18 @@
-/* You can add global styles to this file, and also import other style files */
+/* Here are defined global app styles */
+
+@import "~leaflet/dist/leaflet.css";
+
+@import "styles/global/_breakpoints";
+@import "styles/global/_colors";
+@import "styles/global/_fonts";
+@import "styles/global/_mixins";
+
+html, body { height: 100%; }
+body { margin: 0; font-family: $font-family; }
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 15px;
+  box-sizing: border-box;
+}
