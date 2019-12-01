@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	_ "github.com/lib/pq"
 	"github.com/urfave/cli"
 )
 
@@ -41,6 +42,14 @@ func runApp() {
 		log.Fatalf("redis connection error: %s", err.Error())
 	}
 	defer redis.Close()
+
+	db, err := dbConnect()
+	if err != nil {
+		log.Fatalf("db connection error: %s", err)
+	}
+	db.SetMaxOpenConns(10)
+	db.SetMaxIdleConns(5)
+	defer db.Close()
 
 	runServer()
 }
