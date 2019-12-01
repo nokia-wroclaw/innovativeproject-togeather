@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/restaurant"
 	"log"
 	"os"
 
@@ -50,6 +51,9 @@ func runApp() {
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(5)
 	defer db.Close()
+
+	restaurantStore := restaurant.NewStore(db)
+	restaurantService, err := restaurant.NewService()
 
 	runServer()
 }
