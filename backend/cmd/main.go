@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/urfave/cli"
 	"log"
 	"os"
+
+	"github.com/urfave/cli"
 )
 
 func info(app *cli.App) {
@@ -35,6 +36,12 @@ func main() {
 
 func runApp() {
 	// do all the connections here, pass config
+	redis, err := redisConnect()
+	if err != nil {
+		log.Fatalf("redis connection error: %s", err.Error())
+	}
+	defer redis.Close()
+
 	runServer()
 }
 
