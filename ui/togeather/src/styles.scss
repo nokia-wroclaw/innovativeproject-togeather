@@ -16,3 +16,10 @@ body { margin: 0; font-family: $font-family; }
   padding: 0 15px;
   box-sizing: border-box;
 }
+
+.wrapper {
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 100%;
+}
