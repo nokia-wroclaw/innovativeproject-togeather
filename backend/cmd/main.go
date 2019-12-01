@@ -1,12 +1,13 @@
 package main
 
 import (
-	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/restaurant"
 	"log"
 	"os"
 
 	_ "github.com/lib/pq"
 	"github.com/urfave/cli"
+
+	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/restaurant"
 )
 
 func info(app *cli.App) {
@@ -53,8 +54,10 @@ func runApp() {
 	defer db.Close()
 
 	restaurantStore := restaurant.NewStore(db)
-	restaurantService, err := restaurant.NewService()
+	restaurantService := restaurant.NewService(restaurantStore)
 
-	runServer()
+	runServer(
+		restaurantService,
+	)
 }
 
