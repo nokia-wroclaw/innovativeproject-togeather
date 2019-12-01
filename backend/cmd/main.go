@@ -35,6 +35,12 @@ func main() {
 
 func runApp() {
 	// do all the connections here, pass config
+	redis, err := redisConnect()
+	if err != nil {
+		log.Fatalf("redis connection error: %s", err.Error())
+	}
+	defer redis.Close()
+
 	runServer()
 }
 
