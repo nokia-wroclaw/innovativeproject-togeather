@@ -8,6 +8,8 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+
+	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
 )
 
 type Server struct {
@@ -15,7 +17,9 @@ type Server struct {
 	router chi.Router
 }
 
-func New() *Server {
+func New(
+	restaurantService core.RestaurantService,
+) *Server {
 	s := &Server{}
 
 	r := chi.NewRouter()
@@ -29,9 +33,16 @@ func New() *Server {
 
 	// add handlers
 	pingHandler := pingHandler{}
+	restaurantHandler := restaurantHandler{restaurantService:restaurantService}
 
 	r.Route("/api", func(r chi.Router) {
-		r.Get("/ping", pingHandler.ping)
+		r.Route("/restaurant", func(r chi.Router) {
+			r.Get("/{restaurantID}", restaurantHandler.exists)
+		})
+
+		r.Route("/ping", func(r chi.Router) {
+			r.Get("/", pingHandler.ping)
+		})
 	})
 
 	s.router = r

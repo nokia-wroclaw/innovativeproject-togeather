@@ -6,6 +6,8 @@ import (
 
 	_ "github.com/lib/pq"
 	"github.com/urfave/cli"
+
+	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/restaurant"
 )
 
 func info(app *cli.App) {
@@ -51,6 +53,11 @@ func runApp() {
 	db.SetMaxIdleConns(5)
 	defer db.Close()
 
-	runServer()
+	restaurantStore := restaurant.NewStore(db)
+	restaurantService := restaurant.NewService(restaurantStore)
+
+	runServer(
+		restaurantService,
+	)
 }
 
