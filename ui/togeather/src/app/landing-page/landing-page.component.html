@@ -1,0 +1,16 @@
+<div class="container">
+    <form class="landing-location-selection">
+        <mat-form-field>
+            <input matInput placeholder="Choose delivery location">
+        </mat-form-field>
+    </form>
+    <div class="landing-map">
+        <app-map [coords]="coordinates"></app-map>
+    </div>
+    <div *ngIf="coordinates">Your location: {{ 'lat: ' + coordinates?.lat + ' lon: ' + coordinates?.lon }}</div>
+    <div class="landing-buttons">
+        <button class="landing-buttons__button" mat-raised-button>Restaurants list</button>
+        <button class="landing-buttons__button" mat-raised-button>Search for existing lobby</button>
+        <button class="landing-buttons__button" mat-raised-button>Create a lobby</button>
+    </div>
+</div>
