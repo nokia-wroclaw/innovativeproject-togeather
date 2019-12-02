@@ -8,7 +8,7 @@ type (
 	Restaurant struct {
 		ID    int  `json:"id"`
 		Name  string  `json:"name"`
-		Menu  []Meal    `json:"menu"`
+		Menu  []Meal    `json:"menu, omitempty"`
 		Address  string `json:"address"`
 	}
 
@@ -21,9 +21,11 @@ type (
 
 	RestaurantService interface {
 		Exists(ctx context.Context, restaurantID int) (bool, error)
+		ListRestaurants(ctx context.Context) ([]Restaurant, error)
 	}
 
 	RestaurantStore interface {
 		Exists(ctx context.Context, restaurantID int) (bool, error)
+		ListRestaurants(ctx context.Context) ([]Restaurant, error)
 	}
 )

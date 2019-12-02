@@ -17,3 +17,8 @@ func NewService(restaurantStore core.RestaurantStore) core.RestaurantService {
 func (s *service) Exists(ctx context.Context, restaurantID int) (bool, error) {
 	return false, nil
 }
+
+func (s *service) ListRestaurants(ctx context.Context) ([]core.Restaurant, error) {
+	//TODO
+	return s.restaurantStore.ListRestaurants(ctx)
+}
