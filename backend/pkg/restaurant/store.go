@@ -19,30 +19,28 @@ func (s *restaurantStore) Exists(ctx context.Context, restaurantID int) (bool, e
 	return false, nil
 }
 
-func (s *restaurantStore) ListRestaurants(ctx context.Context) ([]core.Restaurant, error) {
-	query := "SELECT id, name, address FROM rests"
-
-	rows, err := s.db.Query(query)
+func (s *restaurantStore) ListRestaurants(ctx context.Context) ([]*core.Restaurant, error) {
+	rows, err := s.db.QueryContext(ctx, `SELECT id, name, address FROM restaurants`)
 
 	if err != nil{
-		//some error
-		//TODO
+		return nil, err
 	}
 	defer rows.Close()
 
-	rests := make([]core.Restaurant, 0)
+	rests := make([]*core.Restaurant, 0)
 	for rows.Next(){
 		rest := core.Restaurant{}
 		err := rows.Scan(&rest.ID, &rest.Name, &rest.Address)
+
 		if err != nil{
-			//some error
-			//TODO
+			return nil, err
 		}
-		rests = append(rests, rest)
+
+		rests = append(rests, &rest)
 	}
+
 	if err = rows.Err(); err != nil{
-		//some error
-		//TODO
+		return nil, err
 	}
 
 	return rests, nil

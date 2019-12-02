@@ -21,11 +21,11 @@ type (
 
 	RestaurantService interface {
 		Exists(ctx context.Context, restaurantID int) (bool, error)
-		ListRestaurants(ctx context.Context) ([]Restaurant, error)
+		ListRestaurants(ctx context.Context) ([]*Restaurant, error)
 	}
 
 	RestaurantStore interface {
 		Exists(ctx context.Context, restaurantID int) (bool, error)
-		ListRestaurants(ctx context.Context) ([]Restaurant, error)
+		ListRestaurants(ctx context.Context) ([]*Restaurant, error)
 	}
 )

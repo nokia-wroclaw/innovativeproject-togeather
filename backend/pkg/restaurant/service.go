@@ -18,7 +18,6 @@ func (s *service) Exists(ctx context.Context, restaurantID int) (bool, error) {
 	return false, nil
 }
 
-func (s *service) ListRestaurants(ctx context.Context) ([]core.Restaurant, error) {
-	//TODO
+func (s *service) ListRestaurants(ctx context.Context) ([]*core.Restaurant, error) {
 	return s.restaurantStore.ListRestaurants(ctx)
 }

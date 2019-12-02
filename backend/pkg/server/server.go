@@ -40,6 +40,10 @@ func New(
 			r.Get("/{restaurantID}", restaurantHandler.exists)
 		})
 
+		r.Route("/restaurants", func(r chi.Router) {
+			r.Get("/", restaurantHandler.listRestaurants)
+		})
+
 		r.Route("/ping", func(r chi.Router) {
 			r.Get("/", pingHandler.ping)
 		})
