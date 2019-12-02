@@ -1,11 +1,10 @@
 package main
 
 import (
-	"log"
-	"net/http"
-
 	"github.com/go-redis/redis"
 	"github.com/jmoiron/sqlx"
+	"log"
+	"net/http"
 
 	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/server"
 )
@@ -28,9 +27,12 @@ func dbConnect() (*sqlx.DB, error) {
 }
 
 func redisConnect() (*redis.Client, error) {
+	//address := os.Getenv("REDIS_URL")
+
+	address := "eather-redis:6379"
 	client := redis.NewClient(
 		&redis.Options{
-			Addr: ":6379",
+			Addr: address,
 		})
 
 	_, err := client.Ping().Result()
