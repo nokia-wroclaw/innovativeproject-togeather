@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
 	"log"
 	"net/http"
 
 	"github.com/go-redis/redis"
 	"github.com/jmoiron/sqlx"
 
+	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
 	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/server"
 )
 
@@ -25,17 +25,18 @@ func runServer(
 
 // e.g. methods to connect to db, redis go here
 func dbConnect() (*sqlx.DB, error) {
-	connectionString := "user=postgres dbname=postgres password=postgres" +
-		" sslmode=disable"
+	connectionString := "host=eather-postgres port=5432 user=postgres " +
+		"password=postgres dbname=postgres sslmode=disable"
 
 	db, err := sqlx.Connect("postgres", connectionString)
 	return db, err
 }
 
 func redisConnect() (*redis.Client, error) {
+	address := "eather-redis:6379"
 	client := redis.NewClient(
 		&redis.Options{
-			Addr: ":6379",
+			Addr: address,
 		})
 
 	_, err := client.Ping().Result()
