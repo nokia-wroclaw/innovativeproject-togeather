@@ -1,15 +1,22 @@
 package main
 
 import (
-	"github.com/go-redis/redis"
-	"github.com/jmoiron/sqlx"
-	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/server"
 	"log"
 	"net/http"
+
+	"github.com/go-redis/redis"
+	"github.com/jmoiron/sqlx"
+
+	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
+	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/server"
 )
 
-func runServer() {
-	srvr := server.New()
+func runServer(
+	restaurantService core.RestaurantService,
+) {
+	srvr := server.New(
+		restaurantService,
+	)
 
 	if err := http.ListenAndServe(":8000", srvr); err != nil {
 		log.Fatalf("http.ListenAndServe: %v", err)
