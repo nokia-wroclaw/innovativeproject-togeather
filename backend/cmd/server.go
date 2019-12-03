@@ -3,10 +3,9 @@ package main
 import (
 	"github.com/go-redis/redis"
 	"github.com/jmoiron/sqlx"
+	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/server"
 	"log"
 	"net/http"
-
-	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/server"
 )
 
 func runServer() {
@@ -19,16 +18,14 @@ func runServer() {
 
 // e.g. methods to connect to db, redis go here
 func dbConnect() (*sqlx.DB, error) {
-	connectionString := "user=postgres dbname=postgres password=postgres" +
-		" sslmode=disable"
+	connectionString := "host=eather-postgres user=postgres " +
+		"dbname=postgres password=postgres sslmode=disable"
 
 	db, err := sqlx.Connect("postgres", connectionString)
 	return db, err
 }
 
 func redisConnect() (*redis.Client, error) {
-	//address := os.Getenv("REDIS_URL")
-
 	address := "eather-redis:6379"
 	client := redis.NewClient(
 		&redis.Options{
