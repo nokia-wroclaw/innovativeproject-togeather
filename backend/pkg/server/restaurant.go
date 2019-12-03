@@ -33,11 +33,11 @@ func (h *restaurantHandler) exists(w http.ResponseWriter, r *http.Request) {
 func (h *restaurantHandler) listRestaurants(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	listRestaurants, err := h.restaurantService.ListRestaurants(ctx)
+	restaurantsList, err := h.restaurantService.ListRestaurants(ctx)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
 
-	respondJSON(w, http.StatusOK, listRestaurants)
+	respondJSON(w, http.StatusOK, restaurantsList)
 }
