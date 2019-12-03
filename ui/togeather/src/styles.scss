@@ -11,8 +11,19 @@ html, body { height: 100%; }
 body { margin: 0; font-family: $font-family; }
 
 .container {
-  max-width: 960px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 15px;
   box-sizing: border-box;
+
+  @media (min-width: $large) {
+    width: 960px;
+  }
+}
+
+.wrapper {
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 100%;
 }

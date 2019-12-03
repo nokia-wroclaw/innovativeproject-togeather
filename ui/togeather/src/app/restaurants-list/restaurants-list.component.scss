@@ -1,0 +1,19 @@
+@import "~src/styles/global/_colors";
+
+.restaurant-card {
+    margin: 5px 0;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.restaurant-name {
+    text-decoration: none;
+    color: $black;
+
+    &:hover {
+        color: $dark-gray;
+    }
+}
