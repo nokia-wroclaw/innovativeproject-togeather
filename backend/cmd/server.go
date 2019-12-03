@@ -25,8 +25,8 @@ func runServer(
 
 // e.g. methods to connect to db, redis go here
 func dbConnect() (*sqlx.DB, error) {
-	connectionString := "host=eather-postgres user=postgres " +
-		"dbname=postgres password=postgres sslmode=disable"
+	connectionString := "host=eather-postgres port=5432 user=postgres " +
+		"password=postgres dbname=postgres sslmode=disable"
 
 	db, err := sqlx.Connect("postgres", connectionString)
 	return db, err
