@@ -8,7 +8,7 @@ type (
 	Restaurant struct {
 		ID    int  `json:"id"`
 		Name  string  `json:"name"`
-		Menu  []Meal    `json:"menu, omitempty"`
+		Menu  []*Meal    `json:"menu, omitempty"`
 		Address  string `json:"address"`
 	}
 
