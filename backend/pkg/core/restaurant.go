@@ -14,7 +14,7 @@ type (
 
 	Meal struct {
 		ID      	 int  `json:"id"`
-		RestaurantID int  `json:"restaurant_id"`
+		RestaurantID int  `json:"restaurant_id, omitempty"`
 		Name         string  `json:"meal"`
 		Price        float32  `json:"price"`
 	}
@@ -22,10 +22,12 @@ type (
 	RestaurantService interface {
 		Exists(ctx context.Context, restaurantID int) (bool, error)
 		ListRestaurants(ctx context.Context) ([]*Restaurant, error)
+		RestaurantMenu(ctx context.Context, restaurantID int) (*Restaurant, error)
 	}
 
 	RestaurantStore interface {
 		Exists(ctx context.Context, restaurantID int) (bool, error)
 		ListRestaurants(ctx context.Context) ([]*Restaurant, error)
+		RestaurantMenu(ctx context.Context, restaurantID int) (*Restaurant, error)
 	}
 )

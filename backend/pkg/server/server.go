@@ -36,8 +36,12 @@ func New(
 	restaurantHandler := restaurantHandler{restaurantService:restaurantService}
 
 	r.Route("/api", func(r chi.Router) {
-		r.Route("/restaurant", func(r chi.Router) {
+		r.Route("/exists", func(r chi.Router) {
 			r.Get("/{restaurantID}", restaurantHandler.exists)
+		})
+
+		r.Route("/restaurant", func(r chi.Router) {
+			r.Get("/{restaurantID}", restaurantHandler.restaurantMenu)
 		})
 
 		r.Route("/restaurants", func(r chi.Router) {
