@@ -1,5 +1,5 @@
 ## STAGE 1: Build Angular app ##
-FROM node:latest-slim as builder
+FROM node:13-slim as builder
 
 COPY togeather /togeather
 
