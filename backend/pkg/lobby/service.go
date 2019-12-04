@@ -2,6 +2,7 @@ package lobby
 
 import (
 	"context"
+	"time"
 
 	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
 )
@@ -16,4 +17,13 @@ func NewService(lobbyStore core.LobbyStore) core.LobbyService {
 
 func (s *service) List(ctx context.Context) ([]*core.Lobby, error) {
 	return s.lobbyStore.List(ctx)
+}
+
+func (s *service) Create(
+	ctx context.Context,
+	restaurantID int,
+	ownerID int,
+	expires *time.Time,
+) (*core.Lobby, error) {
+	return s.lobbyStore.Create(ctx, restaurantID, ownerID, expires)
 }

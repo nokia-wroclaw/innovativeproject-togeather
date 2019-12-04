@@ -15,9 +15,23 @@ type (
 
 	LobbyService interface {
 		List(ctx context.Context) ([]*Lobby, error)
+
+		Create(
+			ctx context.Context,
+			restaurantID int,
+			ownerID int,
+			expires *time.Time,
+		) (*Lobby, error)
 	}
 
 	LobbyStore interface {
 		List(ctx context.Context) ([]*Lobby, error)
+
+		Create(
+			ctx context.Context,
+			restaurantID int,
+			ownerID int,
+			expires *time.Time,
+		) (*Lobby, error)
 	}
 )

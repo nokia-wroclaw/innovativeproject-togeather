@@ -2,6 +2,7 @@ package lobby
 
 import (
 	"context"
+	"time"
 
 	"github.com/jmoiron/sqlx"
 
@@ -39,4 +40,27 @@ func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
 	}
 
 	return lobbies, nil
+}
+
+func (s *lobbyStore) Create(
+	ctx context.Context,
+	restaurantID int,
+	ownerID int,
+	expires *time.Time,
+) (*core.Lobby, error) {
+	var id int
+
+	err := s.db.QueryRowContext(ctx, `INSERT INTO
+    	lobbies(restaurant, owner, expires) VALUES ($1, $2, $3) RETURNING id`,
+    	restaurantID, ownerID, expires).Scan(&id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &core.Lobby{
+		ID:           id,
+		RestaurantID: restaurantID,
+		Owner:        ownerID,
+		Expires:      *expires,
+	}, nil
 }
