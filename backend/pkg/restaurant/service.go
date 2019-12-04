@@ -26,3 +26,7 @@ func (s *service) ListRestaurants(ctx context.Context) ([]*core.Restaurant, erro
 func (s *service) RestaurantMenu(ctx context.Context, restaurantID int) ([]*core.Meal, error) {
 	return s.restaurantStore.RestaurantMenu(ctx, restaurantID)
 }
+
+func (s *service) GetRestaurant(ctx context.Context, restaurantID int) (*core.Restaurant, error) {
+	return s.restaurantStore.GetRestaurant(ctx, restaurantID)
+}
