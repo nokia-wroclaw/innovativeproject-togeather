@@ -45,7 +45,7 @@ func (s *restaurantStore) ListRestaurants(ctx context.Context) ([]*core.Restaura
 }
 
 func (s *restaurantStore) RestaurantMenu(ctx context.Context, restaurantID int) ([]*core.Meal, error) {
-	rows, err := s.db.QueryContext(ctx, `SELECT id, name, price, restaurantid 
+	rows, err := s.db.QueryContext(ctx, `SELECT id, name, price, description, owning_restaurant 
 												FROM meals WHERE restaurantid = $1;`, restaurantID)
 	if err != nil{
 		return nil, err
@@ -55,7 +55,7 @@ func (s *restaurantStore) RestaurantMenu(ctx context.Context, restaurantID int) 
 	menu := make([]*core.Meal, 0)
 	for rows.Next(){
 		meal := core.Meal{}
-		err := rows.Scan(&meal.ID, &meal.Name, &meal.Price, &meal.RestaurantID)
+		err := rows.Scan(&meal.ID, &meal.Name, &meal.Price, &meal.Description, &meal.RestaurantID)
 		if err != nil{
 			return nil, err
 		}
@@ -71,7 +71,8 @@ func (s *restaurantStore) RestaurantMenu(ctx context.Context, restaurantID int) 
 }
 
 func (s *restaurantStore) GetRestaurant(ctx context.Context, restaurantID int) (*core.Restaurant, error) {
-	rows, err := s.db.QueryContext(ctx, `SELECT id, name, price FROM meals WHERE restaurantid = $1;`, restaurantID)
+	rows, err := s.db.QueryContext(ctx, `SELECT id, name, price, description, owning_restaurant 
+												FROM meals WHERE owning_restaurant = $1;`, restaurantID)
 	if err != nil{
 		return nil, err
 	}
@@ -80,7 +81,7 @@ func (s *restaurantStore) GetRestaurant(ctx context.Context, restaurantID int) (
 	menu := make([]*core.Meal, 0)
 	for rows.Next(){
 		meal := core.Meal{}
-		err := rows.Scan(&meal.ID, &meal.Name, &meal.Price)
+		err := rows.Scan(&meal.ID, &meal.Name, &meal.Price, &meal.Description, &meal.RestaurantID)
 		if err != nil{
 			return nil, err
 		}
