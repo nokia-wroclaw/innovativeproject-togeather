@@ -44,6 +44,7 @@ func New(
 
 		r.Route("/lobbies", func(r chi.Router) {
 			r.Get("/", lobbyHandler.list)
+			r.Post("/", lobbyHandler.create)
 		})
 
 		r.Route("/ping", func(r chi.Router) {

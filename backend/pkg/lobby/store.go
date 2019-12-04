@@ -17,8 +17,8 @@ func NewStore(db *sqlx.DB) core.LobbyStore {
 }
 
 func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
-	rows, err := s.db.QueryxContext(ctx, `SELECT id, restaurant, owner
-		FROM lobbies`)
+	rows, err := s.db.QueryxContext(ctx, `SELECT 
+       id, restaurant, owner, expires FROM lobbies`)
 	if err != nil{
 		return nil, err
 	}
