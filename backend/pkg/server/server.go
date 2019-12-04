@@ -38,8 +38,12 @@ func New(
 	lobbyHandler := lobbyHandler{lobbyService: lobbyService}
 
 	r.Route("/api", func(r chi.Router) {
-		r.Route("/restaurant", func(r chi.Router) {
-			r.Get("/{restaurantID}", restaurantHandler.exists)
+		r.Route("/restaurants", func(r chi.Router) {
+			r.Get("/", restaurantHandler.listRestaurants)
+			r.Route("/{restaurantID}", func(r chi.Router){
+				r.Get("/", restaurantHandler.getRestaurant)
+				r.Get("/menu", restaurantHandler.restaurantMenu)
+			})
 		})
 
 		r.Route("/lobbies", func(r chi.Router) {
