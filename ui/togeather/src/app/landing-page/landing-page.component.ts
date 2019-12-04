@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from "@angular/forms";
-import {GeolocationService} from "../_services/location.service";
+import {LocationService} from "../_services/location.service";
 import {Coordinates} from "../map/map.component";
 
 @Component({
@@ -13,7 +13,7 @@ export class LandingPageComponent implements OnInit {
   coordinates: Coordinates = null;
 
   constructor(
-      private locationService: GeolocationService
+      private locationService: LocationService
   ) { }
 
   ngOnInit() {

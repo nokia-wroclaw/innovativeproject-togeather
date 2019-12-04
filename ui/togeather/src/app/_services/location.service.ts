@@ -4,7 +4,7 @@ import { Coordinates } from "../map/map.component";
 @Injectable({
   providedIn: 'root'
 })
-export class GeolocationService {
+export class LocationService {
 
   getLocation(): Promise<Coordinates> {
     return new Promise((resolve, reject) => {
