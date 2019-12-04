@@ -26,7 +26,10 @@ CREATE TABLE IF NOT EXISTS lobbies
 (
     id SERIAL PRIMARY KEY,
     restaurant INT NOT NULL,
+    owner INT NOT NULL,
+    expires timestamp NOT NULL,
 
+    FOREIGN KEY (owner) REFERENCES cliend(id)
     FOREIGN KEY (restaurant) REFERENCES restaurants(id)
 );
 
