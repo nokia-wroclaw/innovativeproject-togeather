@@ -4,7 +4,9 @@ import "context"
 
 type (
 	Lobby struct {
-
+		ID int `json:"id" db:"id"`
+		RestaurantID int `json:"restaurant_id" db:"restaurant"`
+		Owner int `json:"owner" db:"owner"`
 	}
 
 	LobbyService interface {

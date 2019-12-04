@@ -2,7 +2,9 @@ package lobby
 
 import (
 	"context"
+
 	"github.com/jmoiron/sqlx"
+
 	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
 )
 
@@ -15,5 +17,26 @@ func NewStore(db *sqlx.DB) core.LobbyStore {
 }
 
 func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
-	return nil, nil
+	rows, err := s.db.QueryxContext(ctx, `SELECT id, restaurant, owner
+		FROM lobbies`)
+	if err != nil{
+		return nil, err
+	}
+	defer rows.Close()
+
+	var lobbies []*core.Lobby
+	for rows.Next(){
+		var l core.Lobby
+		err := rows.StructScan(&l)
+		if err != nil{
+			return nil, err
+		}
+
+		lobbies = append(lobbies, &l)
+	}
+	if err = rows.Err(); err != nil{
+		return nil, err
+	}
+
+	return lobbies, nil
 }

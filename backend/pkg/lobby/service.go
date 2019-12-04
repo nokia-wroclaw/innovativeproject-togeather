@@ -15,5 +15,5 @@ func NewService(lobbyStore core.LobbyStore) core.LobbyService {
 }
 
 func (s *service) List(ctx context.Context) ([]*core.Lobby, error) {
-	return nil, nil
+	return s.lobbyStore.List(ctx)
 }
