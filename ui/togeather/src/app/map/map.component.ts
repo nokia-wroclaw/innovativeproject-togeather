@@ -33,11 +33,9 @@ export class MapComponent implements OnInit {
         .catch(error => {
           alert(error);
         });
-    
-    this.lobbiesService.makeLobbiesMarkers(this.map);
   }
 
-  private initMap(coords?: Coordinates): void {
+  private initMap(): void {
     this.map = LeafLet.map('map', {
       center: [ 51.12584, 16.97778 ],
       zoom: 15,
@@ -48,6 +46,8 @@ export class MapComponent implements OnInit {
       attribution: '&copy;<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     });
     tiles.addTo(this.map);
+
+    this.lobbiesService.makeLobbiesMarkers(this.map);
   }
 
 }

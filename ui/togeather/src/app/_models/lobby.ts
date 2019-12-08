@@ -6,5 +6,5 @@ export interface Lobby {
     expirationDate: Date;
     location: Coordinates;
     restaurant: Restaurant;
-    addressLobby: string;
+    lobbyAddress: string;
 }
