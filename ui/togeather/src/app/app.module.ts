@@ -12,6 +12,8 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
 import { ReactiveFormsModule } from "@angular/forms";
 import { FormsModule } from '@angular/forms';
 import { RestaurantsListComponent } from './restaurants-list/restaurants-list.component';
+import { LobbiesService } from './_services/lobbies.service';
+import { MapPopUpService } from './_services/map-pop-up.service';
 
 
 
@@ -37,7 +39,10 @@ import { RestaurantsListComponent } from './restaurants-list/restaurants-list.co
         ReactiveFormsModule,
         FormsModule,
     ],
-  providers: [],
+  providers: [
+    LobbiesService,
+    MapPopUpService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

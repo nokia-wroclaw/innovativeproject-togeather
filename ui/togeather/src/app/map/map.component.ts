@@ -1,6 +1,7 @@
-import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import * as LeafLet from 'leaflet';
-import {GeolocationService} from "../_services/location.service";
+import {LocationService} from "../_services/location.service";
+import {LobbiesService} from "../_services/lobbies.service";
 
 export interface Coordinates {
   lat: number,
@@ -18,7 +19,8 @@ export class MapComponent implements OnInit {
   private map;
 
   constructor(
-      private locationService: GeolocationService,
+      private locationService: LocationService,
+      private lobbiesService: LobbiesService,
   ) { }
 
   ngOnInit() {
@@ -30,7 +32,9 @@ export class MapComponent implements OnInit {
         })
         .catch(error => {
           alert(error);
-        })
+        });
+    
+    this.lobbiesService.makeLobbiesMarkers(this.map);
   }
 
   private initMap(coords?: Coordinates): void {
