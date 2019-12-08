@@ -1,19 +1,19 @@
 @import "~src/styles/global/_colors";
 
 footer {
-    padding: 15px 0;
-    background-color: $medium-gray;
+  padding: 15px 0;
+  background-color: $medium-gray;
 }
 
 .footer-container {
-    padding: 0 15px;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-items: baseline;
-    position: relative;
+  padding: 0 15px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: baseline;
+  position: relative;
 }
 
 .logo {
-    padding-right: 35px;
+  padding-right: 35px;
 }

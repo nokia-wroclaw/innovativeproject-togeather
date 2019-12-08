@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Coordinates } from "../map/map.component";
+import { Coordinates } from '../map/map.component';
 
 @Injectable({
   providedIn: 'root'
