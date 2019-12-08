@@ -7,6 +7,7 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/urfave/cli"
 
+	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/lobby"
 	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/restaurant"
 )
 
@@ -56,8 +57,12 @@ func runApp() {
 	restaurantStore := restaurant.NewStore(db)
 	restaurantService := restaurant.NewService(restaurantStore)
 
+	lobbyStore := lobby.NewStore(db)
+	lobbyService := lobby.NewService(lobbyStore)
+
 	runServer(
 		restaurantService,
+		lobbyService,
 	)
 }
 

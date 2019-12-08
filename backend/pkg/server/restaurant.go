@@ -8,6 +8,7 @@ import (
 
 	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
 )
+
 type restaurantHandler struct {
 	restaurantService core.RestaurantService
 }

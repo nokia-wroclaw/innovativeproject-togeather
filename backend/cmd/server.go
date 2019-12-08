@@ -13,9 +13,11 @@ import (
 
 func runServer(
 	restaurantService core.RestaurantService,
+	lobbyService core.LobbyService,
 ) {
 	srvr := server.New(
 		restaurantService,
+		lobbyService,
 	)
 
 	if err := http.ListenAndServe(":8000", srvr); err != nil {
