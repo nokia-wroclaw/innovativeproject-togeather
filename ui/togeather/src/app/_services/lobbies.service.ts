@@ -29,14 +29,20 @@ export class LobbiesService {
       restaurant: null,
       addressLobby: null,
     },
-  ]
+  ];
+
+  private markerIcon = LeafLet.icon({
+    iconUrl: './assets/marker-icon.png',
+    iconSize: [25, 45],
+  });
+
   constructor(private lobbyPopupService: MapPopUpService) { }
 
   makeLobbiesMarkers(map: LeafLet.map): void {
     for (const lobby of this.lobbies) {
       const latCoord = lobby.location.lat;
       const lonCoord = lobby.location.lon;
-      const marker = LeafLet.marker([latCoord, lonCoord]);
+      const marker = LeafLet.marker([latCoord, lonCoord], {icon:this.markerIcon});
 
       marker.bindPopup(this.lobbyPopupService.makeLobbyPopup(lobby));
       marker.addTo(map);
