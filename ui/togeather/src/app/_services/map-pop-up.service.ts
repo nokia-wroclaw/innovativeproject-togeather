@@ -12,6 +12,6 @@ export class MapPopUpService {
     return '' + '<div>Restaurant: ' + data.restaurant.name + '</div>'
               + '<div>Address lobby: ' + data.lobbyAddress + '</div>'
               + '<div>Expiration Date: ' + data.expirationDate + '</div>';
-    
+
   }
 }

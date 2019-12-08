@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from "@angular/forms";
-import {LocationService} from "../_services/location.service";
-import {Coordinates} from "../map/map.component";
+import { FormControl } from '@angular/forms';
+import { LocationService } from '../_services/location.service';
+import { Coordinates } from '../map/map.component';
 
 @Component({
   selector: 'app-landing-page',

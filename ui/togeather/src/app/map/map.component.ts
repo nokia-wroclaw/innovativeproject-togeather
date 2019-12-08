@@ -1,11 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import * as LeafLet from 'leaflet';
-import {LocationService} from "../_services/location.service";
-import {LobbiesService} from "../_services/lobbies.service";
+import { LocationService } from '../_services/location.service';
+import { LobbiesService } from '../_services/lobbies.service';
 
 export interface Coordinates {
-  lat: number,
-  lon: number
+  lat: number;
+  lon: number;
 }
 
 @Component({

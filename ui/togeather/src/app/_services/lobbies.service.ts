@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as LeafLet from 'leaflet';
 import { MapPopUpService } from './map-pop-up.service';
 import { Lobby } from '../_models/lobby';
-import {ApiService} from "./api.service";
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
