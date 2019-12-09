@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS lobbies
     owner INT NOT NULL,
     expires timestamp NOT NULL,
 
-    FOREIGN KEY (owner) REFERENCES cliend(id)
+    FOREIGN KEY (owner) REFERENCES clients(id),
     FOREIGN KEY (restaurant) REFERENCES restaurants(id)
 );
 

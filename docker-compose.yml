@@ -5,7 +5,7 @@ services:
     build: ./backend
     image: backend-img
     container_name: "eather-backend"
-#    restart: always
+    restart: always
     ports:
       - 8000:8000
     networks:
@@ -27,6 +27,7 @@ services:
     networks:
       - eathernet
     volumes:
+      - ./scripts/sql:/docker-entrypoint-initdb.d/
       - ./pg-data:/var/lib/postgresql/data
 
 networks:
