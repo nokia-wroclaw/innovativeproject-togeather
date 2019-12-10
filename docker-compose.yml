@@ -27,6 +27,7 @@ services:
     networks:
       - eathernet
     volumes:
+      - ./scripts/sql:/docker-entrypoint-initdb.d/
       - ./pg-data:/var/lib/postgresql/data
 
 networks:
