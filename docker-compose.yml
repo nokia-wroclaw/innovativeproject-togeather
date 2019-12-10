@@ -11,6 +11,15 @@ services:
     networks:
       - eathernet
 
+  frontend:
+    build: ./ui
+    image: frontend-img
+    container_name: "eather-frontend"
+    ports:
+      - 4200:80
+    networks:
+      - eathernet
+
   redis:
     image: redis:latest
     container_name: "eather-redis"

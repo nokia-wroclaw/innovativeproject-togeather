@@ -14,4 +14,4 @@ FROM nginx
 
 COPY --from=builder /togeather/dist/* /usr/share/nginx/html/
 
-EXPOSE 80
+EXPOSE 4200
