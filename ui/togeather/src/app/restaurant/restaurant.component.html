@@ -1,0 +1,17 @@
+<div *ngIf="restaurant">
+    <h2>{{ restaurant.name }}</h2>
+
+    <div class="singleRestaurant-container">
+        <mat-card class="singleRestaurant-card" *ngFor="let dish of restaurant.menu">
+            <mat-card-header>
+                {{ dish.name }}
+            </mat-card-header>
+            <mat-card-subtitle>{{ dish.description }}</mat-card-subtitle>
+            <mat-form-field>
+                <input matInput type="number" value="1">
+            </mat-form-field>
+            <mat-card-subtitle>{{ dish.price }}</mat-card-subtitle>
+            <button mat-raised-button>Add to cart</button>
+        </mat-card>
+    </div>
+</div>

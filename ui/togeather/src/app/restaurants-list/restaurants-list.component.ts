@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Restaurant} from "../_models/restaurant";
 import {ApiService} from "../_services/api.service";
+import { RedirectionService } from "../_services/redirection.service";
 
 @Component({
   selector: 'app-restaurants-list',
@@ -13,6 +14,7 @@ export class RestaurantsListComponent implements OnInit {
 
   constructor(
       private apiService: ApiService,
+      private redirectionService: RedirectionService,
   ) { }
 
   ngOnInit() {
@@ -21,6 +23,9 @@ export class RestaurantsListComponent implements OnInit {
           this.restaurants = restaurants;
         }
     );
+  }
+  redirectToRestaurant(id: number): void{
+    this.redirectionService.redirectToSingleRestaurant(id);
   }
 
 }

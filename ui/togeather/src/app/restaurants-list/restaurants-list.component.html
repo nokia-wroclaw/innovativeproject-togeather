@@ -4,9 +4,9 @@
     <mat-card class="restaurant-card" *ngFor="let restaurant of restaurants">
         <mat-card-header>
             <mat-card-title>
-                <a href="#" class="restaurant-name">{{ restaurant?.name }}</a>
+                <a (click)="redirectToRestaurant(restaurant.id)" class="restaurant-name">{{ restaurant.name }}</a>
             </mat-card-title>
-            <mat-card-subtitle>{{ restaurant?.address }}</mat-card-subtitle>
+            <mat-card-subtitle>{{ restaurant.address }}</mat-card-subtitle>
         </mat-card-header>
     </mat-card>
 </div>

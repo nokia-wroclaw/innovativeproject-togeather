@@ -14,7 +14,8 @@ import { FormsModule } from '@angular/forms';
 import { RestaurantsListComponent } from './restaurants-list/restaurants-list.component';
 import { LobbiesService } from './_services/lobbies.service';
 import { MapPopUpService } from './_services/map-pop-up.service';
-
+import { RestaurantComponent } from './restaurant/restaurant.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { MapPopUpService } from './_services/map-pop-up.service';
     MapComponent,
     LandingPageComponent,
     RestaurantsListComponent,
+    RestaurantComponent,
   ],
     imports: [
         BrowserModule,
@@ -38,6 +40,7 @@ import { MapPopUpService } from './_services/map-pop-up.service';
         MatCardModule,
         ReactiveFormsModule,
         FormsModule,
+        HttpClientModule,
     ],
   providers: [
     LobbiesService,
