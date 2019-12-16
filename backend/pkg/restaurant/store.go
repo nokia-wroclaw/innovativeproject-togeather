@@ -46,7 +46,7 @@ func (s *restaurantStore) ListRestaurants(ctx context.Context) ([]*core.Restaura
 
 func (s *restaurantStore) RestaurantMenu(ctx context.Context, restaurantID int) ([]*core.Meal, error) {
 	rows, err := s.db.QueryContext(ctx, `SELECT id, name, price, description, owning_restaurant 
-												FROM meals WHERE restaurantid = $1;`, restaurantID)
+												FROM meals WHERE owning_restaurant = $1;`, restaurantID)
 	if err != nil{
 		return nil, err
 	}
