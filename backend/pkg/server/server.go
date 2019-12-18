@@ -62,6 +62,7 @@ func New(
 }
 
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	s.router.ServeHTTP(w, r)
 }
 
