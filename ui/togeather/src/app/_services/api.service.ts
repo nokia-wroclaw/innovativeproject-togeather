@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Restaurant } from '../_models/restaurant';
 import { Lobby } from '../_models/lobby';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -27,40 +28,22 @@ export class ApiService {
         );
     }
 
+    // TODO: Write test and check that api returns expected array of Lobby objects
     getLobbies(): Observable<Lobby[]> {
-        return of([
-            {
-                ownerId: 123,
-                expirationDate: new Date('2019-12-24'),
-                location: { lat: 51.1264, lon: 16.9918 },
-                restaurant: {
-                    id: 3,
-                    name: 'KFC',
-                    address: 'Kromera, Wrocław',
-                    menu: [
-                        'Burger',
-                        'Frytki',
-                        'Cola',
-                    ]
-                },
-                lobbyAddress: 'Lobby address',
-            },
-            {
-                ownerId: 123,
-                expirationDate: new Date('2019-12-24'),
-                location: { lat: 51.1292, lon: 16.9708 },
-                restaurant: {
-                    id: 2,
-                    name: 'Burger King',
-                    address: 'Plac Dominikański, Wrocław',
-                    menu: [
-                        'Burger',
-                        'Frytki',
-                        'Cola',
-                    ]
-                },
-                lobbyAddress: 'Nokia West link',
-            },
-        ]);
+        return this.http.get(
+            this.baseUrl + '/lobbies'
+        ).pipe(
+            map((objects: any[]): Lobby[] => {
+                return objects.map(obj => {
+                    return {
+                        id: obj.id,
+                        restaurant: obj.restaurant,
+                        owner: obj.owner,
+                        expires: new Date(obj.expires),
+                        location: { lat: obj.lat, lon: obj.lon },
+                    };
+                });
+            })
+        );
     }
 }

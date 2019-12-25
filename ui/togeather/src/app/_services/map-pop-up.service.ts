@@ -8,10 +8,11 @@ export class MapPopUpService {
 
   constructor() { }
 
-  makeLobbyPopup(data: Lobby): string {
+  // TODO: Change this when the new lobby structure is finally given from api
+  static makeLobbyPopup(data: Lobby): string {
     return '' + '<div>Restaurant: ' + data.restaurant.name + '</div>'
-              + '<div>Address lobby: ' + data.lobbyAddress + '</div>'
-              + '<div>Expiration Date: ' + data.expirationDate + '</div>';
+              + '<div>Address lobby: ' + '(no address given)' + '</div>'
+              + '<div>Expiration Date: ' + data.expires + '</div>';
 
   }
 }
