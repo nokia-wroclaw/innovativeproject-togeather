@@ -24,12 +24,12 @@ export class LobbiesService {
       for (const lobby of lobbies) {
         const latCoord = lobby.location.lat;
         const lonCoord = lobby.location.lon;
-        const marker = LeafLet.marker([latCoord, lonCoord], {icon:this.markerIcon});
+        const marker = LeafLet.marker([latCoord, lonCoord], { icon: this.markerIcon});
 
         marker.bindPopup(this.lobbyPopupService.makeLobbyPopup(lobby));
         marker.addTo(map);
       }
     });
-  };
+  }
 
 }

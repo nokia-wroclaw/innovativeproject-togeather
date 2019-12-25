@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {Observable, of} from "rxjs";
-import {Restaurant} from "../_models/restaurant";
-import {Lobby} from "../_models/lobby";
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { Restaurant } from '../_models/restaurant';
+import { Lobby } from '../_models/lobby';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
@@ -9,7 +9,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class ApiService {
 
-    readonly baseUrl = "http://localhost:8000/api";
+    readonly baseUrl = 'http://localhost:8000/api';
 
     constructor(
         private http: HttpClient,

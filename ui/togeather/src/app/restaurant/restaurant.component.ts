@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
-import { ApiService } from "../_services/api.service";
-import { Restaurant } from "../_models/restaurant";
+import { ActivatedRoute } from '@angular/router';
+import { ApiService } from '../_services/api.service';
+import { Restaurant } from '../_models/restaurant';
 
 @Component({
   selector: 'app-restaurant',
