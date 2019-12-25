@@ -9,7 +9,7 @@ type (
 		ID		int		`json:"id"`
 		Name	string	`json:"name"`
 		Menu	[]*Meal	`json:"menu, omitempty"`
-		Address	string	`json:"address"`
+		Address	string	`json:"address, omitempty"`
 	}
 
 	Meal struct {

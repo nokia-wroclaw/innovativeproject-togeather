@@ -18,8 +18,9 @@ func NewStore(db *sqlx.DB) core.LobbyStore {
 }
 
 func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
-	rows, err := s.db.QueryxContext(ctx, `SELECT 
-       id, restaurant, owner, expires FROM lobbies`)
+	rows, err := s.db.QueryxContext(ctx, `SELECT l.id, l.restaurant, r.name, l.owner,
+ 								l.expires, l.geolat, l.geolon FROM lobbies l
+ 								JOIN restaurants r ON r.id = l.restaurant`)
 	if err != nil{
 		return nil, err
 	}
@@ -27,8 +28,9 @@ func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
 
 	var lobbies []*core.Lobby
 	for rows.Next(){
-		var l core.Lobby
-		err := rows.StructScan(&l)
+		l := core.Lobby{}
+		err := rows.Scan(&l.ID, &l.Restaurant.ID, &l.Restaurant.Name, &l.Owner,
+						&l.Expires, &l.GeoLat, &l.GeoLon)
 		if err != nil{
 			return nil, err
 		}
@@ -47,19 +49,31 @@ func (s *lobbyStore) Create(
 	restaurantID int,
 	ownerID int,
 	expires *time.Time,
+	geolat float64,
+	geolon float64,
 ) (*core.Lobby, error) {
 	var id int
 
 	err := s.db.QueryRowContext(ctx, `INSERT INTO
-    	lobbies(restaurant, owner, expires) VALUES ($1, $2, $3) RETURNING id`,
-    	restaurantID, ownerID, expires).Scan(&id)
+    	lobbies(restaurant, owner, expires, geolat, geolon) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+    	restaurantID, ownerID, expires, geolat, geolon).Scan(&id)
 	if err != nil {
+		return nil, err
+	}
+
+	var restaurantName string
+	row := s.db.QueryRowContext(ctx, `SELECT name FROM restaurants WHERE id = $1`, restaurantID)
+	err = row.Scan(&restaurantName)
+	if err != nil{
 		return nil, err
 	}
 
 	return &core.Lobby{
 		ID:           id,
-		RestaurantID: restaurantID,
+		Restaurant: &core.Restaurant{
+			ID:   restaurantID,
+			Name: restaurantName,
+		},
 		Owner:        ownerID,
 		Expires:      *expires,
 	}, nil
