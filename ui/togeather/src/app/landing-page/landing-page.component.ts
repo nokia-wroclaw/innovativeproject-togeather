@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { LocationService } from '../_services/location.service';
 import { Coordinates } from '../map/map.component';
+import { RedirectionService } from '../_services/redirection.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -13,11 +13,18 @@ export class LandingPageComponent implements OnInit {
   coordinates: Coordinates = null;
 
   constructor(
-      private locationService: LocationService
+      private redirectionService: RedirectionService,
   ) { }
 
   ngOnInit() {
 
   }
 
+  redirectToLobbyCreation() {
+    this.redirectionService.redirectToLobbyCreation();
+  }
+
+  redirectToRestaurants() {
+    this.redirectionService.redirectToRestaurants();
+  }
 }

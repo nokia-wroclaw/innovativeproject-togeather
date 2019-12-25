@@ -20,13 +20,15 @@ export class LobbiesService {
   ) { }
 
   makeLobbiesMarkers(map: LeafLet.map): void {
-    this.apiService.getLobbies().subscribe(lobbies => {
-      for (const lobby of lobbies) {
-        const latCoord = lobby.location.lat;
-        const lonCoord = lobby.location.lon;
-        const marker = LeafLet.marker([latCoord, lonCoord], { icon: this.markerIcon});
+    this.apiService.getLobbies().subscribe((lobbies: Lobby[]) => {
 
-        marker.bindPopup(this.lobbyPopupService.makeLobbyPopup(lobby));
+      for (const lobby of lobbies) {
+        const marker = LeafLet.marker (
+            [ lobby.location.lat, lobby.location.lon ],
+            { icon: this.markerIcon}
+        );
+
+        marker.bindPopup(MapPopUpService.makeLobbyPopup(lobby));
         marker.addTo(map);
       }
     });

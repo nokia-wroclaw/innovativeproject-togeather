@@ -6,7 +6,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FooterComponent } from './footer/footer.component';
 import { MatButtonModule } from '@angular/material/button';
 import { HeaderComponent } from './header/header.component';
-import { MatFormFieldModule, MatIconModule, MatInputModule, MatMenuModule, MatCardModule } from '@angular/material';
+import {
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatMenuModule,
+    MatCardModule,
+    MatAutocompleteModule
+} from '@angular/material';
 import { MapComponent } from './map/map.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -18,6 +25,9 @@ import { RestaurantComponent } from './restaurant/restaurant.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ApiService } from './_services/api.service';
 import { RedirectionService } from './_services/redirection.service';
+import { CreateLobbyComponent } from './create-lobby/create-lobby.component';
+import { MaterialTimePickerModule } from '@candidosales/material-time-picker';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 @NgModule({
@@ -29,6 +39,7 @@ import { RedirectionService } from './_services/redirection.service';
         LandingPageComponent,
         RestaurantsListComponent,
         RestaurantComponent,
+        CreateLobbyComponent,
     ],
     imports: [
         BrowserModule,
@@ -43,6 +54,9 @@ import { RedirectionService } from './_services/redirection.service';
         ReactiveFormsModule,
         FormsModule,
         HttpClientModule,
+        MaterialTimePickerModule,
+        FlexLayoutModule,
+        MatAutocompleteModule,
     ],
     providers: [
         ApiService,

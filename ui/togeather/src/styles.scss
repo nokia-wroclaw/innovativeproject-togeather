@@ -26,3 +26,6 @@ body { margin: 0; font-family: $font-family; }
   grid-template-rows: auto 1fr auto;
   grid-template-columns: 100%;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

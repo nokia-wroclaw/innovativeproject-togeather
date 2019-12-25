@@ -1,0 +1,57 @@
+<h3>Create new lobby</h3>
+
+<div class="container">
+    <form class="lobby-form" [formGroup]="lobbyForm">
+
+        <div class="lobby-form__address">
+            <mat-form-field class="lobby-form__field">
+                <mat-label>Street</mat-label>
+                <input formControlName="street" matInput placeholder="Street">
+                <mat-error>
+                    Street is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field class="lobby-form__field">
+                <mat-label>Nr</mat-label>
+                <input formControlName="nr" matInput placeholder="Flat nr">
+                <mat-error>
+                    Nr is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field class="lobby-form__field">
+                <mat-label>City</mat-label>
+                <input formControlName="city" matInput placeholder="City">
+                <mat-error>
+                    City is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+
+        <mat-form-field class="lobby-form__field">
+            <mat-label>Restaurant</mat-label>
+            <select formControlName="restaurantId" matNativeControl required>
+                <option value="" disabled hidden>Choose restaurant</option>
+                <option *ngFor="let restaurant of restaurants$ | async" [value]="restaurant.id">
+                    {{ restaurant.name }}
+                </option>
+            </select>
+        </mat-form-field>
+
+        <material-timepicker
+                class="lobby-form__field"
+                color="primary"
+                label="Choose time for lobby to close"
+                appearance="standard"
+                [userTime]="expirationTime"
+                revertLabel="Cancel"
+                submitLabel="Accept"
+        ></material-timepicker>
+
+        <button (click)="createNewLobby()" mat-raised-button color="primary">Create lobby</button>
+    </form>
+</div>

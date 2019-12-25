@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Restaurant } from '../_models/restaurant';
 import { Lobby } from '../_models/lobby';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { catchError, map } from 'rxjs/operators';
+import { PostLobbyDto } from '../_models/post-lobby-dto';
 
 @Injectable({
     providedIn: 'root'
@@ -27,40 +29,48 @@ export class ApiService {
         );
     }
 
+    // TODO: Write test and check that api returns expected array of Lobby objects
     getLobbies(): Observable<Lobby[]> {
-        return of([
-            {
-                ownerId: 123,
-                expirationDate: new Date('2019-12-24'),
-                location: { lat: 51.1264, lon: 16.9918 },
-                restaurant: {
-                    id: 3,
-                    name: 'KFC',
-                    address: 'Kromera, Wrocław',
-                    menu: [
-                        'Burger',
-                        'Frytki',
-                        'Cola',
-                    ]
-                },
-                lobbyAddress: 'Lobby address',
-            },
-            {
-                ownerId: 123,
-                expirationDate: new Date('2019-12-24'),
-                location: { lat: 51.1292, lon: 16.9708 },
-                restaurant: {
-                    id: 2,
-                    name: 'Burger King',
-                    address: 'Plac Dominikański, Wrocław',
-                    menu: [
-                        'Burger',
-                        'Frytki',
-                        'Cola',
-                    ]
-                },
-                lobbyAddress: 'Nokia West link',
-            },
-        ]);
+        return this.http.get(
+            this.baseUrl + '/lobbies'
+        ).pipe(
+            map((objects: any[]): Lobby[] => {
+                return objects.map(obj => {
+                    return {
+                        id: obj.id,
+                        restaurant: obj.restaurant,
+                        owner: obj.owner,
+                        expires: new Date(obj.expires),
+                        location: { lat: obj.location.lat, lon: obj.location.lon },
+                    };
+                });
+            })
+        );
+    }
+
+    postLobby(lobby: PostLobbyDto): Observable<Lobby> {
+        lobby.restaurant_id = Number(lobby.restaurant_id);
+
+        return this.http.post<Lobby>(
+            this.baseUrl + '/lobbies',
+            lobby,
+        ).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    private handleError(error: HttpErrorResponse) {
+        if (error.error instanceof ErrorEvent) {
+            // A client-side or network error occurred. Handle it accordingly.
+            console.error('An error occurred:', error.error.message);
+        } else {
+            // The backend returned an unsuccessful response code.
+            // The response body may contain clues as to what went wrong,
+            console.error(
+                `Backend returned code ${error.status}, ` +
+                `body was: ${error.error}`);
+        }
+        // return an observable with a user-facing error message
+        return throwError('Something bad happened; please try again later.');
     }
 }
