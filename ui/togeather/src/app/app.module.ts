@@ -16,18 +16,20 @@ import { LobbiesService } from './_services/lobbies.service';
 import { MapPopUpService } from './_services/map-pop-up.service';
 import { RestaurantComponent } from './restaurant/restaurant.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ApiService } from './_services/api.service';
+import { RedirectionService } from './_services/redirection.service';
 
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    FooterComponent,
-    HeaderComponent,
-    MapComponent,
-    LandingPageComponent,
-    RestaurantsListComponent,
-    RestaurantComponent,
-  ],
+    declarations: [
+        AppComponent,
+        FooterComponent,
+        HeaderComponent,
+        MapComponent,
+        LandingPageComponent,
+        RestaurantsListComponent,
+        RestaurantComponent,
+    ],
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -42,10 +44,13 @@ import { HttpClientModule } from '@angular/common/http';
         FormsModule,
         HttpClientModule,
     ],
-  providers: [
-    LobbiesService,
-    MapPopUpService,
-  ],
-  bootstrap: [AppComponent]
+    providers: [
+        ApiService,
+        RedirectionService,
+        LobbiesService,
+        MapPopUpService,
+    ],
+    bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
