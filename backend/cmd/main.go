@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/user"
 	"log"
 	"os"
 
@@ -10,6 +9,7 @@ import (
 
 	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/lobby"
 	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/restaurant"
+	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/user"
 )
 
 func info(app *cli.App) {
