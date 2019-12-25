@@ -1,10 +1,43 @@
 @import "~src/styles/global/_colors";
+@import "~src/styles/global/_breakpoints";
 
-.singleRestaurant-card {
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.cart {
+  flex-grow: 1;
+  order: 2;
+
+  @media (max-width: 930px) {
+    order: 0;
+  }
+}
+
+.restaurant {
+  flex-grow: 1;
+}
+
+.restaurant-menu-item {
   margin: 5px 0;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   align-items: baseline;
   justify-content: space-between;
+
+  &__price-and-button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+  }
+
+  &__price {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-right: 10px;
+  }
 }

@@ -12,6 +12,7 @@ import {
     MatInputModule,
     MatMenuModule,
     MatCardModule,
+    MatListModule,
     MatAutocompleteModule
 } from '@angular/material';
 import { MapComponent } from './map/map.component';
@@ -29,6 +30,7 @@ import { CreateLobbyComponent } from './create-lobby/create-lobby.component';
 import { MaterialTimePickerModule } from '@candidosales/material-time-picker';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BeautifyAddressPipe } from './_pipes/beautify-address.pipe';
+import { CartComponent } from './cart/cart.component';
 
 
 @NgModule({
@@ -42,6 +44,7 @@ import { BeautifyAddressPipe } from './_pipes/beautify-address.pipe';
         RestaurantComponent,
         CreateLobbyComponent,
         BeautifyAddressPipe,
+        CartComponent,
     ],
     imports: [
         BrowserModule,
@@ -59,6 +62,7 @@ import { BeautifyAddressPipe } from './_pipes/beautify-address.pipe';
         MaterialTimePickerModule,
         FlexLayoutModule,
         MatAutocompleteModule,
+        MatListModule,
     ],
     providers: [
         ApiService,

@@ -1,0 +1,21 @@
+@import "~src/styles/global/_colors";
+
+.cart {
+  min-width: 290px;
+  margin: 20px auto;
+}
+
+.cart__items--empty {
+  margin: 0;
+}
+
+.cart-item {
+  border-bottom: 1px solid $medium-gray;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cart-item__delete-btn {
+  cursor: pointer;
+}

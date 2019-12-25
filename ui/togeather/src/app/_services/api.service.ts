@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { Restaurant } from '../_models/restaurant';
 import { Lobby } from '../_models/lobby';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { PostLobbyDto } from '../_models/post-lobby-dto';
 
@@ -29,7 +29,6 @@ export class ApiService {
         );
     }
 
-    // TODO: Write test and check that api returns expected array of Lobby objects
     getLobbies(): Observable<Lobby[]> {
         return this.http.get(
             this.baseUrl + '/lobbies'
