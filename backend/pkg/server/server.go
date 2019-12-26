@@ -20,6 +20,7 @@ type Server struct {
 func New(
 	restaurantService core.RestaurantService,
 	lobbyService core.LobbyService,
+	userService core.UserService,
 ) *Server {
 	s := &Server{}
 
@@ -34,8 +35,9 @@ func New(
 
 	// add handlers
 	pingHandler := pingHandler{}
-	restaurantHandler := restaurantHandler{restaurantService:restaurantService}
+	restaurantHandler := restaurantHandler{restaurantService: restaurantService}
 	lobbyHandler := lobbyHandler{lobbyService: lobbyService}
+	userHandler := userHandler{userService: userService}
 
 	r.Route("/api", func(r chi.Router) {
 		r.Route("/restaurants", func(r chi.Router) {
@@ -49,6 +51,10 @@ func New(
 		r.Route("/lobbies", func(r chi.Router) {
 			r.Get("/", lobbyHandler.list)
 			r.Post("/", lobbyHandler.create)
+		})
+
+		r.Route("/users", func(r chi.Router) {
+			r.Get("/", userHandler.listUsers)
 		})
 
 		r.Route("/ping", func(r chi.Router) {

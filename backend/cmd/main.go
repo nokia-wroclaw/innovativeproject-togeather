@@ -9,6 +9,7 @@ import (
 
 	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/lobby"
 	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/restaurant"
+	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/user"
 )
 
 func info(app *cli.App) {
@@ -60,9 +61,13 @@ func runApp() {
 	lobbyStore := lobby.NewStore(db)
 	lobbyService := lobby.NewService(lobbyStore)
 
+	userStore := user.NewStore(db)
+	userService := user.NewService(userStore)
+
 	runServer(
 		restaurantService,
 		lobbyService,
+		userService,
 	)
 }
 
