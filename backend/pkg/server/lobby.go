@@ -27,6 +27,8 @@ type createLobbyRequest struct {
 	RestaurantID int `json:"restaurant_id, required"`
 	Owner int `json:"owner, required"`
 	Expires time.Time `json:"expires, required"`
+	GeoLat float64 `json:"lat, required"`
+	GeoLon float64 `json:"lon, required"`
 }
 
 func (h *lobbyHandler) create(w http.ResponseWriter, r *http.Request) {
@@ -43,6 +45,8 @@ func (h *lobbyHandler) create(w http.ResponseWriter, r *http.Request) {
 		request.RestaurantID,
 		request.Owner,
 		&request.Expires,
+		request.GeoLat,
+		request.GeoLon,
 	)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
