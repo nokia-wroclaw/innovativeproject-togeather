@@ -26,15 +26,17 @@ func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
 	}
 	defer rows.Close()
 
-	var lobbies []*core.Lobby
+	lobbies := make([]*core.Lobby, 0)
 	for rows.Next(){
 		l := core.Lobby{}
-		err := rows.Scan(&l.ID, &l.Restaurant.ID, &l.Restaurant.Name, &l.Owner,
+		r := core.Restaurant{}
+		err := rows.Scan(&l.ID, &r.ID, &r.Name, &l.Owner,
 						&l.Expires, &l.GeoLat, &l.GeoLon)
 		if err != nil{
 			return nil, err
 		}
 
+		l.Restaurant = &r
 		lobbies = append(lobbies, &l)
 	}
 	if err = rows.Err(); err != nil{
@@ -76,5 +78,7 @@ func (s *lobbyStore) Create(
 		},
 		Owner:        ownerID,
 		Expires:      *expires,
+		GeoLat:       geolat,
+		GeoLon:       geolon,
 	}, nil
 }
