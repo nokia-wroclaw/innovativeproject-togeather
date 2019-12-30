@@ -38,7 +38,7 @@ export class MapComponent implements OnInit {
   private initMap(): void {
     this.map = LeafLet.map('map', {
       center: [ 51.12584, 16.97778 ],
-      zoom: 15,
+      zoom: 12.5,
     });
 
     const tiles = LeafLet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
