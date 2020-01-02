@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RedirectionService } from '../_services/redirection.service';
 
 @Component({
   selector: 'app-header',
@@ -7,5 +8,11 @@ import { Component } from '@angular/core';
 })
 export class HeaderComponent {
 
-  constructor() { }
+  constructor(
+    private redirectionService: RedirectionService,
+  ) { }
+
+  redirectToHomePage(): void {
+    this.redirectionService.redirectToHomePage();
+  }
 }

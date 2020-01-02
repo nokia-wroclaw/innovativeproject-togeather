@@ -14,6 +14,10 @@ export class RedirectionService {
         this.router.navigateByUrl(`/restaurants/${id}`);
     }
 
+    redirectToHomePage(): void {
+        this.router.navigateByUrl('/');
+    }
+
     redirectToLobbyCreation(): void {
         this.router.navigateByUrl('/create-lobby');
     }
