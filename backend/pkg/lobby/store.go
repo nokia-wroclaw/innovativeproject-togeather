@@ -21,7 +21,7 @@ func NewStore(db *sqlx.DB) core.LobbyStore {
 
 func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
 	rows, err := s.db.QueryxContext(ctx, `SELECT l.id, l.restaurant, r.name, l.owner,
- 								l.expires, l.geolat, l.geolon FROM lobbies l
+ 								l.expires, l.geolat, l.geolon, l.address FROM lobbies l
  								JOIN restaurants r ON r.id = l.restaurant`)
 	if err != nil{
 		return nil, err
@@ -35,17 +35,11 @@ func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
 		loc := core.Location{}
 
 		err := rows.Scan(&l.ID, &r.ID, &r.Name, &l.Owner,
-						&l.Expires, &loc.GeoLat, &loc.GeoLon)
+						&l.Expires, &loc.GeoLat, &loc.GeoLon, &loc.Address)
 		if err != nil{
 			return nil, err
 		}
 
-		adrs, err := geocoder.ReverseGeocode(loc.GeoLat, loc.GeoLon)
-		if err != nil {
-			return nil, err
-		}
-
-		loc.Address = adrs.Street + " " + adrs.City
 		l.Location = &loc
 		l.Restaurant = &r
 		lobbies = append(lobbies, &l)
@@ -72,8 +66,8 @@ func (s *lobbyStore) Create(
 	}
 
 	err = s.db.QueryRowContext(ctx, `INSERT INTO
-    	lobbies(restaurant, owner, expires, geolat, geolon) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
-		restaurantID, ownerID, expires, geolat, geolon).Scan(&id)
+    	lobbies(restaurant, owner, expires, geolat, geolon, address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
+		restaurantID, ownerID, expires, geolat, geolon, address).Scan(&id)
 	if err != nil {
 		return nil, err
 	}
