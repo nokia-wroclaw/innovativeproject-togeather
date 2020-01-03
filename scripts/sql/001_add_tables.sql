@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS lobbies
     expires timestamp NOT NULL,
     geolat double precision NOT NULL,
     geolon double precision NOT NULL,
+    address TEXT NOT NULL,
 
     FOREIGN KEY (owner) REFERENCES clients(id),
     FOREIGN KEY (restaurant) REFERENCES restaurants(id)

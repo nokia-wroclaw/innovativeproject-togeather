@@ -24,8 +24,7 @@ func (s *service) Create(
 	restaurantID int,
 	ownerID int,
 	expires *time.Time,
-	geolat float64,
-	geolon float64,
+	address string,
 ) (*core.Lobby, error) {
-	return s.lobbyStore.Create(ctx, restaurantID, ownerID, expires, geolat, geolon)
+	return s.lobbyStore.Create(ctx, restaurantID, ownerID, expires, address)
 }
