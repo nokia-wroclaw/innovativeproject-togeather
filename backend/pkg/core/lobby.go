@@ -11,8 +11,13 @@ type (
 		Restaurant *Restaurant `json:"restaurant"`
 		Owner int `json:"owner" db:"owner"`
 		Expires time.Time `json:"expires" db:"expires"`
+		Location *Location `json:"location"`
+	}
+
+	Location struct {
 		GeoLat float64 `json:"lat" db:"geolat"`
 		GeoLon float64 `json:"lon" db:"geolon"`
+		Address string `json:"lobby_address"`
 	}
 
 
@@ -24,8 +29,7 @@ type (
 			restaurantID int,
 			ownerID int,
 			expires *time.Time,
-			geolat float64,
-			geolon float64,
+			address string,
 		) (*Lobby, error)
 	}
 
@@ -37,8 +41,7 @@ type (
 			restaurantID int,
 			ownerID int,
 			expires *time.Time,
-			geolat float64,
-			geolon float64,
+			address string,
 		) (*Lobby, error)
 	}
 )

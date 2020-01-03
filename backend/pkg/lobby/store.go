@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/jasonwinn/geocoder"
 	"github.com/jmoiron/sqlx"
 
 	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
@@ -14,6 +15,7 @@ type lobbyStore struct {
 }
 
 func NewStore(db *sqlx.DB) core.LobbyStore {
+	geocoder.SetAPIKey("PdBSQAE97uUFd6NKJYsBO35voZcXX0qD")
 	return &lobbyStore{db: db}
 }
 
@@ -30,12 +32,21 @@ func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
 	for rows.Next(){
 		l := core.Lobby{}
 		r := core.Restaurant{}
+		loc := core.Location{}
+
 		err := rows.Scan(&l.ID, &r.ID, &r.Name, &l.Owner,
-						&l.Expires, &l.GeoLat, &l.GeoLon)
+						&l.Expires, &loc.GeoLat, &loc.GeoLon)
 		if err != nil{
 			return nil, err
 		}
 
+		adrs, err := geocoder.ReverseGeocode(loc.GeoLat, loc.GeoLon)
+		if err != nil {
+			return nil, err
+		}
+
+		loc.Address = adrs.Street + " " + adrs.City
+		l.Location = &loc
 		l.Restaurant = &r
 		lobbies = append(lobbies, &l)
 	}
@@ -51,14 +62,18 @@ func (s *lobbyStore) Create(
 	restaurantID int,
 	ownerID int,
 	expires *time.Time,
-	geolat float64,
-	geolon float64,
+	address string,
 ) (*core.Lobby, error) {
 	var id int
 
-	err := s.db.QueryRowContext(ctx, `INSERT INTO
+	geolat, geolon, err := geocoder.Geocode(address)
+	if err != nil {
+		return nil, err
+	}
+
+	err = s.db.QueryRowContext(ctx, `INSERT INTO
     	lobbies(restaurant, owner, expires, geolat, geolon) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
-    	restaurantID, ownerID, expires, geolat, geolon).Scan(&id)
+		restaurantID, ownerID, expires, geolat, geolon).Scan(&id)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +93,10 @@ func (s *lobbyStore) Create(
 		},
 		Owner:        ownerID,
 		Expires:      *expires,
-		GeoLat:       geolat,
-		GeoLon:       geolon,
+		Location: &core.Location{
+			GeoLat:  geolat,
+			GeoLon:  geolon,
+			Address: address,
+		},
 	}, nil
 }
