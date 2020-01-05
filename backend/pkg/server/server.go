@@ -25,6 +25,8 @@ func New(
 
 	r := chi.NewRouter()
 
+	h := newHub()
+
 	r.Use(
 		middleware.RequestID,
 		middleware.Logger,
@@ -33,11 +35,24 @@ func New(
 	)
 
 	// add handlers
+	webSocketHandler := wsHandler{hub: h}
+
 	pingHandler := pingHandler{}
 	restaurantHandler := restaurantHandler{restaurantService:restaurantService}
 	lobbyHandler := lobbyHandler{lobbyService: lobbyService}
 
 	r.Route("/api", func(r chi.Router) {
+		//r.HandleFunc("/ws", webSocketHandler.ServeHTTP)
+		//r.Route("/ws", func(r chi.Router) {
+		//	r.Get("/", webSocketHandler.ServeHTTP)
+		//})
+		//router := mux.NewRouter()
+		r.HandleFunc("/longlat", webSocketHandler.longLatHandler)
+		router.HandleFunc("/", rootHandler).Methods("GET")
+		router.HandleFunc("/ws", wsHandler)
+		go echo()
+
+
 		r.Route("/restaurants", func(r chi.Router) {
 			r.Get("/", restaurantHandler.listRestaurants)
 			r.Route("/{restaurantID}", func(r chi.Router){
