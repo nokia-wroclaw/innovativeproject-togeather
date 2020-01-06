@@ -31,6 +31,15 @@ type (
 			expires *time.Time,
 			address string,
 		) (*Lobby, error)
+
+		Edit(
+			ctx context.Context,
+			lobbyID int,
+			restaurantID int,
+			ownerID int,
+			expires *time.Time,
+			address string,
+		) (*Lobby, error)
 	}
 
 	LobbyStore interface {
@@ -38,6 +47,15 @@ type (
 
 		Create(
 			ctx context.Context,
+			restaurantID int,
+			ownerID int,
+			expires *time.Time,
+			address string,
+		) (*Lobby, error)
+
+		Edit(
+			ctx context.Context,
+			lobbyID int,
 			restaurantID int,
 			ownerID int,
 			expires *time.Time,

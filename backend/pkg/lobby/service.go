@@ -28,3 +28,14 @@ func (s *service) Create(
 ) (*core.Lobby, error) {
 	return s.lobbyStore.Create(ctx, restaurantID, ownerID, expires, address)
 }
+
+func (s *service) Edit(
+	ctx context.Context,
+	lobbyID int,
+	restaurantID int,
+	ownerID int,
+	expires *time.Time,
+	address string,
+) (*core.Lobby, error) {
+	return s.lobbyStore.Edit(ctx, lobbyID, restaurantID, ownerID, expires, address)
+}

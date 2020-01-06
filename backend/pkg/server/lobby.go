@@ -2,8 +2,10 @@ package server
 
 import (
 	"encoding/json"
+	"github.com/go-chi/chi"
 	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -41,6 +43,37 @@ func (h *lobbyHandler) create(w http.ResponseWriter, r *http.Request) {
 
 	lobby, err := h.lobbyService.Create(
 		ctx,
+		request.RestaurantID,
+		request.Owner,
+		&request.Expires,
+		request.Address,
+	)
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	respondJSON(w, http.StatusOK, lobby)
+}
+
+func (h *lobbyHandler) edit(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	lobbyID, err := strconv.Atoi(chi.URLParam(r, "lobbyID"))
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	var request createLobbyRequest
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	lobby, err := h.lobbyService.Edit(
+		ctx,
+		lobbyID,
 		request.RestaurantID,
 		request.Owner,
 		&request.Expires,
