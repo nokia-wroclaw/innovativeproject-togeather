@@ -1,0 +1,14 @@
+<h2>Open lobbies</h2>
+
+<div class="lobbies-container" *ngIf="lobbies$">
+    <mat-card class="lobby-card" *ngFor="let lobby of lobbies$ | async">
+        <mat-card-header>
+            <mat-card-title>
+                <a (click)="redirectToRestaurant(lobby.restaurant.id)" class="restaurant-name">Restaurant: {{ lobby.restaurant.name }}</a>
+            </mat-card-title>
+            <mat-card-subtitle>Closes in: {{ lobby.expires | beautifyExpirationDate }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-subtitle class="delivery-address">Delivery address: {{ lobby.address | beautifyAddress }}</mat-card-subtitle>
+        <button mat-raised-button>Join</button>
+    </mat-card>
+</div>

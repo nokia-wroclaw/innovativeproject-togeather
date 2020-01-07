@@ -31,6 +31,8 @@ import { MaterialTimePickerModule } from '@candidosales/material-time-picker';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BeautifyAddressPipe } from './_pipes/beautify-address.pipe';
 import { CartComponent } from './cart/cart.component';
+import { LobbiesListComponent } from './lobbies-list/lobbies-list.component';
+import { BeautifyExpirationDatePipe } from './_pipes/beautify-expiration-date.pipe';
 
 
 @NgModule({
@@ -45,6 +47,8 @@ import { CartComponent } from './cart/cart.component';
         CreateLobbyComponent,
         BeautifyAddressPipe,
         CartComponent,
+        LobbiesListComponent,
+        BeautifyExpirationDatePipe,
     ],
     imports: [
         BrowserModule,

@@ -28,4 +28,8 @@ export class RedirectionService {
     redirectToRestaurants(): void {
         this.router.navigateByUrl('/restaurants');
     }
+
+    redirectToLobbies(): void {
+        this.router.navigateByUrl('/open-lobbies');
+    }
 }
