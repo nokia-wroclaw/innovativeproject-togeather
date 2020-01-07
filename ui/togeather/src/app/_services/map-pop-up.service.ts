@@ -8,10 +8,12 @@ export class MapPopUpService {
 
   constructor() { }
 
-  // TODO: Change this when the new lobby structure is finally given from api
   static makeLobbyPopup(data: Lobby): string {
+    const addressArray = data.address.replace(',', '').split(' ');
+    const address = `${ addressArray[1] } ${ addressArray[0] }, ${ addressArray[2] }`;
+
     return '' + '<div>Restaurant: ' + data.restaurant.name + '</div>'
-              + '<div>Address lobby: ' + '(no address given)' + '</div>'
+              + '<div>Address lobby: ' + address + '</div>'
               + '<div>Expiration Date: ' + data.expires + '</div>';
 
   }

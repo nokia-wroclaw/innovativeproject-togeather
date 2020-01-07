@@ -29,4 +29,5 @@ export interface Lobby {
     readonly owner: number;
     readonly expires: Date;
     readonly location: Coordinates;
+    readonly address: string;
 }

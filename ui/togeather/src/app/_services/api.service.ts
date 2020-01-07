@@ -42,6 +42,7 @@ export class ApiService {
                         owner: obj.owner,
                         expires: new Date(obj.expires),
                         location: { lat: obj.location.lat, lon: obj.location.lon },
+                        address: obj.location.lobby_address,
                     };
                 });
             })
