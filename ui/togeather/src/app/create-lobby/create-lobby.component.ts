@@ -11,6 +11,11 @@ import { PostLobbyDto } from '../_models/post-lobby-dto';
   styleUrls: ['./create-lobby.component.scss']
 })
 export class CreateLobbyComponent implements OnInit {
+
+  constructor(
+      private api: ApiService,
+      private fb: FormBuilder,
+  ) { }
   today = new Date();
   expirationTime: { hour: number, minute: number, meriden: 'PM' | 'AM', format: 24 | 12 };
   restaurants$: Observable<Restaurant[]> = of([]);
@@ -22,10 +27,9 @@ export class CreateLobbyComponent implements OnInit {
     restaurantId: [ null, Validators.required ],
   });
 
-  constructor(
-      private api: ApiService,
-      private fb: FormBuilder,
-  ) { }
+  static sanitize (field: string) {
+    return field.trim().replace(',', ' ');
+  }
 
   ngOnInit() {
     this.expirationTime = {
@@ -49,7 +53,7 @@ export class CreateLobbyComponent implements OnInit {
       );
 
       const control = this.lobbyForm.controls;
-      const address = `${control.nr.value} ${control.street.value}, ${control.city.value}`;
+      const address = control.nr.value.sanitize + ',' + control.street.value.sanitize + ',' + control.city.value.sanitize;
 
       const newLobby: PostLobbyDto = {
         restaurant_id: this.lobbyForm.controls['restaurantId'].value,
