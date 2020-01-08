@@ -13,11 +13,11 @@ import { PostLobbyDto } from '../_models/post-lobby-dto';
 export class CreateLobbyComponent implements OnInit {
 
   disableCreateButton = false;
-  today = new Date();
   expirationTime: { hour: number, minute: number, meriden: 'PM' | 'AM', format: 24 | 12 };
   restaurants$: Observable<Restaurant[]> = of([]);
 
   lobbyForm = this.fb.group({
+    ownerName: ['', Validators.required ],
     street: [ '', Validators.required ],
     nr: [ '', Validators.required ],
     city: [ '', Validators.required ],
@@ -34,9 +34,10 @@ export class CreateLobbyComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    const today = new Date();
     this.expirationTime = {
-      hour: this.today.getHours(),
-      minute: this.today.getMinutes(),
+      hour: today.getHours(),
+      minute: today.getMinutes(),
       meriden: 'PM',
       format: 24
     };
@@ -44,17 +45,12 @@ export class CreateLobbyComponent implements OnInit {
     this.restaurants$ = this.api.getRestaurants();
   }
 
-  createNewLobby() {
+  createNewLobby(): void {
     if (this.lobbyForm.valid) {
       this.disableCreateButton = true;
 
-      const expirationDate = new Date(
-          this.today.getFullYear(),
-          this.today.getMonth(),
-          this.today.getDay(),
-          this.expirationTime.hour,
-          this.expirationTime.minute
-      );
+      const expirationDate = new Date();
+      expirationDate.setUTCHours(this.expirationTime.hour, this.expirationTime.minute);
 
       const control = this.lobbyForm.controls;
       const address = CreateLobbyComponent.sanitize(control.nr.value)
@@ -65,7 +61,7 @@ export class CreateLobbyComponent implements OnInit {
 
       const newLobby: PostLobbyDto = {
         restaurant_id: this.lobbyForm.controls['restaurantId'].value,
-        owner: 1,
+        owner_name: this.lobbyForm.controls['ownerName'].value,
         expires: expirationDate.toISOString(),
         address: address
       };

@@ -9,6 +9,6 @@
 <div *ngIf="coordinates">Your location: {{ 'lat: ' + coordinates?.lat + ' lon: ' + coordinates?.lon }}</div>
 <div class="landing-buttons">
     <button (click)="redirectToRestaurants()" class="landing-buttons__button" mat-raised-button>Restaurants list</button>
-    <button (click)="redirectToLobbies()" class="landing-buttons__button" mat-raised-button>Search for existing lobby</button>
+    <button (click)="redirectToLobbies()" class="landing-buttons__button" mat-raised-button>View open lobbies</button>
     <button (click)="redirectToLobbyCreation()" class="landing-buttons__button" mat-raised-button>Create a lobby</button>
 </div>
