@@ -26,11 +26,21 @@ func (h *lobbyHandler) list(w http.ResponseWriter, r *http.Request) {
 }
 
 type createLobbyRequest struct {
-	RestaurantID int `json:"restaurant_id, required"`
-	Owner int `json:"owner, required"`
-	Expires time.Time `json:"expires, required"`
-	Address string `json:"address, required"`
+	RestaurantID int       `json:"restaurant_id, required"`
+	OwnerName    string       `json:"owner_name, required"`
+	Expires      time.Time `json:"expires, required"`
+	Address      string    `json:"address, required"`
+	Order        []*core.Item   `json:"order, required"`
 }
+
+type editLobbyRequest struct {
+	RestaurantID int       `json:"restaurant_id, required"`
+	OwnerID    	 int       `json:"owner_name, required"`
+	Expires      time.Time `json:"expires, required"`
+	Address      string    `json:"address, required"`
+	Order        []*core.Item   `json:"order, required"`
+}
+
 
 func (h *lobbyHandler) create(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
@@ -44,9 +54,10 @@ func (h *lobbyHandler) create(w http.ResponseWriter, r *http.Request) {
 	lobby, err := h.lobbyService.Create(
 		ctx,
 		request.RestaurantID,
-		request.Owner,
+		request.OwnerName,
 		&request.Expires,
 		request.Address,
+		request.Order,
 	)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
@@ -65,7 +76,7 @@ func (h *lobbyHandler) edit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var request createLobbyRequest
+	var request editLobbyRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return
@@ -75,7 +86,7 @@ func (h *lobbyHandler) edit(w http.ResponseWriter, r *http.Request) {
 		ctx,
 		lobbyID,
 		request.RestaurantID,
-		request.Owner,
+		request.OwnerID,
 		&request.Expires,
 		request.Address,
 	)
