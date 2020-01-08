@@ -15,7 +15,7 @@
 
             <mat-form-field class="lobby-form__field">
                 <mat-label>Nr</mat-label>
-                <input formControlName="nr" matInput placeholder="Flat nr">
+                <input formControlName="nr" matInput placeholder="building/apartment">
                 <mat-error>
                     Nr is <strong>required</strong>
                 </mat-error>
@@ -52,6 +52,6 @@
                 submitLabel="Accept"
         ></material-timepicker>
 
-        <button (click)="createNewLobby()" mat-raised-button color="primary">Create lobby</button>
+        <button [disabled]="disableCreateButton" (click)="createNewLobby()" mat-raised-button color="primary">Create lobby</button>
     </form>
 </div>

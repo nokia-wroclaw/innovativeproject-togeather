@@ -20,9 +20,9 @@ func NewStore(db *sqlx.DB) core.LobbyStore {
 }
 
 func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
-	rows, err := s.db.QueryxContext(ctx, `SELECT l.id, l.restaurant, r.name, l.owner,
- 								l.expires, l.geolat, l.geolon, l.address FROM lobbies l
- 								JOIN restaurants r ON r.id = l.restaurant`)
+	rows, err := s.db.QueryxContext(ctx, `SELECT l.id, l.restaurant, r.name, 
+		r.delivery, l.owner,	l.expires, l.geolat, l.geolon, l.address FROM lobbies l
+		JOIN restaurants r ON r.id = l.restaurant`)
 	if err != nil{
 		return nil, err
 	}
@@ -35,8 +35,8 @@ func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
 		loc := core.Location{}
 		c := core.Client{}
 
-		err := rows.Scan(&l.ID, &r.ID, &r.Name, &c.ID,
-						&l.Expires, &loc.GeoLat, &loc.GeoLon, &loc.Address)
+		err := rows.Scan(&l.ID, &r.ID, &r.Name, &r.Delivery, &c.ID, 
+        &l.Expires, &loc.GeoLat, &loc.GeoLon, &loc.Address)
 		if err != nil{
 			return nil, err
 		}
@@ -92,8 +92,9 @@ func (s *lobbyStore) Create(
 	}
 
 	var restaurantName string
-	row := s.db.QueryRowContext(ctx, `SELECT name FROM restaurants WHERE id = $1`, restaurantID)
-	err = row.Scan(&restaurantName)
+	var restaurantDelivery float32
+	row := s.db.QueryRowContext(ctx, `SELECT name, delivery FROM restaurants WHERE id = $1`, restaurantID)
+	err = row.Scan(&restaurantName, &restaurantDelivery)
 	if err != nil{
 		return nil, err
 	}
@@ -103,6 +104,7 @@ func (s *lobbyStore) Create(
 		Restaurant: &core.Restaurant{
 			ID:   restaurantID,
 			Name: restaurantName,
+			Delivery: restaurantDelivery,
 		},
 		Owner: &core.Client{
 			ID:   clientID,
@@ -137,10 +139,10 @@ func (s *lobbyStore) Edit(
 		return nil, err
 	}
 
-
 	var restaurantName string
-	row := s.db.QueryRowContext(ctx, `SELECT name FROM restaurants WHERE id = $1`, restaurantID)
-	err = row.Scan(&restaurantName)
+	var restaurantDelivery float32
+	row := s.db.QueryRowContext(ctx, `SELECT name, delivery FROM restaurants WHERE id = $1`, restaurantID)
+	err = row.Scan(&restaurantName, &restaurantDelivery)
 	if err != nil{
 		return nil, err
 	}
@@ -150,6 +152,7 @@ func (s *lobbyStore) Edit(
 		Restaurant: &core.Restaurant{
 			ID:   restaurantID,
 			Name: restaurantName,
+			Delivery: restaurantDelivery,
 		},
 		Owner:    &core.Client{
 			ID:	ownerID,
