@@ -52,6 +52,6 @@
                 submitLabel="Accept"
         ></material-timepicker>
 
-        <button (click)="createNewLobby()" mat-raised-button color="primary">Create lobby</button>
+        <button [disabled]="disableCreateButton" (click)="createNewLobby()" mat-raised-button color="primary">Create lobby</button>
     </form>
 </div>
