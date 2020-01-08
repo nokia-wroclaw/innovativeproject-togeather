@@ -33,13 +33,15 @@ func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
 		l := core.Lobby{}
 		r := core.Restaurant{}
 		loc := core.Location{}
+		c := core.Client{}
 
-		err := rows.Scan(&l.ID, &r.ID, &r.Name, &l.Owner,
+		err := rows.Scan(&l.ID, &r.ID, &r.Name, &c.ID,
 						&l.Expires, &loc.GeoLat, &loc.GeoLon, &loc.Address)
 		if err != nil{
 			return nil, err
 		}
 
+		l.Owner = &c
 		l.Location = &loc
 		l.Restaurant = &r
 		lobbies = append(lobbies, &l)
