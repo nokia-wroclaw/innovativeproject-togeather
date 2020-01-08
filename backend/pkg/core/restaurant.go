@@ -10,6 +10,7 @@ type (
 		Name	string	`json:"name"`
 		Menu	[]*Meal	`json:"menu, omitempty"`
 		Address	string	`json:"address, omitempty"`
+		Delivery float32 `json:"delivery_cost"`
 	}
 
 	Meal struct {
@@ -21,14 +22,12 @@ type (
 	}
 
 	RestaurantService interface {
-		Exists(ctx context.Context, restaurantID int) (bool, error)
 		ListRestaurants(ctx context.Context) ([]*Restaurant, error)
 		RestaurantMenu(ctx context.Context, restaurantID int) ([]*Meal, error)
 		GetRestaurant(ctx context.Context, restaurantID int) (*Restaurant, error)
 	}
 
 	RestaurantStore interface {
-		Exists(ctx context.Context, restaurantID int) (bool, error)
 		ListRestaurants(ctx context.Context) ([]*Restaurant, error)
 		RestaurantMenu(ctx context.Context, restaurantID int) ([]*Meal, error)
 		GetRestaurant(ctx context.Context, restaurantID int) (*Restaurant, error)
