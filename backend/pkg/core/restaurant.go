@@ -10,6 +10,7 @@ type (
 		Name	string	`json:"name"`
 		Menu	[]*Meal	`json:"menu, omitempty"`
 		Address	string	`json:"address, omitempty"`
+		Delivery float32 `json:"delivery_cost"`
 	}
 
 	Meal struct {

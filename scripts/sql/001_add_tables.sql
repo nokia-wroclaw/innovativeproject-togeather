@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS restaurants
 (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
-    address TEXT NOT NULL
+    address TEXT NOT NULL,
+    delivery REAL NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS meals

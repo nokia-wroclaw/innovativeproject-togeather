@@ -20,7 +20,7 @@ func (s *restaurantStore) Exists(ctx context.Context, restaurantID int) (bool, e
 }
 
 func (s *restaurantStore) ListRestaurants(ctx context.Context) ([]*core.Restaurant, error) {
-	rows, err := s.db.QueryContext(ctx, `SELECT id, name, address FROM restaurants`)
+	rows, err := s.db.QueryContext(ctx, `SELECT id, name, address, delivery FROM restaurants`)
 	if err != nil{
 		return nil, err
 	}
@@ -29,7 +29,7 @@ func (s *restaurantStore) ListRestaurants(ctx context.Context) ([]*core.Restaura
 	rests := make([]*core.Restaurant, 0)
 	for rows.Next(){
 		rest := core.Restaurant{}
-		err := rows.Scan(&rest.ID, &rest.Name, &rest.Address)
+		err := rows.Scan(&rest.ID, &rest.Name, &rest.Address, &rest.Delivery)
 		if err != nil{
 			return nil, err
 		}
@@ -96,8 +96,8 @@ func (s *restaurantStore) GetRestaurant(ctx context.Context, restaurantID int) (
 	rest := core.Restaurant{}
 	rest.Menu = menu
 
-	row := s.db.QueryRowContext(ctx, `SELECT id, name, address FROM restaurants WHERE id = $1`, restaurantID)
-	err = row.Scan(&rest.ID, &rest.Name, &rest.Address)
+	row := s.db.QueryRowContext(ctx, `SELECT id, name, address, delivery FROM restaurants WHERE id = $1`, restaurantID)
+	err = row.Scan(&rest.ID, &rest.Name, &rest.Address, &rest.Delivery)
 	if err != nil{
 		return nil, err
 	}
