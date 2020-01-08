@@ -15,10 +15,6 @@ func NewStore(db *sqlx.DB) core.RestaurantStore {
 	return &restaurantStore{db: db}
 }
 
-func (s *restaurantStore) Exists(ctx context.Context, restaurantID int) (bool, error) {
-	return false, nil
-}
-
 func (s *restaurantStore) ListRestaurants(ctx context.Context) ([]*core.Restaurant, error) {
 	rows, err := s.db.QueryContext(ctx, `SELECT id, name, address, delivery FROM restaurants`)
 	if err != nil{
