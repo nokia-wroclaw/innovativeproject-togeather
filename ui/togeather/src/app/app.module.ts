@@ -28,6 +28,7 @@ import { RedirectionService } from './_services/redirection.service';
 import { CreateLobbyComponent } from './create-lobby/create-lobby.component';
 import { MaterialTimePickerModule } from '@candidosales/material-time-picker';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { BeautifyAddressPipe } from './_pipes/beautify-address.pipe';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
         RestaurantsListComponent,
         RestaurantComponent,
         CreateLobbyComponent,
+        BeautifyAddressPipe,
     ],
     imports: [
         BrowserModule,
