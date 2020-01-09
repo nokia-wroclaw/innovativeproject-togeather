@@ -1,17 +1,20 @@
-<div *ngIf="restaurant">
-    <h2>{{ restaurant.name }}</h2>
+<div class="wrapper">
+    <app-cart class="cart"></app-cart>
 
-    <div class="singleRestaurant-container">
-        <mat-card class="singleRestaurant-card" *ngFor="let dish of restaurant.menu">
+    <div class="restaurant" *ngIf="restaurant">
+        <h2 class="restaurant__name">{{ restaurant.name }}</h2>
+
+        <mat-card class="restaurant-menu-item" *ngFor="let dish of restaurant.menu">
             <mat-card-header>
-                {{ dish.name }}
+                <mat-card-title>{{ dish.name }}</mat-card-title>
+                <mat-card-subtitle>{{ dish.description }}</mat-card-subtitle>
             </mat-card-header>
-            <mat-card-subtitle>{{ dish.description }}</mat-card-subtitle>
-            <mat-form-field>
-                <input matInput type="number" value="1">
-            </mat-form-field>
-            <mat-card-subtitle>{{ dish.price }}</mat-card-subtitle>
-            <button mat-raised-button>Add to cart</button>
+            <mat-card-content>
+                <div class="restaurant-menu-item__price-and-button-container">
+                    <div class="restaurant-menu-item__price">{{ dish.price }}</div>
+                    <button mat-raised-button (click)="addToCart(dish)">Add to cart</button>
+                </div>
+            </mat-card-content>
         </mat-card>
     </div>
 </div>

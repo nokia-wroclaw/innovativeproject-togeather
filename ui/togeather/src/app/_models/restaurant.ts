@@ -1,6 +1,8 @@
+import { Product } from './product';
+
 export interface Restaurant {
     id: number;
     name: string;
     address: string;
-    readonly menu: string[];
+    readonly menu: Product[];
 }

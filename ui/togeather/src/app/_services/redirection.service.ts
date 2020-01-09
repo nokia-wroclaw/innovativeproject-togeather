@@ -11,7 +11,10 @@ export class RedirectionService {
     ) { }
 
     redirectToSingleRestaurant(id: number): void {
-        this.router.navigateByUrl(`/restaurants/${id}`);
+        this.router.navigateByUrl(`/restaurants/${id}`)
+            .catch(error => {
+                console.error('Error when redirecting to single restaurant view:', error);
+            });
     }
 
     redirectToHomePage(): void {

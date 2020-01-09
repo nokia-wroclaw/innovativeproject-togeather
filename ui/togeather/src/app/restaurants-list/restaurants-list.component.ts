@@ -24,6 +24,7 @@ export class RestaurantsListComponent implements OnInit {
         }
     );
   }
+
   redirectToRestaurant(id: number): void {
     this.redirectionService.redirectToSingleRestaurant(id);
   }
