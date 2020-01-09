@@ -33,11 +33,3 @@ VALUES	('Pizza Hawaii', 19.99, 'Pizza z szynką, ananasem i mandarynkami', 1),
 	('Pierogi Ruskie', 5.99, 'Pierogi z mięsem i cebulką', 8),
 	('Naleśniki', 3.99, 'Naleśniki z serem i śmietaną', 8),
 	('Kwaśne Mleko', 1.99, 'Szklanka zsiadłego mleka', 8);
-
-INSERT INTO clients(name)
-VALUES 	('Robert Lewandowski'),
-	('Arkadiusz Milik'),
-	('Grzegorz Krychowiak'),
-	('Paweł Talar'),
-	('Piotr Zieliński'),
-	('Tomasz Siemieniuk');
