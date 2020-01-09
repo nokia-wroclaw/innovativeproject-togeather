@@ -8,14 +8,14 @@ type (
 	Restaurant struct {
 		ID		int		`json:"id"`
 		Name	string	`json:"name"`
-		Menu	[]*Meal	`json:"menu, omitempty"`
-		Address	string	`json:"address, omitempty"`
+		Menu	[]*Meal	`json:"menu,omitempty"`
+		Address	string	`json:"address,omitempty"`
 		Delivery float32 `json:"delivery_cost"`
 	}
 
 	Meal struct {
 		ID      	 int	 `json:"id"`
-		RestaurantID int	 `json:"restaurant_id, omitempty"`
+		RestaurantID int	 `json:"restaurant_id,omitempty"`
 		Name         string	 `json:"name"`
 		Price        float32 `json:"price"`
 		Description	 string	 `json:"description"`
