@@ -12,7 +12,7 @@ type (
 		Owner 		*Client		`json:"owner"`
 		Expires 	time.Time	`json:"expires" db:"expires"`
 		Location 	*Location	`json:"location"`
-		Order 		[]*Item		`json:"order"`
+		Order 		[]*Item		`json:"order,omitempty"`
 	}
 
 	Location struct {
