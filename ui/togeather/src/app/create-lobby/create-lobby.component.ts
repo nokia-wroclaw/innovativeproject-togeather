@@ -57,9 +57,9 @@ export class CreateLobbyComponent implements OnInit {
       );
 
       const control = this.lobbyForm.controls;
-      const address = CreateLobbyComponent.sanitize(control.street.value)
+      const address = CreateLobbyComponent.sanitize(control.nr.value)
           + ','
-          + CreateLobbyComponent.sanitize(control.nr.value)
+          + CreateLobbyComponent.sanitize(control.street.value)
           + ','
           + CreateLobbyComponent.sanitize(control.city.value);
 

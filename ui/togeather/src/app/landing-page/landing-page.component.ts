@@ -27,4 +27,8 @@ export class LandingPageComponent implements OnInit {
   redirectToRestaurants() {
     this.redirectionService.redirectToRestaurants();
   }
+
+  redirectToLobbies() {
+    this.redirectionService.redirectToLobbies();
+  }
 }
