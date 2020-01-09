@@ -35,7 +35,7 @@ type createLobbyRequest struct {
 
 type editLobbyRequest struct {
 	RestaurantID int       `json:"restaurant_id, required"`
-	OwnerID    	 int       `json:"owner_name, required"`
+	OwnerID    	 int       `json:"owner_id, required"`
 	Expires      time.Time `json:"expires, required"`
 	Address      string    `json:"address, required"`
 	Order        []*core.Item   `json:"order, required"`
