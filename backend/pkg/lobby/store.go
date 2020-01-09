@@ -21,8 +21,10 @@ func NewStore(db *sqlx.DB) core.LobbyStore {
 
 func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
 	rows, err := s.db.QueryxContext(ctx, `SELECT l.id, l.restaurant, r.name, 
-		r.delivery, l.owner,	l.expires, l.geolat, l.geolon, l.address FROM lobbies l
-		JOIN restaurants r ON r.id = l.restaurant`)
+		r.delivery, l.owner, c.name, l.expires, l.geolat, l.geolon, l.address 
+		FROM lobbies l 
+		JOIN restaurants r ON r.id = l.restaurant 
+		JOIN clients c ON c.id = l.owner`)
 	if err != nil{
 		return nil, err
 	}
@@ -36,7 +38,7 @@ func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
 		c := core.Client{}
 
 		err := rows.Scan(&l.ID, &r.ID, &r.Name, &r.Delivery, &c.ID, 
-        &l.Expires, &loc.GeoLat, &loc.GeoLon, &loc.Address)
+        &c.Name, &l.Expires, &loc.GeoLat, &loc.GeoLon, &loc.Address)
 		if err != nil{
 			return nil, err
 		}
@@ -75,7 +77,8 @@ func (s *lobbyStore) Create(
 
 	var lobbyID int
 	err = s.db.QueryRowContext(ctx, `INSERT INTO
-    	lobbies(restaurant, owner, expires, geolat, geolon, address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
+    	lobbies(restaurant, owner, expires, geolat, geolon, address) 
+    	VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
 		restaurantID, clientID, expires, geolat, geolon, address).Scan(&lobbyID)
 	if err != nil {
 		return nil, err
@@ -93,7 +96,8 @@ func (s *lobbyStore) Create(
 
 	var restaurantName string
 	var restaurantDelivery float32
-	row := s.db.QueryRowContext(ctx, `SELECT name, delivery FROM restaurants WHERE id = $1`, restaurantID)
+	row := s.db.QueryRowContext(ctx, `SELECT name, delivery 
+		FROM restaurants WHERE id = $1`, restaurantID)
 	err = row.Scan(&restaurantName, &restaurantDelivery)
 	if err != nil{
 		return nil, err
@@ -133,15 +137,17 @@ func (s *lobbyStore) Edit(
 		return nil, err
 	}
 
-	_, err = s.db.ExecContext(ctx, `UPDATE lobbies SET restaurant = $1, expires = $2,
-		geolat = $3, geolon = $4, address = $5 WHERE id = $6`, restaurantID, expires, geolat, geolon, address, lobbyID)
+	_, err = s.db.ExecContext(ctx, `UPDATE lobbies SET restaurant = $1, 
+		expires = $2, geolat = $3, geolon = $4, address = $5 WHERE id = $6`,
+		restaurantID, expires, geolat, geolon, address, lobbyID)
 	if err != nil {
 		return nil, err
 	}
 
 	var restaurantName string
 	var restaurantDelivery float32
-	row := s.db.QueryRowContext(ctx, `SELECT name, delivery FROM restaurants WHERE id = $1`, restaurantID)
+	row := s.db.QueryRowContext(ctx, `SELECT name, delivery 
+		FROM restaurants WHERE id = $1`, restaurantID)
 	err = row.Scan(&restaurantName, &restaurantDelivery)
 	if err != nil{
 		return nil, err
