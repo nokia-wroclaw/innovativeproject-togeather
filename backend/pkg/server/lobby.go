@@ -41,6 +41,9 @@ type editLobbyRequest struct {
 	Order        []*core.Item   `json:"order, required"`
 }
 
+type joinLobbyRequest struct {
+	ClientName string `json:"user_name"`
+}
 
 func (h *lobbyHandler) create(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
@@ -96,4 +99,28 @@ func (h *lobbyHandler) edit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondJSON(w, http.StatusOK, lobby)
+}
+
+func (h *lobbyHandler) join(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	lobbyID, err := strconv.Atoi(chi.URLParam(r, "lobbyID"))
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	var request joinLobbyRequest
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	client, err := h.lobbyService.Join(ctx, lobbyID, request.ClientName)
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	respondJSON(w, http.StatusOK, client)
 }

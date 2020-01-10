@@ -6,8 +6,8 @@ import (
 
 type (
 	User struct {
-		ID		int		`json:"id"`
-		Name	string	`json:"name"`
+		ID		int		`json:"user_id"`
+		Name	string	`json:"user_name"`
 	}
 
 	UserService interface {
