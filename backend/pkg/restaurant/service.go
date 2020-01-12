@@ -10,6 +10,19 @@ type service struct {
 	restaurantStore core.RestaurantStore
 }
 
+type command struct {
+	Command string `json:"command"`
+	Food Meal `json:"meal"`
+}
+
+type Meal struct {
+	ID      	 int	 `json:"id"`
+	RestaurantID int	 `json:"restaurant_id,omitempty"`
+	Name         string	 `json:"name"`
+	Price        float32 `json:"price"`
+	Description	 string	 `json:"description"`
+}
+
 
 func NewService(restaurantStore core.RestaurantStore) core.RestaurantService {
 	return &service{restaurantStore: restaurantStore}

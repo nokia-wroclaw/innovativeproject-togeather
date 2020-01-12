@@ -68,6 +68,7 @@ func (h *lobbyHandler) create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondJSON(w, http.StatusOK, lobby)
+	//wsEndpoint(w, r)
 }
 
 func (h *lobbyHandler) edit(w http.ResponseWriter, r *http.Request) {
@@ -123,4 +124,5 @@ func (h *lobbyHandler) join(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondJSON(w, http.StatusOK, client)
+	//wsEndpoint(w, r)
 }
