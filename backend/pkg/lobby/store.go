@@ -2,7 +2,6 @@ package lobby
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"github.com/jasonwinn/geocoder"
@@ -185,10 +184,6 @@ func (s *lobbyStore) Join(ctx context.Context, lobbyID int, clientName string) (
 }
 
 func (s *lobbyStore) Clean(ctx context.Context) {
-	//currentTime := time.Now().Unix()
-
-	limitTime := time.Now().Add(time.Minute*30).UTC()
-	log.Fatal(limitTime)
-
-
+	limitTime := time.Now().Add(time.Minute*(-30)).Format(time.RFC3339)
+	s.db.ExecContext(ctx, `DELETE FROM lobbies WHERE expires < $1`, limitTime)
 }
