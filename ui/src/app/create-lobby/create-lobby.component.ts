@@ -4,6 +4,8 @@ import { Restaurant } from '../_models/restaurant';
 import { ApiService } from '../_services/api.service';
 import { Observable, of } from 'rxjs';
 import { PostLobbyDto } from '../_models/post-lobby-dto';
+import { Lobby } from '../_models/lobby';
+import { RedirectionService } from '../_services/redirection.service';
 
 @Component({
   selector: 'app-create-lobby',
@@ -31,6 +33,7 @@ export class CreateLobbyComponent implements OnInit {
   constructor(
       private api: ApiService,
       private fb: FormBuilder,
+      private redirectionService: RedirectionService,
   ) { }
 
   ngOnInit() {
@@ -52,12 +55,11 @@ export class CreateLobbyComponent implements OnInit {
       const expirationDate = new Date();
       expirationDate.setUTCHours(this.expirationTime.hour, this.expirationTime.minute);
 
-      const control = this.lobbyForm.controls;
-      const address = CreateLobbyComponent.sanitize(control.nr.value)
+      const address = CreateLobbyComponent.sanitize(this.lobbyForm.get('nr').value)
           + ','
-          + CreateLobbyComponent.sanitize(control.street.value)
+          + CreateLobbyComponent.sanitize(this.lobbyForm.get('street').value)
           + ','
-          + CreateLobbyComponent.sanitize(control.city.value);
+          + CreateLobbyComponent.sanitize(this.lobbyForm.get('city').value);
 
       const newLobby: PostLobbyDto = {
         restaurant_id: this.lobbyForm.controls['restaurantId'].value,
@@ -67,10 +69,9 @@ export class CreateLobbyComponent implements OnInit {
       };
 
 
-      this.api.postLobby(newLobby).subscribe(lobby => {
+      this.api.postLobby(newLobby).subscribe((lobby: Lobby) => {
         this.disableCreateButton = false;
-        console.log('Newly created lobby: ');
-        console.log(lobby);
+        this.redirectionService.redirectToSingleLobby(lobby.id);
       }, () => {
         this.disableCreateButton = false;
       });

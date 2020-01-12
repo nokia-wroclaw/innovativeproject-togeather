@@ -74,7 +74,7 @@ func (h *lobbyHandler) create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	addCookie(w, "user-id", strconv.Itoa(userID), 24*60*60, "/lobbies")
+	addCookie(w, "user-id", strconv.Itoa(userID), 24*60*60, "/api/lobbies")
 	respondJSON(w, http.StatusOK, lobby)
 }
 
@@ -130,7 +130,7 @@ func (h *lobbyHandler) join(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	addCookie(w, "user-id", strconv.Itoa(user.ID), 24*60*60, "/lobbies")
+	addCookie(w, "user-id", strconv.Itoa(user.ID), 24*60*60, "/api/lobbies")
 	respondJSON(w, http.StatusOK, user)
 }
 

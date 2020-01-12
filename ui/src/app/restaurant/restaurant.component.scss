@@ -1,24 +1,4 @@
-@import "~src/styles/global/_colors";
-@import "~src/styles/global/_breakpoints";
-
-.wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.cart {
-  flex-grow: 1;
-  order: 2;
-
-  @media (max-width: 930px) {
-    order: 0;
-  }
-}
-
-.restaurant {
-  flex-grow: 1;
-}
+@import '~src/styles/global/_colors';
 
 .restaurant-menu-item {
   margin: 5px 0;

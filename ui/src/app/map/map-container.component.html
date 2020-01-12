@@ -1,0 +1,6 @@
+<app-map [coords]="location">
+    <app-map-lobby-marker
+            *ngFor="let lobby of lobbies$ | async"
+            [lobby]="lobby"
+    ></app-map-lobby-marker>
+</app-map>

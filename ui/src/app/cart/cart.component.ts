@@ -18,8 +18,12 @@ export class CartComponent implements OnInit {
     this.items = this.cartService.getItems();
   }
 
-  deleteItem(item: Product) {
+  deleteItem(item: Product): void {
     this.cartService.deleteFromCart(item);
     this.items = this.cartService.getItems();
+  }
+
+  isCartEmpty(): boolean {
+    return this.items ? this.items.length === 0 : true;
   }
 }

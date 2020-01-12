@@ -4,7 +4,7 @@
     <mat-card class="lobby-card" *ngFor="let lobby of lobbies$ | async">
         <mat-card-header>
             <mat-card-title>
-                <a (click)="redirectToRestaurant(lobby.restaurant.id)" class="restaurant-name">Restaurant: {{ lobby.restaurant.name }}</a>
+                <a (click)="redirectToLobby(lobby.id)" class="restaurant-name">Restaurant: {{ lobby.restaurant.name }}</a>
             </mat-card-title>
             <mat-card-subtitle>Closes in: {{ lobby.expires | beautifyExpirationDate }}</mat-card-subtitle>
         </mat-card-header>
