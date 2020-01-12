@@ -44,3 +44,7 @@ func (s *service) Edit(
 func (s *service) Join(ctx context.Context, lobbyID int, clientName string)(*core.User, error){
 	return s.lobbyStore.Join(ctx, lobbyID, clientName)
 }
+
+func (s *service) Get(ctx context.Context, lobbyID int) (*core.Lobby, error) {
+	return s.lobbyStore.Get(ctx, lobbyID)
+}

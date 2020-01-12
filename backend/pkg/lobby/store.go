@@ -182,3 +182,30 @@ func (s *lobbyStore) Join(ctx context.Context, lobbyID int, clientName string) (
 
 	return &core.User{ID: clientID, Name: clientName}, nil
 }
+
+func (s *lobbyStore) Get(ctx context.Context, lobbyID int) (*core.Lobby, error) {
+	row := s.db.QueryRowContext(ctx, `SELECT l.restaurant, r.name, 
+		r.delivery, l.owner, c.name, l.expires, l.geolat, l.geolon, l.address 
+		FROM lobbies l 
+		JOIN restaurants r ON r.id = l.restaurant 
+		JOIN clients c ON c.id = l.owner
+		WHERE l.id = $1`, lobbyID)
+
+	lobby := core.Lobby{ID: lobbyID}
+	r := core.Restaurant{}
+	l := core.Location{}
+	c := core.Client{}
+
+	err := row.Scan(&r.ID, &r.Name, &r.Delivery, &c.ID, &c.Name, &lobby.Expires,
+		&l.GeoLat, &l.GeoLon, &l.Address)
+	if err != nil{
+		return nil, err
+	}
+
+	lobby.Owner = &c
+	lobby.Location = &l
+	lobby.Restaurant = &r
+
+	return &lobby, nil
+}
+
