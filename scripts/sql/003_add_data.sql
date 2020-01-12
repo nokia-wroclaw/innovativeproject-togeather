@@ -1,12 +1,12 @@
-INSERT INTO restaurants(name, address)
-VALUES	('Pizza Station', 'Grabiszyńska 66E'),
-	('Subway', 'Legnicka 58'),
-	('Pasibus', 'Świdnicka 11'),
-	('Djerba Kebab', 'Grabiszyńska 66B'),
-	('McDonalds', 'Powstańców Śląskich 95'),
-	('KFC','Legnicka 58'),
-	('Hoshi Sushi', 'Strzegomska 3b/3c'),
-	('Bar Mleczny Miś', 'Kuźnicza 48');
+INSERT INTO restaurants(name, address, delivery)
+VALUES	('Pizza Station', 'Grabiszyńska 66E', 5.00),
+	('Subway', 'Legnicka 58', 3.50),
+	('Pasibus', 'Świdnicka 11', 6.00),
+	('Djerba Kebab', 'Grabiszyńska 66B', 2.50),
+	('McDonalds', 'Powstańców Śląskich 95', 8.00),
+	('KFC','Legnicka 58', 2.00),
+	('Hoshi Sushi', 'Strzegomska 3b/3c', 4.50),
+	('Bar Mleczny Miś', 'Kuźnicza 48', 7.00);
 
 INSERT INTO meals(name, price, description, owning_restaurant)
 VALUES	('Pizza Hawaii', 19.99, 'Pizza z szynką, ananasem i mandarynkami', 1),
@@ -33,11 +33,3 @@ VALUES	('Pizza Hawaii', 19.99, 'Pizza z szynką, ananasem i mandarynkami', 1),
 	('Pierogi Ruskie', 5.99, 'Pierogi z mięsem i cebulką', 8),
 	('Naleśniki', 3.99, 'Naleśniki z serem i śmietaną', 8),
 	('Kwaśne Mleko', 1.99, 'Szklanka zsiadłego mleka', 8);
-
-INSERT INTO clients(name)
-VALUES 	('Robert Lewandowski'),
-	('Arkadiusz Milik'),
-	('Grzegorz Krychowiak'),
-	('Paweł Talar'),
-	('Piotr Zieliński'),
-	('Tomasz Siemieniuk');

@@ -1,0 +1,26 @@
+@import '~src/styles/global/_colors';
+@import '~src/styles/global/_breakpoints';
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.lobby-form {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 15px;
+  border-radius: 3px;
+  box-shadow: 0 1px 4px $light-gray;
+
+  @media (min-width: $small) {
+    width: 480px;
+    padding: 25px;
+  }
+}
+
+.lobby-form__field {
+  width: 100%;
+  margin: 10px 0;
+}

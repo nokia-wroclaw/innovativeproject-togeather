@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS restaurants
 (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
-    address TEXT NOT NULL
+    address TEXT NOT NULL,
+    delivery REAL NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS meals
@@ -28,6 +29,9 @@ CREATE TABLE IF NOT EXISTS lobbies
     restaurant INT NOT NULL,
     owner INT NOT NULL,
     expires timestamp NOT NULL,
+    geolat double precision NOT NULL,
+    geolon double precision NOT NULL,
+    address TEXT NOT NULL,
 
     FOREIGN KEY (owner) REFERENCES clients(id),
     FOREIGN KEY (restaurant) REFERENCES restaurants(id)

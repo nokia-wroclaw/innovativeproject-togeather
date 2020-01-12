@@ -9,6 +9,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/cors"
 	"github.com/gorilla/websocket"
 
 	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
@@ -22,26 +23,36 @@ type Server struct {
 func New(
 	restaurantService core.RestaurantService,
 	lobbyService core.LobbyService,
+	userService core.UserService,
 ) *Server {
 	s := &Server{}
 
 	r := chi.NewRouter()
 
-	//h := newHub()
+	serverCors := cors.New(cors.Options{
+		// AllowedOrigins: []string{"https://foo.com"}, // Use this to allow specific origin hosts
+		AllowedOrigins:   []string{"*"},
+		// AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "Content-Length", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: true,
+		MaxAge:           300, // Maximum value not ignored by any of major browsers
+	})
 
 	r.Use(
 		middleware.RequestID,
 		middleware.Logger,
 		middleware.StripSlashes,
 		middleware.Timeout(10*time.Second),
+		serverCors.Handler,
 	)
 
 	// add handlers
-	//webSocketHandler := wsHandler{hub: h}
-
 	pingHandler := pingHandler{}
-	restaurantHandler := restaurantHandler{restaurantService:restaurantService}
+	restaurantHandler := restaurantHandler{restaurantService: restaurantService}
 	lobbyHandler := lobbyHandler{lobbyService: lobbyService}
+	userHandler := userHandler{userService: userService}
 
 	hub := newHub()
 	go hub.run()
@@ -73,6 +84,13 @@ func New(
 		r.Route("/lobbies", func(r chi.Router) {
 			r.Get("/", lobbyHandler.list)
 			r.Post("/", lobbyHandler.create)
+			r.Route("/{lobbyID}", func(r chi.Router){
+				r.Put("/", lobbyHandler.edit)
+			})
+		})
+
+		r.Route("/users", func(r chi.Router) {
+			r.Get("/", userHandler.listUsers)
 		})
 
 		r.Route("/ping", func(r chi.Router) {
@@ -162,7 +180,6 @@ func reader(conn *websocket.Conn) {
 //}
 
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	s.router.ServeHTTP(w, r)
 }
 

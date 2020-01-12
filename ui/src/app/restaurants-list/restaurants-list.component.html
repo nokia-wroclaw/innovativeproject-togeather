@@ -1,0 +1,12 @@
+<h2>Restaurants</h2>
+
+<div class="restaurants-container" *ngIf="restaurants">
+    <mat-card class="restaurant-card" *ngFor="let restaurant of restaurants">
+        <mat-card-header>
+            <mat-card-title>
+                <a (click)="redirectToRestaurant(restaurant.id)" class="restaurant-name">{{ restaurant.name }}</a>
+            </mat-card-title>
+            <mat-card-subtitle>{{ restaurant.address }}</mat-card-subtitle>
+        </mat-card-header>
+    </mat-card>
+</div>

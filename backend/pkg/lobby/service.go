@@ -22,8 +22,21 @@ func (s *service) List(ctx context.Context) ([]*core.Lobby, error) {
 func (s *service) Create(
 	ctx context.Context,
 	restaurantID int,
+	ownerName string,
+	expires *time.Time,
+	address string,
+	order []*core.Item,
+) (*core.Lobby, error) {
+	return s.lobbyStore.Create(ctx, restaurantID, ownerName, expires, address, order)
+}
+
+func (s *service) Edit(
+	ctx context.Context,
+	lobbyID int,
+	restaurantID int,
 	ownerID int,
 	expires *time.Time,
+	address string,
 ) (*core.Lobby, error) {
-	return s.lobbyStore.Create(ctx, restaurantID, ownerID, expires)
+	return s.lobbyStore.Edit(ctx, lobbyID, restaurantID, ownerID, expires, address)
 }
