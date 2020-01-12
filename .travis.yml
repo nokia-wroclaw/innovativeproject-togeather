@@ -17,7 +17,7 @@ cache:
     - ./node_modules
 
 before_install:
-  - cd ui/togeather
+  - cd ui
 
 install:
   - npm install
