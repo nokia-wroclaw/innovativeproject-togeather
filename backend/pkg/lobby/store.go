@@ -171,3 +171,14 @@ func (s *lobbyStore) Edit(
 		},
 	}, nil
 }
+
+func (s *lobbyStore) Join(ctx context.Context, lobbyID int, clientName string) (*core.User, error) {
+	var clientID int
+	err := s.db.QueryRowContext(ctx, `INSERT INTO clients(name) 
+		VALUES ($1) RETURNING id`, clientName).Scan(&clientID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &core.User{ID: clientID, Name: clientName}, nil
+}

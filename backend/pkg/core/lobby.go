@@ -52,6 +52,8 @@ type (
 			expires *time.Time,
 			address string,
 		) (*Lobby, error)
+
+		Join(ctx context.Context, lobbyID int, clientName string)(*User, error)
 	}
 
 	LobbyStore interface {
@@ -74,5 +76,7 @@ type (
 			expires *time.Time,
 			address string,
 		) (*Lobby, error)
+
+		Join(ctx context.Context, lobbyID int, clientName string)(*User, error)
 	}
 )
