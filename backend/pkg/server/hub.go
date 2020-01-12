@@ -1,65 +1,49 @@
 package server
 
-import (
-	"log"
-	"sync"
-	"time"
-)
+// Hub maintains the set of active clients and broadcasts messages to the
+// clients.
+type Hub struct {
+	// Registered clients.
+	clients map[*Client]bool
 
-type hub struct {
-	// the mutex to protect connections
-	connectionsMx sync.RWMutex
-
-	// Registered connections.
-	connections map[*connection]struct{}
-
-	// Inbound messages from the connections.
+	// Inbound messages from the clients.
 	broadcast chan []byte
 
-	logMx sync.RWMutex
-	log   [][]byte
+	// Register requests from the clients.
+	register chan *Client
+
+	// Unregister requests from clients.
+	unregister chan *Client
 }
 
-func newHub() *hub {
-	h := &hub{
-		connectionsMx: sync.RWMutex{},
-		broadcast:     make(chan []byte),
-		connections:   make(map[*connection]struct{}),
+func newHub() *Hub {
+	return &Hub{
+		broadcast:  make(chan []byte),
+		register:   make(chan *Client),
+		unregister: make(chan *Client),
+		clients:    make(map[*Client]bool),
 	}
+}
 
-	go func() {
-		for {
-			msg := <-h.broadcast
-			h.connectionsMx.RLock()
-			for c := range h.connections {
+func (h *Hub) run() {
+	for {
+		select {
+		case client := <-h.register:
+			h.clients[client] = true
+		case client := <-h.unregister:
+			if _, ok := h.clients[client]; ok {
+				delete(h.clients, client)
+				close(client.send)
+			}
+		case message := <-h.broadcast:
+			for client := range h.clients {
 				select {
-				case c.send <- msg:
-				// stop trying to send to this connection
-				// after trying for 1 second.
-				// if we have to stop, it means that a reader died so also
-				// remove the connection.
-				case <-time.After(1 * time.Second):
-					log.Printf("shutting down connection %s", c)
-					h.removeConnection(c)
+				case client.send <- message:
+				default:
+					close(client.send)
+					delete(h.clients, client)
 				}
 			}
-			h.connectionsMx.RUnlock()
 		}
-	}()
-	return h
-}
-
-func (h *hub) addConnection(conn *connection) {
-	h.connectionsMx.Lock()
-	defer h.connectionsMx.Unlock()
-	h.connections[conn] = struct{}{}
-}
-
-func (h *hub) removeConnection(conn *connection) {
-	h.connectionsMx.Lock()
-	defer h.connectionsMx.Unlock()
-	if _, ok := h.connections[conn]; ok {
-		delete(h.connections, conn)
-		close(conn.send)
 	}
 }

@@ -40,19 +40,21 @@ func main() {
 
 func runApp() {
 	// do all the connections here, pass config
-	redis, err := redisConnect()
-	if err != nil {
-		log.Fatalf("redis connection error: %s", err.Error())
-	}
-	defer redis.Close()
+	//redis, err := redisConnect()
+	//if err != nil {
+	//	log.Printf("redis connection error: %s", err.Error())
+	//	log.Fatalf("redis connection error: %s", err.Error())
+	//}
+	//defer redis.Close()
 
 	db, err := dbConnect()
 	if err != nil {
-		log.Fatalf("db connection error: %s", err)
+		//log.Fatalf("db connection error: %s", err)
+		log.Printf("db connection error: %s", err)
 	}
-	db.SetMaxOpenConns(10)
-	db.SetMaxIdleConns(5)
-	defer db.Close()
+	//db.SetMaxOpenConns(10)
+	//db.SetMaxIdleConns(5)
+	//defer db.Close()
 
 	restaurantStore := restaurant.NewStore(db)
 	restaurantService := restaurant.NewService(restaurantStore)
