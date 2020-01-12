@@ -40,3 +40,7 @@ func (s *service) Edit(
 ) (*core.Lobby, error) {
 	return s.lobbyStore.Edit(ctx, lobbyID, restaurantID, ownerID, expires, address)
 }
+
+func (s *service) Join(ctx context.Context, lobbyID int, clientName string)(*core.User, error){
+	return s.lobbyStore.Join(ctx, lobbyID, clientName)
+}
