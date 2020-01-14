@@ -2,11 +2,13 @@ package server
 
 import (
 	"encoding/json"
-	"github.com/go-chi/chi"
-	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/go-chi/chi"
+
+	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
 )
 
 type lobbyHandler struct {
@@ -123,4 +125,22 @@ func (h *lobbyHandler) join(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondJSON(w, http.StatusOK, client)
+}
+
+func (h *lobbyHandler) get(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	lobbyID, err := strconv.Atoi(chi.URLParam(r, "lobbyID"))
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	lobby, err := h.lobbyService.Get(ctx, lobbyID)
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	respondJSON(w, http.StatusOK, lobby)
 }

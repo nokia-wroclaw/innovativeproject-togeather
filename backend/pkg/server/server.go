@@ -67,6 +67,7 @@ func New(
 			r.Route("/{lobbyID}", func(r chi.Router){
 				r.Put("/", lobbyHandler.edit)
 				r.Post("/", lobbyHandler.join)
+				r.Get("/", lobbyHandler.get)
 			})
 		})
 

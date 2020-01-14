@@ -55,6 +55,8 @@ type (
 
 		Join(ctx context.Context, lobbyID int, clientName string)(*User, error)
 
+		Get(ctx context.Context, lobbyID int)(*Lobby, error)
+
 		Clean(ctx context.Context)
 	}
 
@@ -80,6 +82,8 @@ type (
 		) (*Lobby, error)
 
 		Join(ctx context.Context, lobbyID int, clientName string)(*User, error)
+
+		Get(ctx context.Context, lobbyID int)(*Lobby, error)
 
 		Clean(ctx context.Context)
 	}
