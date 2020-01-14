@@ -16,6 +16,7 @@ func NewService(lobbyStore core.LobbyStore) core.LobbyService {
 }
 
 func (s *service) List(ctx context.Context) ([]*core.Lobby, error) {
+	s.Clean(ctx)
 	return s.lobbyStore.List(ctx)
 }
 
@@ -47,4 +48,7 @@ func (s *service) Join(ctx context.Context, lobbyID int, clientName string)(*cor
 
 func (s *service) Get(ctx context.Context, lobbyID int) (*core.Lobby, error) {
 	return s.lobbyStore.Get(ctx, lobbyID)
+
+func (s *service) Clean(ctx context.Context) {
+	s.lobbyStore.Clean(ctx)
 }

@@ -20,11 +20,14 @@ func NewStore(db *sqlx.DB) core.LobbyStore {
 }
 
 func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
+	currentTime := time.Now().Format(time.RFC3339)
+
 	rows, err := s.db.QueryxContext(ctx, `SELECT l.id, l.restaurant, r.name, 
 		r.delivery, l.owner, c.name, l.expires, l.geolat, l.geolon, l.address 
 		FROM lobbies l 
 		JOIN restaurants r ON r.id = l.restaurant 
-		JOIN clients c ON c.id = l.owner`)
+		JOIN clients c ON c.id = l.owner
+		WHERE l.expires > $1`, currentTime)
 	if err != nil{
 		return nil, err
 	}
@@ -209,3 +212,7 @@ func (s *lobbyStore) Get(ctx context.Context, lobbyID int) (*core.Lobby, error) 
 	return &lobby, nil
 }
 
+func (s *lobbyStore) Clean(ctx context.Context) {
+	limitTime := time.Now().Add(time.Minute*(-30)).Format(time.RFC3339)
+	s.db.ExecContext(ctx, `DELETE FROM lobbies WHERE expires < $1`, limitTime)
+}

@@ -56,6 +56,8 @@ type (
 		Join(ctx context.Context, lobbyID int, clientName string)(*User, error)
 
 		Get(ctx context.Context, lobbyID int)(*Lobby, error)
+
+		Clean(ctx context.Context)
 	}
 
 	LobbyStore interface {
@@ -82,5 +84,7 @@ type (
 		Join(ctx context.Context, lobbyID int, clientName string)(*User, error)
 
 		Get(ctx context.Context, lobbyID int)(*Lobby, error)
+
+		Clean(ctx context.Context)
 	}
 )
