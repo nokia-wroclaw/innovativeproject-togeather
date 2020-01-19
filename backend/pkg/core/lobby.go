@@ -8,22 +8,15 @@ import (
 type (
 	Lobby struct {
 		ID			int			`json:"id" db:"id"`
-		Restaurant 	*Restaurant `json:"restaurant"`
-		Owner 		*Client		`json:"owner"`
-		Expires 	time.Time	`json:"expires" db:"expires"`
-		Location 	*Location	`json:"location"`
-		Order 		[]*Item		`json:"order,omitempty"`
+		Restaurant 	*Restaurant `json:"restaurant,omitempty"`
+		Expires 	time.Time	`json:"expires,omitempty" db:"expires"`
+		Location 	*Location	`json:"location,omitempty"`
 	}
 
 	Location struct {
 		GeoLat float64 `json:"lat" db:"geolat"`
 		GeoLon float64 `json:"lon" db:"geolon"`
 		Address string `json:"lobby_address" db:"address"`
-	}
-
-	Item struct {
-		MealID   int `json:"meal_id, required"`
-		Quantity int `json:"quantity, required"`
 	}
 
 	Client struct {
@@ -41,8 +34,7 @@ type (
 			ownerName string,
 			expires *time.Time,
 			address string,
-			order []*Item,
-		) (*Lobby, error)
+		) (*Lobby, int, error)
 
 		Edit(
 			ctx context.Context,
@@ -69,8 +61,7 @@ type (
 			ownerName string,
 			expires *time.Time,
 			address string,
-			order []*Item,
-		) (*Lobby, error)
+		) (*Lobby, int, error)
 
 		Edit(
 			ctx context.Context,

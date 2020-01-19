@@ -32,7 +32,6 @@ type createLobbyRequest struct {
 	OwnerName    string       `json:"owner_name, required"`
 	Expires      time.Time `json:"expires, required"`
 	Address      string    `json:"address, required"`
-	Order        []*core.Item   `json:"order, required"`
 }
 
 type editLobbyRequest struct {
@@ -40,7 +39,6 @@ type editLobbyRequest struct {
 	OwnerID    	 int       `json:"owner_id, required"`
 	Expires      time.Time `json:"expires, required"`
 	Address      string    `json:"address, required"`
-	Order        []*core.Item   `json:"order, required"`
 }
 
 type joinLobbyRequest struct {
@@ -56,19 +54,19 @@ func (h *lobbyHandler) create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	lobby, err := h.lobbyService.Create(
+	lobby, userID, err := h.lobbyService.Create(
 		ctx,
 		request.RestaurantID,
 		request.OwnerName,
 		&request.Expires,
 		request.Address,
-		request.Order,
 	)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
 
+	addCookie(w, "user-id", strconv.Itoa(userID), 24*60*60, "/lobbies")
 	respondJSON(w, http.StatusOK, lobby)
 }
 

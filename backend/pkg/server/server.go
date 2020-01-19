@@ -109,3 +109,14 @@ func respondError(w http.ResponseWriter, status int, err error) {
 		"error": err.Error(),
 	})
 }
+
+func addCookie(w http.ResponseWriter, name string, value string, maxAge int, path string) {
+	//expire := time.Now().AddDate(0, 0, 1)
+	cookie := http.Cookie{
+		Name:    name,
+		Value:   value,
+		MaxAge: maxAge,
+		Path: path,
+	}
+	http.SetCookie(w, &cookie)
+}

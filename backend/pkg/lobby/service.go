@@ -26,9 +26,8 @@ func (s *service) Create(
 	ownerName string,
 	expires *time.Time,
 	address string,
-	order []*core.Item,
-) (*core.Lobby, error) {
-	return s.lobbyStore.Create(ctx, restaurantID, ownerName, expires, address, order)
+) (*core.Lobby, int, error) {
+	return s.lobbyStore.Create(ctx, restaurantID, ownerName, expires, address)
 }
 
 func (s *service) Edit(
