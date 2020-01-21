@@ -2,11 +2,14 @@ package server
 
 import (
 	"encoding/json"
-	"github.com/go-chi/chi"
-	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
+	"errors"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/go-chi/chi"
+
+	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
 )
 
 type lobbyHandler struct {
@@ -16,13 +19,13 @@ type lobbyHandler struct {
 func (h *lobbyHandler) list(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	resp, err := h.lobbyService.List(ctx)
+	lobbies, err := h.lobbyService.List(ctx)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
 
-	respondJSON(w, http.StatusOK, resp)
+	respondJSON(w, http.StatusOK, lobbies)
 }
 
 type createLobbyRequest struct {
@@ -30,7 +33,6 @@ type createLobbyRequest struct {
 	OwnerName    string       `json:"owner_name, required"`
 	Expires      time.Time `json:"expires, required"`
 	Address      string    `json:"address, required"`
-	Order        []*core.Item   `json:"order, required"`
 }
 
 type editLobbyRequest struct {
@@ -38,15 +40,21 @@ type editLobbyRequest struct {
 	OwnerID    	 int       `json:"owner_id, required"`
 	Expires      time.Time `json:"expires, required"`
 	Address      string    `json:"address, required"`
-	Order        []*core.Item   `json:"order, required"`
 }
 
 type joinLobbyRequest struct {
-	ClientName string `json:"user_name"`
+	UserName string `json:"user_name"`
 }
 
 func (h *lobbyHandler) create(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+
+	cookie, err := r.Cookie("user-id")
+	if cookie != nil {
+		respondError(w, http.StatusBadRequest,
+			errors.New("given user already belongs to a lobby"))
+		return
+	}
 
 	var request createLobbyRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
@@ -54,19 +62,19 @@ func (h *lobbyHandler) create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	lobby, err := h.lobbyService.Create(
+	lobby, userID, err := h.lobbyService.Create(
 		ctx,
 		request.RestaurantID,
 		request.OwnerName,
 		&request.Expires,
 		request.Address,
-		request.Order,
 	)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
 
+	addCookie(w, "user-id", strconv.Itoa(userID), 24*60*60, "/lobbies")
 	respondJSON(w, http.StatusOK, lobby)
 	//wsEndpoint(w, r)
 }
@@ -117,12 +125,31 @@ func (h *lobbyHandler) join(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	client, err := h.lobbyService.Join(ctx, lobbyID, request.ClientName)
+	user, err := h.lobbyService.Join(ctx, lobbyID, request.UserName)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
 
-	respondJSON(w, http.StatusOK, client)
+	addCookie(w, "user-id", strconv.Itoa(user.ID), 24*60*60, "/lobbies")
+	respondJSON(w, http.StatusOK, user)
+}
+
+func (h *lobbyHandler) get(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	lobbyID, err := strconv.Atoi(chi.URLParam(r, "lobbyID"))
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	lobby, err := h.lobbyService.Get(ctx, lobbyID)
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	respondJSON(w, http.StatusOK, lobby)
 	//wsEndpoint(w, r)
 }

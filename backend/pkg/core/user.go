@@ -11,10 +11,12 @@ type (
 	}
 
 	UserService interface {
-		ListUsers(ctx context.Context) ([]*User, error)
+		List(ctx context.Context) ([]*User, error)
+		Create(ctx context.Context, userName string, lobbyID int, isOwner bool) (*User, error)
 	}
 
 	UserStore interface {
-		ListUsers(ctx context.Context) ([]*User, error)
+		List(ctx context.Context) ([]*User, error)
+		Create(ctx context.Context, userName string, lobbyID int, isOwner bool) (*User, error)
 	}
 )

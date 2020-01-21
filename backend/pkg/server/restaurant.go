@@ -16,7 +16,7 @@ type restaurantHandler struct {
 func (h *restaurantHandler) listRestaurants(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	restaurantsList, err := h.restaurantService.ListRestaurants(ctx)
+	restaurantsList, err := h.restaurantService.List(ctx)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return
@@ -34,7 +34,7 @@ func (h *restaurantHandler) restaurantMenu(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	restaurantMenu, err := h.restaurantService.RestaurantMenu(ctx, restaurantID)
+	restaurantMenu, err := h.restaurantService.GetMenu(ctx, restaurantID)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return
@@ -52,7 +52,7 @@ func (h *restaurantHandler) getRestaurant(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	restaurant, err := h.restaurantService.GetRestaurant(ctx, restaurantID)
+	restaurant, err := h.restaurantService.Get(ctx, restaurantID)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return

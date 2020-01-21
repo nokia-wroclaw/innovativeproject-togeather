@@ -54,6 +54,7 @@ func New(
 	restaurantHandler := restaurantHandler{restaurantService: restaurantService}
 	lobbyHandler := lobbyHandler{lobbyService: lobbyService}
 	userHandler := userHandler{userService: userService}
+	lobbyMiddleware := lobbyMiddleware{lobbyService: lobbyService}
 
 	hub := newHub()
 	go hub.run()
@@ -86,8 +87,10 @@ func New(
 			r.Get("/", lobbyHandler.list)
 			r.Post("/", lobbyHandler.create)
 			r.Route("/{lobbyID}", func(r chi.Router){
+				r.Use(lobbyMiddleware.cookiesMiddleware)
 				r.Put("/", lobbyHandler.edit)
 				r.Post("/", lobbyHandler.join)
+				r.Get("/", lobbyHandler.get)
 			})
 		})
 
@@ -204,4 +207,14 @@ func respondError(w http.ResponseWriter, status int, err error) {
 	_ = json.NewEncoder(w).Encode(map[string]string{
 		"error": err.Error(),
 	})
+}
+
+func addCookie(w http.ResponseWriter, name string, value string, maxAge int, path string) {
+	cookie := http.Cookie{
+		Name:    name,
+		Value:   value,
+		MaxAge: maxAge,
+		Path: path,
+	}
+	http.SetCookie(w, &cookie)
 }

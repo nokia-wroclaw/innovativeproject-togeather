@@ -1,9 +1,3 @@
-CREATE TABLE IF NOT EXISTS clients
-(
-    id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS restaurants
 (
     id SERIAL PRIMARY KEY,
@@ -27,15 +21,24 @@ CREATE TABLE IF NOT EXISTS lobbies
 (
     id SERIAL PRIMARY KEY,
     restaurant INT NOT NULL,
-    owner INT NOT NULL,
     expires timestamp NOT NULL,
     geolat double precision NOT NULL,
     geolon double precision NOT NULL,
     address TEXT NOT NULL,
 
-    FOREIGN KEY (owner) REFERENCES clients(id),
     FOREIGN KEY (restaurant) REFERENCES restaurants(id)
 );
+
+CREATE TABLE IF NOT EXISTS clients
+(
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    lobby INT NOT NULL,
+    is_owner BOOLEAN NOT NULL,
+
+    FOREIGN KEY (lobby) REFERENCES lobbies(id)
+);
+
 
 CREATE TABLE IF NOT EXISTS orders
 (

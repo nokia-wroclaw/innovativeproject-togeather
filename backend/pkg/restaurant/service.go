@@ -32,14 +32,25 @@ func (s *service) Exists(ctx context.Context, restaurantID int) (bool, error) {
 	return false, nil
 }
 
-func (s *service) ListRestaurants(ctx context.Context) ([]*core.Restaurant, error) {
-	return s.restaurantStore.ListRestaurants(ctx)
+func (s *service) List(ctx context.Context) ([]*core.Restaurant, error) {
+	return s.restaurantStore.List(ctx)
 }
 
-func (s *service) RestaurantMenu(ctx context.Context, restaurantID int) ([]*core.Meal, error) {
-	return s.restaurantStore.RestaurantMenu(ctx, restaurantID)
+func (s *service) GetMenu(ctx context.Context, restaurantID int) ([]*core.Meal, error) {
+	return s.restaurantStore.GetMenu(ctx, restaurantID)
 }
 
-func (s *service) GetRestaurant(ctx context.Context, restaurantID int) (*core.Restaurant, error) {
-	return s.restaurantStore.GetRestaurant(ctx, restaurantID)
+func (s *service) Get(ctx context.Context, restaurantID int) (*core.Restaurant, error) {
+	m, err := s.GetMenu(ctx, restaurantID)
+	if err != nil{
+		return nil, err
+	}
+
+	r, err := s.restaurantStore.Get(ctx, restaurantID)
+	if err != nil{
+		return nil, err
+	}
+
+	r.Menu = m
+	return r, nil
 }

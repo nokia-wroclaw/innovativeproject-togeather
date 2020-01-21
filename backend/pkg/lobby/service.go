@@ -9,13 +9,15 @@ import (
 
 type service struct {
 	lobbyStore core.LobbyStore
+	userService core.UserService
 }
 
-func NewService(lobbyStore core.LobbyStore) core.LobbyService {
-	return &service{lobbyStore: lobbyStore}
+func NewService(lobbyStore core.LobbyStore, userService core.UserService) core.LobbyService {
+	return &service{lobbyStore: lobbyStore, userService: userService}
 }
 
 func (s *service) List(ctx context.Context) ([]*core.Lobby, error) {
+	s.Clean(ctx)
 	return s.lobbyStore.List(ctx)
 }
 
@@ -25,9 +27,18 @@ func (s *service) Create(
 	ownerName string,
 	expires *time.Time,
 	address string,
-	order []*core.Item,
-) (*core.Lobby, error) {
-	return s.lobbyStore.Create(ctx, restaurantID, ownerName, expires, address, order)
+) (*core.Lobby, int, error) {
+	l, err := s.lobbyStore.Create(ctx, restaurantID, expires, address)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	u, err := s.userService.Create(ctx, ownerName, l.ID, true)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return l, u.ID, nil
 }
 
 func (s *service) Edit(
@@ -41,6 +52,18 @@ func (s *service) Edit(
 	return s.lobbyStore.Edit(ctx, lobbyID, restaurantID, ownerID, expires, address)
 }
 
-func (s *service) Join(ctx context.Context, lobbyID int, clientName string)(*core.User, error){
-	return s.lobbyStore.Join(ctx, lobbyID, clientName)
+func (s *service) Join(ctx context.Context, lobbyID int, userName string)(*core.User, error){
+	return s.userService.Create(ctx, userName, lobbyID, false)
+}
+
+func (s *service) Get(ctx context.Context, lobbyID int) (*core.Lobby, error) {
+	return s.lobbyStore.Get(ctx, lobbyID)
+}
+
+func (s *service) Clean(ctx context.Context) {
+	s.lobbyStore.Clean(ctx)
+}
+
+func (s *service) BelongsToLobby(ctx context.Context, userID int, lobbyID int) (bool, error) {
+	return s.lobbyStore.BelongsToLobby(ctx, userID, lobbyID)
 }

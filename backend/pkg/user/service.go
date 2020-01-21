@@ -10,11 +10,15 @@ type service struct {
 	userStore core.UserStore
 }
 
-
 func NewService(userStore core.UserStore) core.UserService {
 	return &service{userStore: userStore}
 }
 
-func (s *service) ListUsers(ctx context.Context) ([]*core.User, error) {
-	return s.userStore.ListUsers(ctx)
+func (s *service) List(ctx context.Context) ([]*core.User, error) {
+	return s.userStore.List(ctx)
 }
+
+func (s *service) Create(ctx context.Context, userName string, lobbyID int, isOwner bool) (*core.User, error) {
+	return s.userStore.Create(ctx, userName, lobbyID, isOwner)
+}
+

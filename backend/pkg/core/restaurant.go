@@ -22,14 +22,14 @@ type (
 	}
 
 	RestaurantService interface {
-		ListRestaurants(ctx context.Context) ([]*Restaurant, error)
-		RestaurantMenu(ctx context.Context, restaurantID int) ([]*Meal, error)
-		GetRestaurant(ctx context.Context, restaurantID int) (*Restaurant, error)
+		List(ctx context.Context) ([]*Restaurant, error)
+		GetMenu(ctx context.Context, restaurantID int) ([]*Meal, error)
+		Get(ctx context.Context, restaurantID int) (*Restaurant, error)
 	}
 
 	RestaurantStore interface {
-		ListRestaurants(ctx context.Context) ([]*Restaurant, error)
-		RestaurantMenu(ctx context.Context, restaurantID int) ([]*Meal, error)
-		GetRestaurant(ctx context.Context, restaurantID int) (*Restaurant, error)
+		List(ctx context.Context) ([]*Restaurant, error)
+		GetMenu(ctx context.Context, restaurantID int) ([]*Meal, error)
+		Get(ctx context.Context, restaurantID int) (*Restaurant, error)
 	}
 )

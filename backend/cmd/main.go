@@ -60,11 +60,11 @@ func runApp() {
 	restaurantStore := restaurant.NewStore(db)
 	restaurantService := restaurant.NewService(restaurantStore)
 
-	lobbyStore := lobby.NewStore(db)
-	lobbyService := lobby.NewService(lobbyStore)
-
 	userStore := user.NewStore(db)
 	userService := user.NewService(userStore)
+
+	lobbyStore := lobby.NewStore(db)
+	lobbyService := lobby.NewService(lobbyStore, userService)
 
 	runServer(
 		restaurantService,
