@@ -1,0 +1,15 @@
+<div>
+    <h2 mat-dialog-title>Join lobby!</h2>
+    <hr>
+    <mat-dialog-content>
+        <p>Your name: </p>
+        <mat-form-field> 
+            <input matInput [(ngModel)]="userName" placeholder="Name" cdkFocusInitial>
+        </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-button (click)="onNoClick()">No Thanks</button>
+        <button mat-button (click)="onJoinClick()">Ok</button>
+    </mat-dialog-actions>
+
+</div>

@@ -13,8 +13,9 @@ import {
     MatMenuModule,
     MatCardModule,
     MatListModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
 } from '@angular/material';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MapComponent } from './map/map.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -33,6 +34,7 @@ import { BeautifyAddressPipe } from './_pipes/beautify-address.pipe';
 import { CartComponent } from './cart/cart.component';
 import { LobbiesListComponent } from './lobbies-list/lobbies-list.component';
 import { BeautifyExpirationDatePipe } from './_pipes/beautify-expiration-date.pipe';
+import { JoinLobbyComponent } from './join-lobby/join-lobby.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { RestaurantContainerComponent } from './restaurant/restaurant-container.component';
 import { MapContainerComponent } from './map/map-container.component';
@@ -55,6 +57,7 @@ import { ToastrModule } from 'ngx-toastr';
         CartComponent,
         LobbiesListComponent,
         BeautifyExpirationDatePipe,
+        JoinLobbyComponent,
         LobbyComponent,
         RestaurantContainerComponent,
         MapLobbyMarkerComponent,
@@ -79,6 +82,7 @@ import { ToastrModule } from 'ngx-toastr';
         ToastrModule.forRoot({
             timeOut: 3500,
         }),
+        MatDialogModule,
     ],
     providers: [
         ApiService,
@@ -86,7 +90,8 @@ import { ToastrModule } from 'ngx-toastr';
         LobbiesService,
         MapPopUpService,
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    entryComponents: [JoinLobbyComponent],
 })
 export class AppModule {
 }
