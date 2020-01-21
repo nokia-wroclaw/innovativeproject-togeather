@@ -12,7 +12,7 @@ type userHandler struct {
 func (h *userHandler) listUsers(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	usersList, err := h.userService.ListUsers(ctx)
+	usersList, err := h.userService.List(ctx)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return
