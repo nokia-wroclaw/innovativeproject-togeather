@@ -52,3 +52,7 @@ func (s *service) Get(ctx context.Context, lobbyID int) (*core.Lobby, error) {
 func (s *service) Clean(ctx context.Context) {
 	s.lobbyStore.Clean(ctx)
 }
+
+func (s *service) BelongsToLobby(ctx context.Context, clientID int, lobbyID int) (bool, error) {
+	return s.lobbyStore.BelongsToLobby(ctx, clientID, lobbyID)
+}

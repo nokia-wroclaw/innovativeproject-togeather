@@ -51,6 +51,7 @@ func New(
 	restaurantHandler := restaurantHandler{restaurantService: restaurantService}
 	lobbyHandler := lobbyHandler{lobbyService: lobbyService}
 	userHandler := userHandler{userService: userService}
+	lobbyMiddleware := lobbyMiddleware{lobbyService: lobbyService}
 
 	r.Route("/api", func(r chi.Router) {
 		r.Route("/restaurants", func(r chi.Router) {
@@ -65,6 +66,7 @@ func New(
 			r.Get("/", lobbyHandler.list)
 			r.Post("/", lobbyHandler.create)
 			r.Route("/{lobbyID}", func(r chi.Router){
+				r.Use(lobbyMiddleware.cookiesMiddleware)
 				r.Put("/", lobbyHandler.edit)
 				r.Post("/", lobbyHandler.join)
 				r.Get("/", lobbyHandler.get)
@@ -111,7 +113,6 @@ func respondError(w http.ResponseWriter, status int, err error) {
 }
 
 func addCookie(w http.ResponseWriter, name string, value string, maxAge int, path string) {
-	//expire := time.Now().AddDate(0, 0, 1)
 	cookie := http.Cookie{
 		Name:    name,
 		Value:   value,

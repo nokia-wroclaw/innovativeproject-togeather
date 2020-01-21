@@ -171,3 +171,16 @@ func (s *lobbyStore) Clean(ctx context.Context) {
 	limitTime := time.Now().Add(time.Minute*(-30)).Format(time.RFC3339)
 	s.db.ExecContext(ctx, `DELETE FROM lobbies WHERE expires < $1`, limitTime)
 }
+
+func (s *lobbyStore) BelongsToLobby(ctx context.Context, clientID int, lobbyID int) (bool, error) {
+	row := s.db.QueryRowContext(ctx, `SELECT EXISTS(SELECT 1 FROM clients 
+		WHERE id = $1 AND lobby = $2)`, clientID, lobbyID)
+
+	var exists bool
+	err := row.Scan(&exists)
+	if err != nil{
+		return false, err
+	}
+
+	return exists, nil
+}

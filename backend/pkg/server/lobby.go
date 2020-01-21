@@ -122,6 +122,7 @@ func (h *lobbyHandler) join(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	addCookie(w, "user-id", strconv.Itoa(client.ID), 24*60*60, "/lobbies")
 	respondJSON(w, http.StatusOK, client)
 }
 

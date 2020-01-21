@@ -50,6 +50,8 @@ type (
 		Get(ctx context.Context, lobbyID int)(*Lobby, error)
 
 		Clean(ctx context.Context)
+
+		BelongsToLobby(ctx context.Context, clientID int, lobbyID int)(bool, error)
 	}
 
 	LobbyStore interface {
@@ -77,5 +79,7 @@ type (
 		Get(ctx context.Context, lobbyID int)(*Lobby, error)
 
 		Clean(ctx context.Context)
+
+		BelongsToLobby(ctx context.Context, clientID int, lobbyID int)(bool, error)
 	}
 )
