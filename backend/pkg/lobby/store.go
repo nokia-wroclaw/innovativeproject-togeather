@@ -58,13 +58,12 @@ func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
 func (s *lobbyStore) Create(
 	ctx context.Context,
 	restaurantID int,
-	ownerName string,
 	expires *time.Time,
 	address string,
-) (*core.Lobby, int, error) {
+) (*core.Lobby, error) {
 	geolat, geolon, err := geocoder.Geocode(address)
 	if err != nil {
-		return nil, 0, err
+		return nil, err
 	}
 
 	var lobbyID int
@@ -73,19 +72,12 @@ func (s *lobbyStore) Create(
     	VALUES ($1, $2, $3, $4, $5) RETURNING id`,
 		restaurantID, expires, geolat, geolon, address).Scan(&lobbyID)
 	if err != nil {
-		return nil, 0, err
-	}
-
-	var clientID int
-	err = s.db.QueryRowContext(ctx, `INSERT INTO clients(name, lobby, is_owner) 
-		VALUES ($1, $2, true) RETURNING id`, ownerName, lobbyID).Scan(&clientID)
-	if err != nil {
-		return nil, 0, err
+		return nil, err
 	}
 
 	return &core.Lobby{
 		ID:		lobbyID,
-	}, clientID, nil
+	}, nil
 }
 
 func (s *lobbyStore) Edit(
@@ -124,7 +116,7 @@ func (s *lobbyStore) Edit(
 			Name: restaurantName,
 			Delivery: restaurantDelivery,
 		},
-		Expires:      *expires,
+		Expires:      expires,
 		Location: &core.Location{
 			GeoLat:  geolat,
 			GeoLon:  geolon,
@@ -133,15 +125,8 @@ func (s *lobbyStore) Edit(
 	}, nil
 }
 
-func (s *lobbyStore) Join(ctx context.Context, lobbyID int, clientName string) (*core.User, error) {
-	var clientID int
-	err := s.db.QueryRowContext(ctx, `INSERT INTO clients(name, lobby, is_owner) 
-		VALUES ($1, $2, false) RETURNING id`, clientName, lobbyID).Scan(&clientID)
-	if err != nil {
-		return nil, err
-	}
-
-	return &core.User{ID: clientID, Name: clientName}, nil
+func (s *lobbyStore) Join(ctx context.Context) error {
+	return nil
 }
 
 func (s *lobbyStore) Get(ctx context.Context, lobbyID int) (*core.Lobby, error) {
@@ -172,12 +157,10 @@ func (s *lobbyStore) Clean(ctx context.Context) {
 	s.db.ExecContext(ctx, `DELETE FROM lobbies WHERE expires < $1`, limitTime)
 }
 
-func (s *lobbyStore) BelongsToLobby(ctx context.Context, clientID int, lobbyID int) (bool, error) {
-	row := s.db.QueryRowContext(ctx, `SELECT EXISTS(SELECT 1 FROM clients 
-		WHERE id = $1 AND lobby = $2)`, clientID, lobbyID)
-
+func (s *lobbyStore) BelongsToLobby(ctx context.Context, userID int, lobbyID int) (bool, error) {
 	var exists bool
-	err := row.Scan(&exists)
+	err := s.db.QueryRowContext(ctx, `SELECT EXISTS(SELECT 1 FROM clients 
+		WHERE id = $1 AND lobby = $2)`, userID, lobbyID).Scan(&exists)
 	if err != nil{
 		return false, err
 	}

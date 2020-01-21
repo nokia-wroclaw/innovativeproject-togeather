@@ -1,6 +1,7 @@
 package server
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -16,9 +17,10 @@ type lobbyMiddleware struct {
 func (m *lobbyMiddleware) cookiesMiddleware(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("user-id")
-		if err != nil{
-			//respondError(w, http.StatusBadRequest, err)
-			//TODO what if there's no cookie
+		if err != nil && r.Method == "GET"{
+			respondError(w, http.StatusBadRequest, errors.New("user not authorized"))
+			return
+		} else if err != nil{
 			h.ServeHTTP(w, r)
 			return
 		}
@@ -38,17 +40,18 @@ func (m *lobbyMiddleware) cookiesMiddleware(h http.Handler) http.Handler {
 		ctx := r.Context()
 		exists, err := m.lobbyService.BelongsToLobby(ctx, clientID, lobbyID)
 		if err != nil {
-			//TODO don't know what to do when authentication is wrong
 			respondError(w, http.StatusBadRequest, err)
 			return
 		}
 
-
-		//TODO should not exist when joining
 		if (exists && r.Method == "GET") || (!exists && r.Method == "POST"){
 			h.ServeHTTP(w, r)
+		} else if exists && r.Method == "POST" {
+			respondError(w, http.StatusBadRequest, errors.New("given user already belongs to this lobby"))
+			return
+
 		} else {
-			//TODO do sth not to go to handler
+			respondError(w, http.StatusBadRequest, errors.New("given user does not belong to this lobby"))
 			return
 		}
 
