@@ -1,15 +1,31 @@
-<div class="cart">
-    <mat-card>
-        <h3>Cart</h3>
-        <mat-list class="cart__items" *ngIf="items">
-            <mat-list-item *ngFor="let item of items">
-                <div class="cart-item">
-                    <div class="cart-item__name"> {{ item.name }} </div>
-                    <div class="cart-item__price"> {{ item.price }} </div>
-                    <mat-icon class="cart-item__delete-btn" (click)="deleteItem(item)">delete</mat-icon>
-                </div>
-            </mat-list-item>
-        </mat-list>
-        <span class="cart__items--empty" *ngIf="items?.length === 0">(cart is empty)</span>
-    </mat-card>
-</div>
+<mat-card class="cart">
+    <h3>Cart</h3>
+
+    <mat-list class="cart__items" *ngIf="items">
+        <mat-list-item *ngFor="let item of items">
+            <mat-divider></mat-divider>
+            <div class="cart-item">
+                <div class="cart-item__name"> {{ item.name }} </div>
+                <div class="cart-item__price"> {{ item.price }} </div>
+                <mat-icon class="cart-item__delete-btn" (click)="deleteItem(item)">delete</mat-icon>
+            </div>
+        </mat-list-item>
+    </mat-list>
+    <span class="cart__items--empty" *ngIf="isCartEmpty()">(cart is empty)</span>
+
+    <div class="cart__summary" *ngIf="!isCartEmpty()">
+        <div class="cart-item--summary">
+            <div class="cart-item--summary__description">Food cost: </div>
+            <div class="cart-item--summary__value">$13</div>
+        </div>
+        <div class="cart-item--summary">
+            <div class="cart-item--summary__description">Delivery cost: </div>
+            <div class="cart-item--summary__value">$3</div>
+        </div>
+        <div class="cart-item--summary total">
+            <div class="cart-item--summary__description">Total: </div>
+            <div class="cart-item--summary__value">$16</div>
+        </div>
+    </div>
+
+</mat-card>

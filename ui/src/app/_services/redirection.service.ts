@@ -1,35 +1,60 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Lobby } from '../_models/lobby';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class RedirectionService {
 
-    constructor(
-        private router: Router,
-    ) { }
+  constructor(
+    private router: Router,
+  ) {
+  }
 
-    redirectToSingleRestaurant(id: number): void {
-        this.router.navigateByUrl(`/restaurants/${id}`)
-            .catch(error => {
-                console.error('Error when redirecting to single restaurant view:', error);
-            });
-    }
+  static handleError(viewName: string, error: any): void {
+    console.error(`Error when redirecting to ${viewName} view:`, error);
+  }
 
-    redirectToHomePage(): void {
-        this.router.navigateByUrl('/');
-    }
+  redirectToSingleRestaurant(id: number): void {
+    this.router.navigateByUrl(`/restaurants/${ id }`)
+      .catch(error => {
+        RedirectionService.handleError('single restaurant', error);
+      });
+  }
 
-    redirectToLobbyCreation(): void {
-        this.router.navigateByUrl('/create-lobby');
-    }
+  redirectToHomePage(): void {
+    this.router.navigateByUrl('/')
+      .catch(error => {
+        RedirectionService.handleError('home page', error);
+      });
+  }
 
-    redirectToRestaurants(): void {
-        this.router.navigateByUrl('/restaurants');
-    }
+  redirectToLobbyCreation(): void {
+    this.router.navigateByUrl('/create-lobby')
+      .catch(error => {
+        RedirectionService.handleError('lobby creation', error);
+      });
+  }
 
-    redirectToLobbies(): void {
-        this.router.navigateByUrl('/open-lobbies');
-    }
+  redirectToRestaurants(): void {
+    this.router.navigateByUrl('/restaurants')
+      .catch(error => {
+        RedirectionService.handleError('restaurants', error);
+      });
+  }
+
+  redirectToLobbies(): void {
+    this.router.navigateByUrl('/open-lobbies')
+      .catch(error => {
+        RedirectionService.handleError('lobbies', error);
+      });
+  }
+
+  redirectToSingleLobby(lobbyId: number): void {
+    this.router.navigate([`/lobbies/${lobbyId}`], { state: { lobbyId: lobbyId } })
+        .catch(error => {
+          RedirectionService.handleError('lobby', error);
+        });
+  }
 }

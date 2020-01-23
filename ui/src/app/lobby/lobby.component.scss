@@ -1,0 +1,28 @@
+@import '~src/styles/global/_breakpoints';
+
+.lobby-card {
+  margin-top: 15px;
+}
+
+.lobby-map {
+  display: block;
+  width: 100%;
+  height: 300px;
+}
+
+.restaurant-and-cart-wrapper {
+  display: flex;
+  justify-content: space-between;
+
+  .restaurant {
+    flex-grow: 1;
+  }
+
+  .cart {
+    flex-grow: 1;
+  }
+
+  @media (max-width: $medium) {
+    flex-wrap: wrap-reverse;
+  }
+}

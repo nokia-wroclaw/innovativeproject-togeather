@@ -33,6 +33,10 @@ import { BeautifyAddressPipe } from './_pipes/beautify-address.pipe';
 import { CartComponent } from './cart/cart.component';
 import { LobbiesListComponent } from './lobbies-list/lobbies-list.component';
 import { BeautifyExpirationDatePipe } from './_pipes/beautify-expiration-date.pipe';
+import { LobbyComponent } from './lobby/lobby.component';
+import { RestaurantContainerComponent } from './restaurant/restaurant-container.component';
+import { MapContainerComponent } from './map/map-container.component';
+import { MapLobbyMarkerComponent } from './map-lobby-marker/map-lobby-marker.component';
 
 
 @NgModule({
@@ -41,6 +45,7 @@ import { BeautifyExpirationDatePipe } from './_pipes/beautify-expiration-date.pi
         FooterComponent,
         HeaderComponent,
         MapComponent,
+        MapContainerComponent,
         LandingPageComponent,
         RestaurantsListComponent,
         RestaurantComponent,
@@ -49,6 +54,9 @@ import { BeautifyExpirationDatePipe } from './_pipes/beautify-expiration-date.pi
         CartComponent,
         LobbiesListComponent,
         BeautifyExpirationDatePipe,
+        LobbyComponent,
+        RestaurantContainerComponent,
+        MapLobbyMarkerComponent,
     ],
     imports: [
         BrowserModule,

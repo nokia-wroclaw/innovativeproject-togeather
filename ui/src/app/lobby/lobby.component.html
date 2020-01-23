@@ -1,0 +1,27 @@
+<ng-container *ngIf="lobby$ | async as lobby">
+    <mat-card class="lobby-card">
+        <mat-card-header>
+            <mat-card-title>Lobby address: {{ lobby.address | beautifyAddress }}</mat-card-title>
+            <mat-card-subtitle>Expires in: {{ lobby.expires }}</mat-card-subtitle>
+            <mat-card-subtitle>Number of lobby members: 3</mat-card-subtitle>
+        </mat-card-header>
+
+        <div class="lobby-map">
+            <app-map [coords]="lobby.location">
+                <app-map-lobby-marker
+                        [lobby]="lobby"
+                ></app-map-lobby-marker>
+            </app-map>
+        </div>
+    </mat-card>
+
+    <div class="restaurant-and-cart-wrapper">
+        <app-restaurant
+                class="restaurant"
+                [restaurantId]="lobby.restaurant.id.toString()"
+        ></app-restaurant>
+
+        <app-cart class="cart"></app-cart>
+    </div>
+
+</ng-container>

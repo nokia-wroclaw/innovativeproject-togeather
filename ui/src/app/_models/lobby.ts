@@ -12,10 +12,12 @@ Structure returned by API on /api/lobbies
                 "menu": null,
                 "address": ""
             },
-            "owner": 2,
             "expires": "2019-09-17T12:00:00Z",
-            "lat": 51.7234,
-            "lon": 12.7723
+            "location": {
+                "lat": 51.7234,
+                "lon": 12.7723,
+                "address": "15,Joliot-Cuire,Wrocław"
+            }
         },
         {
           ...
@@ -26,7 +28,6 @@ Structure returned by API on /api/lobbies
 export interface Lobby {
     readonly id: number;
     readonly restaurant: Restaurant;
-    readonly owner: number;
     readonly expires: Date;
     readonly location: Coordinates;
     readonly address: string;

@@ -10,12 +10,27 @@
 }
 
 .cart-item {
-  border-bottom: 1px solid $medium-gray;
   width: 100%;
   display: flex;
   justify-content: space-between;
+
+  &__delete-btn {
+    cursor: pointer;
+  }
 }
 
-.cart-item__delete-btn {
-  cursor: pointer;
+.cart__summary {
+  margin-top: 20px;
+}
+
+.cart-item--summary {
+  @extend .cart-item;
+
+  box-sizing: border-box;
+  padding: 0 16px;
+}
+
+.cart-item--summary.total {
+  font-size: 1.2rem;
+  font-weight: 600;
 }

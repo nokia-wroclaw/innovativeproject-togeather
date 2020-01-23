@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { Restaurant } from '../_models/restaurant';
 import { Lobby } from '../_models/lobby';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -20,12 +20,16 @@ export class ApiService {
     getRestaurants(): Observable<Restaurant[]> {
         return this.http.get<Restaurant[]>(
             this.baseUrl + '/restaurants'
+        ).pipe(
+            catchError(this.handleError)
         );
     }
 
-    getSingleRestaurant(id: string | number): Observable<Restaurant> {
+    getRestaurant(id: string | number): Observable<Restaurant> {
         return this.http.get<Restaurant>(
             this.baseUrl + '/restaurants/' + id
+        ).pipe(
+            catchError(this.handleError)
         );
     }
 
@@ -38,13 +42,31 @@ export class ApiService {
                     return {
                         id: obj.id,
                         restaurant: obj.restaurant,
-                        owner: obj.owner,
                         expires: new Date(obj.expires),
                         location: { lat: obj.location.lat, lon: obj.location.lon },
                         address: obj.location.lobby_address,
                     };
                 });
-            })
+            }),
+            catchError(this.handleError)
+        );
+    }
+
+    getLobby(lobbyId: number): Observable<Lobby> {
+        return this.http.get(
+            `${this.baseUrl}/lobbies/${lobbyId}`,
+            { withCredentials: true },
+        ).pipe(
+            map((data: any): Lobby => {
+                return {
+                    id: data.id,
+                    restaurant: data.restaurant,
+                    expires: new Date(data.expires),
+                    location: { lat: data.location.lat, lon: data.location.lon },
+                    address: data.location.lobby_address
+                };
+            }),
+            catchError(this.handleError)
         );
     }
 
@@ -54,6 +76,7 @@ export class ApiService {
         return this.http.post<Lobby>(
             this.baseUrl + '/lobbies',
             lobby,
+            { withCredentials: true },
         ).pipe(
             catchError(this.handleError)
         );
@@ -62,13 +85,12 @@ export class ApiService {
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
             // A client-side or network error occurred. Handle it accordingly.
-            console.error('An error occurred:', error.error.message);
+            console.error('A client-side or network error occurred:', error.error.message);
         } else {
             // The backend returned an unsuccessful response code.
             // The response body may contain clues as to what went wrong,
-            console.error(
-                `Backend returned code ${error.status}, ` +
-                `body was: ${error.error}`);
+            console.error('Backend returned code' + error.status);
+            console.error('body was: ', error.error);
         }
         // return an observable with a user-facing error message
         return throwError('Something bad happened; please try again later.');

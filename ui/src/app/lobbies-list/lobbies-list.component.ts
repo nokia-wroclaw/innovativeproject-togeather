@@ -22,8 +22,8 @@ export class LobbiesListComponent implements OnInit {
     this.lobbies$ = this.apiService.getLobbies();
   }
 
-  redirectToRestaurant(id: number): void {
-    this.redirectionService.redirectToSingleRestaurant(id);
+  redirectToLobby(id: number): void {
+    this.redirectionService.redirectToSingleLobby(id);
   }
 
 }
