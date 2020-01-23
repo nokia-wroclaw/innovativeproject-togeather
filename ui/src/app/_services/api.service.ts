@@ -82,6 +82,16 @@ export class ApiService {
         );
     }
 
+    joinLobby(lobbyId: number, userName: string): Observable<void> {
+        return this.http.post<void>(
+            this.baseUrl + `/lobbies/${lobbyId}`,
+            { user_name: userName },
+            { withCredentials: true },
+        ).pipe(
+            catchError(this.handleError)
+        );
+    }
+
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
             // A client-side or network error occurred. Handle it accordingly.
