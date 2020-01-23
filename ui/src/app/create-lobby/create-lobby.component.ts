@@ -6,6 +6,7 @@ import { Observable, of } from 'rxjs';
 import { PostLobbyDto } from '../_models/post-lobby-dto';
 import { Lobby } from '../_models/lobby';
 import { RedirectionService } from '../_services/redirection.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-create-lobby',
@@ -34,6 +35,7 @@ export class CreateLobbyComponent implements OnInit {
       private api: ApiService,
       private fb: FormBuilder,
       private redirectionService: RedirectionService,
+      private toaster: ToastrService,
   ) { }
 
   ngOnInit() {
@@ -72,11 +74,12 @@ export class CreateLobbyComponent implements OnInit {
       this.api.postLobby(newLobby).subscribe((lobby: Lobby) => {
         this.disableCreateButton = false;
         this.redirectionService.redirectToSingleLobby(lobby.id);
-      }, () => {
+      }, error => {
+        this.toaster.error(error, 'Could not create lobby');
         this.disableCreateButton = false;
       });
     } else {
-      console.error('Form is not valid! I won\'t send the request >.<');
+      this.toaster.error('Form is not valid! I won\'t send the request >.<');
     }
   }
 }
