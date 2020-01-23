@@ -37,6 +37,7 @@ import { LobbyComponent } from './lobby/lobby.component';
 import { RestaurantContainerComponent } from './restaurant/restaurant-container.component';
 import { MapContainerComponent } from './map/map-container.component';
 import { MapLobbyMarkerComponent } from './map-lobby-marker/map-lobby-marker.component';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -75,6 +76,9 @@ import { MapLobbyMarkerComponent } from './map-lobby-marker/map-lobby-marker.com
         FlexLayoutModule,
         MatAutocompleteModule,
         MatListModule,
+        ToastrModule.forRoot({
+            timeOut: 3500,
+        }),
     ],
     providers: [
         ApiService,

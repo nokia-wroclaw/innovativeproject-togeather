@@ -4,6 +4,7 @@ import { LocationService } from '../_services/location.service';
 import { Observable } from 'rxjs';
 import { Lobby } from '../_models/lobby';
 import { ApiService } from '../_services/api.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'map-container',
@@ -17,6 +18,7 @@ export class MapContainerComponent implements OnInit {
     constructor(
         private locationService: LocationService,
         private api: ApiService,
+        private toaster: ToastrService,
     ) { }
 
     ngOnInit() {
@@ -25,9 +27,7 @@ export class MapContainerComponent implements OnInit {
                 this.location = location;
             })
             .catch(error => {
-                // TODO: Change this to toaster popup.
-                // alert(error);
-                console.error('Could not get your location');
+                this.toaster.error(error);
             });
 
         this.lobbies$ = this.api.getLobbies();
