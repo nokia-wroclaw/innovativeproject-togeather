@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS clients
     lobby INT NOT NULL,
     is_owner BOOLEAN NOT NULL,
 
-    FOREIGN KEY (lobby) REFERENCES lobbies(id)
+    FOREIGN KEY (lobby) REFERENCES lobbies(id) ON DELETE CASCADE
 );
 
 
