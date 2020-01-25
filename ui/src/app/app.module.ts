@@ -28,7 +28,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { ApiService } from './_services/api.service';
 import { RedirectionService } from './_services/redirection.service';
 import { CreateLobbyComponent } from './create-lobby/create-lobby.component';
-import { MaterialTimePickerModule } from '@candidosales/material-time-picker';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BeautifyAddressPipe } from './_pipes/beautify-address.pipe';
 import { CartComponent } from './cart/cart.component';
@@ -40,6 +39,7 @@ import { RestaurantContainerComponent } from './restaurant/restaurant-container.
 import { MapContainerComponent } from './map/map-container.component';
 import { MapLobbyMarkerComponent } from './map-lobby-marker/map-lobby-marker.component';
 import { ToastrModule } from 'ngx-toastr';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 
 @NgModule({
@@ -75,7 +75,6 @@ import { ToastrModule } from 'ngx-toastr';
         ReactiveFormsModule,
         FormsModule,
         HttpClientModule,
-        MaterialTimePickerModule,
         FlexLayoutModule,
         MatAutocompleteModule,
         MatListModule,
@@ -83,6 +82,7 @@ import { ToastrModule } from 'ngx-toastr';
             timeOut: 3500,
         }),
         MatDialogModule,
+        NgxMaterialTimepickerModule.setLocale('pl-PL'),
     ],
     providers: [
         ApiService,
