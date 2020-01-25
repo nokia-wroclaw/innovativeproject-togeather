@@ -7,6 +7,7 @@ import { PostLobbyDto } from '../_models/post-lobby-dto';
 import { Lobby } from '../_models/lobby';
 import { RedirectionService } from '../_services/redirection.service';
 import { ToastrService } from 'ngx-toastr';
+import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
 
 @Component({
   selector: 'app-create-lobby',
@@ -16,7 +17,6 @@ import { ToastrService } from 'ngx-toastr';
 export class CreateLobbyComponent implements OnInit {
 
   disableCreateButton = false;
-  expirationTime: { hour: number, minute: number, meriden: 'PM' | 'AM', format: 24 | 12 };
   restaurants$: Observable<Restaurant[]> = of([]);
 
   lobbyForm = this.fb.group({
@@ -25,7 +25,23 @@ export class CreateLobbyComponent implements OnInit {
     nr: [ '', Validators.required ],
     city: [ '', Validators.required ],
     restaurantId: [ null, Validators.required ],
+    expirationHour: ['', [Validators.required, Validators.pattern(/(\d{1,2}):(\d{2})/)]],
   });
+
+  timePickerTheme: NgxMaterialTimepickerTheme = {
+    container: {
+      buttonColor: '#3f51b5'
+    },
+
+    dial: {
+      dialBackgroundColor: '#3f51b5',
+      dialEditableActiveColor: '#3f51b5',
+    },
+
+    clockFace: {
+      clockHandColor: '#3f51b5',
+    },
+  };
 
   static sanitize (field: string) {
     return field.trim().replace(',', ' ');
@@ -40,12 +56,7 @@ export class CreateLobbyComponent implements OnInit {
 
   ngOnInit() {
     const today = new Date();
-    this.expirationTime = {
-      hour: today.getHours(),
-      minute: today.getMinutes(),
-      meriden: 'PM',
-      format: 24
-    };
+    this.lobbyForm.controls['expirationHour'].setValue(`${ today.getHours() }:${ today.getMinutes() + 10 }`);
 
     this.restaurants$ = this.api.getRestaurants();
   }
@@ -55,7 +66,8 @@ export class CreateLobbyComponent implements OnInit {
       this.disableCreateButton = true;
 
       const expirationDate = new Date();
-      expirationDate.setUTCHours(this.expirationTime.hour, this.expirationTime.minute);
+      const expirationTime = this.lobbyForm.controls['expirationHour'].value.split(':', 2);
+      expirationDate.setHours(expirationTime[0], expirationTime[1]);
 
       const address = CreateLobbyComponent.sanitize(this.lobbyForm.get('nr').value)
           + ','

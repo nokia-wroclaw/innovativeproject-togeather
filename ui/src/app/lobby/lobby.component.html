@@ -2,7 +2,7 @@
     <mat-card class="lobby-card">
         <mat-card-header>
             <mat-card-title>Lobby address: {{ lobby.address | beautifyAddress }}</mat-card-title>
-            <mat-card-subtitle>Expires in: {{ lobby.expires }}</mat-card-subtitle>
+            <mat-card-subtitle>Expires in: {{ lobby.expires | beautifyExpirationDate }}</mat-card-subtitle>
             <mat-card-subtitle>Number of lobby members: 3</mat-card-subtitle>
         </mat-card-header>
 
