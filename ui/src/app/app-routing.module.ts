@@ -16,7 +16,7 @@ const routes: Routes = [
     { path: 'create-lobby', component: CreateLobbyComponent },
     { path: 'open-lobbies', component: LobbiesListComponent },
     { path: 'lobbies/:lobbyId', component: LobbyComponent },
-    { path: 'open-lobbies/:lobbyId', component: JoinLobbyLinkComponent },
+    { path: 'lobbies/:lobbyId/join', component: JoinLobbyLinkComponent },
 ];
 
 @NgModule({

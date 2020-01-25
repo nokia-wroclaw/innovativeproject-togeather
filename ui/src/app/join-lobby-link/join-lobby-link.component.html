@@ -1,9 +1,9 @@
 <h3>Join lobby!</h3>
 <div class="container">
-    <form class="join-lobby-form" [formGroup]="joinLobbyForm">
+    <form class="join-lobby-form">
         <mat-form-field class="join-lobby-form_field">
             <mat-label>Your name: </mat-label>
-            <input matInput formControlName="userName" placeholder="Name" cdkFocusInitial>
+            <input matInput [formControl]="userName" placeholder="Name" required cdkFocusInitial>
         </mat-form-field>
         <div class="buttons">
             <button mat-button (click)="onNoClick()">No Thanks</button>
