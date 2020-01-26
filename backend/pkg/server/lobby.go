@@ -112,7 +112,7 @@ func (h *lobbyHandler) edit(w http.ResponseWriter, r *http.Request) {
 func (h *lobbyHandler) join(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	user := ctx.Value(userKey).(string)
+	user := ctx.Value(UserKey).(*core.User)
 
 	lobbyID, err := strconv.Atoi(chi.URLParam(r, "lobbyID"))
 	if err != nil {

@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -22,20 +23,35 @@ func (m *lobbyMiddleware) authMiddleware(h http.Handler) http.Handler {
 	return http.HandlerFunc(func (w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 
-		userID, err := r.Cookie("user-id")
+		userCookie, err := r.Cookie("user-id")
 		if err != nil {
 			h.ServeHTTP(w, r)
 			return
 		}
 
-		if userID == nil {
+		if userCookie == nil {
 			respondError(w, http.StatusBadRequest,
 				errors.New("unauthorized: no user found"))
+			return
 		}
 
-		user, err := m.userService.Get()
+		userID, err := strconv.Atoi(userCookie.Value)
+		if err != nil {
+			respondError(w, http.StatusBadRequest,
+				 errors.New("incorrect cookie value: not a number"))
+			return
+		}
 
-		ctx = context.WithValue(ctx, UserKey, )
+		user, err := m.userService.Get(ctx, userID)
+		if err != nil {
+			respondError(w, http.StatusBadRequest,
+				fmt.Errorf("error retrieving given user " +
+					"from database: %v", userID))
+			return
+		}
+
+		newCtx := context.WithValue(ctx, UserKey, user)
+		h.ServeHTTP(w, r.WithContext(newCtx))
 	})
 }
 
