@@ -51,11 +51,10 @@ func (s *userStore) List(ctx context.Context) ([]*core.User, error) {
 	return users, nil
 }
 
-func (s *userStore) Create(ctx context.Context, userName string, lobbyID int,
-	isOwner bool) (*core.User, error) {
+func (s *userStore) Create(ctx context.Context, userName string) (*core.User, error) {
 	var userID int
-	err := s.db.QueryRowContext(ctx, `INSERT INTO clients(name, lobby, is_owner) 
-		VALUES ($1, $2, $3) RETURNING id`, userName, lobbyID, isOwner).Scan(&userID)
+	err := s.db.QueryRowContext(ctx, `INSERT INTO
+    	clients(name) VALUES ($1) RETURNING id`, userName).Scan(&userID)
 	if err != nil {
 		return nil, err
 	}

@@ -17,6 +17,7 @@ type lobbyMiddleware struct {
 	userService core.UserService
 }
 
+var CookieUserIDKey = "user-id"
 var UserKey = "user"
 
 func authMiddleware(next http.HandlerFunc, m lobbyMiddleware) http.HandlerFunc {

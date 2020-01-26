@@ -52,6 +52,7 @@ func New(
 	lobbyHandler := lobbyHandler{lobbyService: lobbyService}
 	userHandler := userHandler{userService: userService}
 	lobbyMiddleware := lobbyMiddleware{lobbyService: lobbyService}
+	authHandler := authHandler{userService: userService}
 
 	r.Route("/api", func(r chi.Router) {
 		r.Route("/restaurants", func(r chi.Router) {

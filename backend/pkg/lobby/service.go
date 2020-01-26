@@ -33,7 +33,7 @@ func (s *service) Create(
 		return nil, 0, err
 	}
 
-	u, err := s.userService.Create(ctx, ownerName, l.ID, true)
+	u, err := s.userService.Create(ctx, ownerName)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -53,7 +53,7 @@ func (s *service) Edit(
 }
 
 func (s *service) Join(ctx context.Context, lobbyID int, userName string) error {
-	_, err := s.userService.Create(ctx, userName, lobbyID, false)
+	_, err := s.userService.Create(ctx, userName)
 	return err
 }
 

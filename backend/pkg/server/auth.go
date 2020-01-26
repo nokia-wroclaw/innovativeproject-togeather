@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"time"
 
 	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
 )
@@ -25,13 +26,13 @@ func (h *authHandler) register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID, err := h.userService.Create(ctx, payload.Name)
+	user, err := h.userService.Create(ctx, payload.Name)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
 
-	respondJSON(w, http.StatusCreated, userID)
+	respondJSON(w, http.StatusCreated, user)
 }
 
 type loginUser struct {
@@ -54,6 +55,13 @@ func (h *authHandler) login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// add cookie here
+	c := &http.Cookie {
+		Name:       CookieUserIDKey,
+		Value:      string(payload.UserID),
+		MaxAge:     24*60*60,
+		HttpOnly:   true,
+	}
+	http.SetCookie(w, c)
 	respondJSON(w, http.StatusOK, nil)
 }
 
@@ -66,12 +74,20 @@ func (h *authHandler) logout(w http.ResponseWriter, r *http.Request) {
 			errors.New("logout: user already logged out"))
 	}
 
-	err := h.userService.Logoout(ctx, user.ID)
-	if err != nil {
-		respondError(w, http.StatusBadRequest, err)
-		return
+	c := &http.Cookie {
+		Name:       CookieUserIDKey,
+		Value:      "",
+		MaxAge:     -1,
+		HttpOnly:   true,
 	}
 
+	//err := h.userService.Logout(ctx, user.ID)
+	//if err != nil {
+	//	respondError(w, http.StatusBadRequest, err)
+	//	return
+	//}
+
 	// delete cookie here
+	http.SetCookie(w, c)
 	respondJSON(w, http.StatusOK, nil)
 }
