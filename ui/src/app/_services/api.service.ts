@@ -6,6 +6,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { PostLobbyDto } from '../_models/post-lobby-dto';
 import { environment } from '../../environments/environment';
+import { User } from '../_models/user';
+import { UserDto } from '../_models/user-dto';
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +19,33 @@ export class ApiService {
     constructor(
         private http: HttpClient,
     ) { }
+
+    logIn(id: number): Observable<User> {
+        return this.http.post<UserDto>(
+            this.baseUrl + '/auth/login',
+            { id: id },
+            { withCredentials: true }
+        ).pipe(
+            map(userDto => {
+                return {
+                    id: userDto.user_id,
+                    name: userDto.user_name
+                };
+            }),
+            catchError(this.handleError)
+        );
+    }
+
+    checkUserLogin(): Observable<boolean> {
+        return this.http.get(
+            this.baseUrl + '/ping',
+            { withCredentials: true }
+        ).pipe(
+            map(response => {
+                return response === 'pong';
+            }),
+        );
+    }
 
     getRestaurants(): Observable<Restaurant[]> {
         return this.http.get<Restaurant[]>(

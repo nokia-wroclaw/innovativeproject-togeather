@@ -40,6 +40,8 @@ import { MapContainerComponent } from './map/map-container.component';
 import { MapLobbyMarkerComponent } from './map-lobby-marker/map-lobby-marker.component';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { LoginPageComponent } from './login-page/login-page.component';
+import { RegistrationPageComponent } from './registration-page/registration-page.component';
 
 
 @NgModule({
@@ -61,6 +63,8 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
         LobbyComponent,
         RestaurantContainerComponent,
         MapLobbyMarkerComponent,
+        LoginPageComponent,
+        RegistrationPageComponent,
     ],
     imports: [
         BrowserModule,

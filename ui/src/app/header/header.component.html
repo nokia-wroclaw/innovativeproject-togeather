@@ -1,13 +1,22 @@
 <header>
     <div class="container nav">
         <a (click)="redirectToHomePage()" class="nav__logo">togEATher</a>
-        <mat-menu #appMenu="matMenu" xPosition="before">
-            <button mat-menu-item>Settings</button>
-            <button mat-menu-item>Log out</button>
-        </mat-menu>
-        <button mat-raised-button [matMenuTriggerFor]="appMenu">
-            Profile
-            <mat-icon>more_vert</mat-icon>
-        </button>
+
+        <div class="profile-information">
+            <div class="profile-information__current-user">
+                <span class="user-information">You're viewing page as: </span>
+                {{ user.loggedInUser || 'Guest' }}
+            </div>
+
+            <mat-menu #appMenu="matMenu" xPosition="before">
+                <a (click)="redirectToLogin()" mat-menu-item>Log in</a>
+                <a (click)="redirectToRegistration()" mat-menu-item>Register</a>
+            </mat-menu>
+            <button mat-raised-button [matMenuTriggerFor]="appMenu">
+                Profile
+                <mat-icon>more_vert</mat-icon>
+            </button>
+        </div>
+
     </div>
 </header>
