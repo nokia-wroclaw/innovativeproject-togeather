@@ -2,7 +2,6 @@ package server
 
 import (
 	"encoding/json"
-	"errors"
 	"net/http"
 	"strconv"
 
@@ -68,13 +67,13 @@ func (h *authHandler) login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *authHandler) logout(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
+	//ctx := r.Context()
 
-	user := ctx.Value(UserKey).(*core.User)
-	if user == nil {
-		respondError(w, http.StatusBadRequest,
-			errors.New("logout: user already logged out"))
-	}
+	//user := ctx.Value(UserKey).(*core.User)
+	//if user == nil {
+	//	respondError(w, http.StatusBadRequest,
+	//		errors.New("logout: user already logged out"))
+	//}
 
 	c := &http.Cookie {
 		Name:       CookieUserIDKey,
