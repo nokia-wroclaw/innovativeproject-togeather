@@ -39,7 +39,7 @@ type (
 			address string,
 		) (*Lobby, error)
 
-		Join(ctx context.Context, lobbyID int, userID int) error
+		Join(ctx context.Context, lobbyID int, userID int) (*Lobby, error)
 
 		Get(ctx context.Context, lobbyID int) (*Lobby, error)
 
