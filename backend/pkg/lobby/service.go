@@ -53,7 +53,8 @@ func (s *service) Edit(
 }
 
 func (s *service) Join(ctx context.Context, lobbyID int, userName string) error {
-	return s.userService.Create(ctx, userName, lobbyID, false)
+	_, err := s.userService.Create(ctx, userName, lobbyID, false)
+	return err
 }
 
 func (s *service) Get(ctx context.Context, lobbyID int) (*core.Lobby, error) {
