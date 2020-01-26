@@ -18,7 +18,7 @@ func NewStore(db *sqlx.DB) core.UserStore {
 func (s *userStore) Get(ctx context.Context, id int) (*core.User, error) {
 	var user core.User
 	err := s.db.QueryRowContext(ctx, `SELECT id, name 
-		FROM clients WHERE id = $1`, id).Scan(&user)
+		FROM clients WHERE id = $1`, id).Scan(&user.ID, &user.Name)
 	if err != nil {
 		return nil, err
 	}

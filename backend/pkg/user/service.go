@@ -18,7 +18,7 @@ func NewService(userStore core.UserStore) core.UserService {
 func (s *service) Login(ctx context.Context, id int) error {
 	u, err := s.userStore.Get(ctx, id)
 	if err != nil {
-		return err
+		return fmt.Errorf("user %v does not exist: %w", id, err)
 	}
 
 	if u == nil {

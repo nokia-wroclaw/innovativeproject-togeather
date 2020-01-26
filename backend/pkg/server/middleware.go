@@ -26,7 +26,8 @@ func authMiddleware(next http.HandlerFunc, m lobbyMiddleware) http.HandlerFunc {
 
 		userCookie, err := r.Cookie("user-id")
 		if err != nil {
-			next.ServeHTTP(w, r)
+			respondError(w, http.StatusBadRequest,
+				fmt.Errorf("unauthorized: user not logged in"))
 			return
 		}
 

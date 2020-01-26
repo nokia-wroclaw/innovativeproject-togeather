@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
-	"time"
+	"strconv"
 
 	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
 )
@@ -36,7 +36,7 @@ func (h *authHandler) register(w http.ResponseWriter, r *http.Request) {
 }
 
 type loginUser struct {
-	UserID int `json:"name,required"`
+	UserID int `json:"id,required"`
 }
 
 func (h *authHandler) login(w http.ResponseWriter, r *http.Request) {
@@ -54,15 +54,17 @@ func (h *authHandler) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// add cookie here
+	id := strconv.Itoa(payload.UserID)
+
 	c := &http.Cookie {
 		Name:       CookieUserIDKey,
-		Value:      string(payload.UserID),
+		Value:      id,
+		Path: "/",
 		MaxAge:     24*60*60,
 		HttpOnly:   true,
 	}
 	http.SetCookie(w, c)
-	respondJSON(w, http.StatusOK, nil)
+	respondJSON(w, http.StatusOK, payload.UserID)
 }
 
 func (h *authHandler) logout(w http.ResponseWriter, r *http.Request) {
@@ -77,6 +79,7 @@ func (h *authHandler) logout(w http.ResponseWriter, r *http.Request) {
 	c := &http.Cookie {
 		Name:       CookieUserIDKey,
 		Value:      "",
+		Path: 		"/",
 		MaxAge:     -1,
 		HttpOnly:   true,
 	}

@@ -51,7 +51,7 @@ func New(
 	restaurantHandler := restaurantHandler{restaurantService: restaurantService}
 	lobbyHandler := lobbyHandler{lobbyService: lobbyService}
 	userHandler := userHandler{userService: userService}
-	lobbyMiddleware := lobbyMiddleware{lobbyService: lobbyService}
+	lobbyMiddleware := lobbyMiddleware{lobbyService: lobbyService, userService: userService}
 	authHandler := authHandler{userService: userService}
 
 	r.Route("/api", func(r chi.Router) {
@@ -65,11 +65,11 @@ func New(
 
 		r.Route("/lobbies", func(r chi.Router) {
 			r.Get("/", lobbyHandler.list)
-			r.Post("/", lobbyHandler.create)
+			r.Post("/", authMiddleware(lobbyHandler.create, lobbyMiddleware))
 			r.Route("/{lobbyID}", func(r chi.Router){
 				//r.Put("/", authMiddleware(lobbyHandler.edit, lobbyMiddleware))
 				r.Post("/", authMiddleware(lobbyHandler.join, lobbyMiddleware))
-				r.Get("/", authMiddleware(lobbyHandler.get, lobbyMiddleware))
+				r.Get("/", lobbyHandler.get)
 			})
 		})
 
