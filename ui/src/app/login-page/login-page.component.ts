@@ -8,7 +8,7 @@ import { RedirectionService } from '../_services/redirection.service';
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.scss']
+  styleUrls: ['../../styles/global/centered-form.scss']
 })
 export class LoginPageComponent implements OnInit {
 
@@ -23,6 +23,13 @@ export class LoginPageComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+      // TODO: Consider changing it to route guard
+      this.api.checkUserLogin().subscribe(() => {
+          this.redirectionService.redirectToHomePage();
+          this.toaster.warning('You are already logged in');
+      }, () => {
+          // ignore
+      });
   }
 
   logIn() {

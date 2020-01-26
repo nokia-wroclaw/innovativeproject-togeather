@@ -1,9 +1,9 @@
 <h3>Create new lobby</h3>
 
-<div class="container">
-    <form class="lobby-form" [formGroup]="lobbyForm">
+<div class="centered-form-container">
+    <form class="centered-form" [formGroup]="lobbyForm">
 
-        <mat-form-field class="lobby-form__field">
+        <mat-form-field class="centered-form__field">
             <mat-label>Your name</mat-label>
             <input formControlName="ownerName" matInput placeholder="Name">
             <mat-error>
@@ -12,7 +12,7 @@
         </mat-form-field>
 
         <div class="lobby-form__address">
-            <mat-form-field class="lobby-form__field">
+            <mat-form-field class="centered-form__field">
                 <mat-label>Street</mat-label>
                 <input formControlName="street" matInput placeholder="Street">
                 <mat-error>
@@ -21,7 +21,7 @@
             </mat-form-field>
 
 
-            <mat-form-field class="lobby-form__field">
+            <mat-form-field class="centered-form__field">
                 <mat-label>Nr</mat-label>
                 <input formControlName="nr" matInput placeholder="building/apartment">
                 <mat-error>
@@ -30,7 +30,7 @@
             </mat-form-field>
 
 
-            <mat-form-field class="lobby-form__field">
+            <mat-form-field class="centered-form__field">
                 <mat-label>City</mat-label>
                 <input formControlName="city" matInput placeholder="City">
                 <mat-error>
@@ -40,7 +40,7 @@
         </div>
 
 
-        <mat-form-field class="lobby-form__field">
+        <mat-form-field class="centered-form__field">
             <mat-label>Restaurant</mat-label>
             <select formControlName="restaurantId" matNativeControl required>
                 <option value="" disabled hidden>Choose restaurant</option>
@@ -50,7 +50,7 @@
             </select>
         </mat-form-field>
 
-        <mat-form-field class="lobby-form__field">
+        <mat-form-field class="centered-form__field">
             <mat-label>Closing time</mat-label>
             <input
                     formControlName="expirationHour"

@@ -36,6 +36,26 @@ export class ApiService {
         );
     }
 
+    logOut(): Observable<void> {
+        return this.http.delete<void>(this.baseUrl + '/auth/logout')
+            .pipe(catchError(this.handleError));
+    }
+
+    register(name: string): Observable<User> {
+        return this.http.post<UserDto>(
+            this.baseUrl + '/auth/register',
+            { name: name }
+        ).pipe(
+            map(userDto => {
+                return {
+                    id: userDto.user_id,
+                    name: userDto.user_name,
+                };
+            }),
+            catchError(this.handleError)
+        );
+    }
+
     checkUserLogin(): Observable<boolean> {
         return this.http.get(
             this.baseUrl + '/ping',

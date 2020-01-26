@@ -12,7 +12,7 @@ import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
 @Component({
   selector: 'app-create-lobby',
   templateUrl: './create-lobby.component.html',
-  styleUrls: ['./create-lobby.component.scss']
+  styleUrls: ['../../styles/global/centered-form.scss']
 })
 export class CreateLobbyComponent implements OnInit {
 

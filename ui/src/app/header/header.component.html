@@ -9,7 +9,12 @@
             </div>
 
             <mat-menu #appMenu="matMenu" xPosition="before">
-                <a (click)="redirectToLogin()" mat-menu-item>Log in</a>
+                <a *ngIf="!user.loggedInUser" (click)="redirectToLogin()" mat-menu-item>
+                    Log in
+                </a>
+                <a *ngIf="user.loggedInUser" (click)="logOut()" mat-menu-item>
+                    Log out
+                </a>
                 <a (click)="redirectToRegistration()" mat-menu-item>Register</a>
             </mat-menu>
             <button mat-raised-button [matMenuTriggerFor]="appMenu">
