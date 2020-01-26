@@ -67,29 +67,6 @@ func (h *authHandler) login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *authHandler) logout(w http.ResponseWriter, r *http.Request) {
-	//ctx := r.Context()
-
-	//user := ctx.Value(UserKey).(*core.User)
-	//if user == nil {
-	//	respondError(w, http.StatusBadRequest,
-	//		errors.New("logout: user already logged out"))
-	//}
-
-	c := &http.Cookie {
-		Name:       CookieUserIDKey,
-		Value:      "",
-		Path: 		"/",
-		MaxAge:     -1,
-		HttpOnly:   true,
-	}
-
-	//err := h.userService.Logout(ctx, user.ID)
-	//if err != nil {
-	//	respondError(w, http.StatusBadRequest, err)
-	//	return
-	//}
-
-	// delete cookie here
-	http.SetCookie(w, c)
+	w.Header().Add("Set-Cookie", "user-id=deleted; Path=/; Max-Age=0")
 	respondJSON(w, http.StatusOK, nil)
 }
