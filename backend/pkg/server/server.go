@@ -77,6 +77,10 @@ func New(
 			r.Get("/", userHandler.listUsers)
 		})
 
+		r.Route("/user", func(r chi.Router) {
+			r.Get("/", userHandler.get)
+		})
+
 		r.Route("/ping", func(r chi.Router) {
 			r.Get("/", pingHandler.ping)
 		})

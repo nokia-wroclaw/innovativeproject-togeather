@@ -1,8 +1,11 @@
 package server
 
 import (
-	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
+	"errors"
 	"net/http"
+	"strconv"
+
+	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
 )
 
 type userHandler struct {
@@ -19,4 +22,29 @@ func (h *userHandler) listUsers(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondJSON(w, http.StatusOK, usersList)
+}
+
+func (h *userHandler) get(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	cookie, err := r.Cookie("user-id")
+	if err != nil {
+		respondError(w, http.StatusBadRequest,
+			errors.New("user not authorized"))
+		return
+	}
+
+	userID, err := strconv.Atoi(cookie.Value)
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	user, err := h.userService.Get(ctx, userID)
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	respondJSON(w, http.StatusOK, user)
 }
