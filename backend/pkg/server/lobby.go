@@ -41,10 +41,6 @@ type createLobbyRequest struct {
 //	Address      string    `json:"address, required"`
 //}
 
-type joinLobbyRequest struct {
-	//UserName string `json:"user_name"`
-}
-
 func (h *lobbyHandler) create(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
