@@ -5,13 +5,14 @@ import { Lobby } from '../_models/lobby';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { PostLobbyDto } from '../_models/post-lobby-dto';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ApiService {
 
-    readonly baseUrl = 'http://localhost:8000/api';
+    readonly baseUrl = environment.apiUrl;
 
     constructor(
         private http: HttpClient,
