@@ -84,7 +84,7 @@ func New(
 		})
 
 		r.Route("/ping", func(r chi.Router) {
-			r.Get("/", pingHandler.ping)
+			r.Get("/", authMiddleware(pingHandler.ping, lobbyMiddleware))
 		})
 	})
 
