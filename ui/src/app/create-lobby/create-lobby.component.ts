@@ -20,7 +20,6 @@ export class CreateLobbyComponent implements OnInit {
   restaurants$: Observable<Restaurant[]> = of([]);
 
   lobbyForm = this.fb.group({
-    ownerName: ['', Validators.required ],
     street: [ '', Validators.required ],
     nr: [ '', Validators.required ],
     city: [ '', Validators.required ],
@@ -77,7 +76,6 @@ export class CreateLobbyComponent implements OnInit {
 
       const newLobby: PostLobbyDto = {
         restaurant_id: this.lobbyForm.controls['restaurantId'].value,
-        owner_name: this.lobbyForm.controls['ownerName'].value,
         expires: expirationDate.toISOString(),
         address: address
       };
