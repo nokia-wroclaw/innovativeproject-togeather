@@ -15,6 +15,17 @@ func NewStore(db *sqlx.DB) core.UserStore {
 	return &userStore{db: db}
 }
 
+func (s *userStore) Get(ctx context.Context, id int) (*core.User, error) {
+	var user core.User
+	err := s.db.QueryRowContext(ctx, `SELECT id, name 
+		FROM clients WHERE id = $1`, id).Scan(&user)
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
 func (s *userStore) List(ctx context.Context) ([]*core.User, error) {
 	rows, err := s.db.QueryContext(ctx, `SELECT id, name FROM clients`)
 	if err != nil{

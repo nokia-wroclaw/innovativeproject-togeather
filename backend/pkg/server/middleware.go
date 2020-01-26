@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"strconv"
@@ -12,6 +13,30 @@ import (
 
 type lobbyMiddleware struct {
 	lobbyService core.LobbyService
+	userService core.UserService
+}
+
+var UserKey = "user"
+
+func (m *lobbyMiddleware) authMiddleware(h http.Handler) http.Handler {
+	return http.HandlerFunc(func (w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+
+		userID, err := r.Cookie("user-id")
+		if err != nil {
+			h.ServeHTTP(w, r)
+			return
+		}
+
+		if userID == nil {
+			respondError(w, http.StatusBadRequest,
+				errors.New("unauthorized: no user found"))
+		}
+
+		user, err := m.userService.Get()
+
+		ctx = context.WithValue(ctx, UserKey, )
+	})
 }
 
 func (m *lobbyMiddleware) cookiesMiddleware(h http.Handler) http.Handler {
