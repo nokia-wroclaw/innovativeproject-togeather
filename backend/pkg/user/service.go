@@ -22,3 +22,6 @@ func (s *service) Create(ctx context.Context, userName string, lobbyID int, isOw
 	return s.userStore.Create(ctx, userName, lobbyID, isOwner)
 }
 
+func (s *service) Get(ctx context.Context, userID int) (*core.User, error) {
+	return s.userStore.Get(ctx, userID)
+}

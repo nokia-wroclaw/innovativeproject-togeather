@@ -13,7 +13,7 @@ type restaurantHandler struct {
 	restaurantService core.RestaurantService
 }
 
-func (h *restaurantHandler) listRestaurants(w http.ResponseWriter, r *http.Request) {
+func (h *restaurantHandler) list(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	restaurantsList, err := h.restaurantService.List(ctx)
@@ -25,7 +25,7 @@ func (h *restaurantHandler) listRestaurants(w http.ResponseWriter, r *http.Reque
 	respondJSON(w, http.StatusOK, restaurantsList)
 }
 
-func (h *restaurantHandler) restaurantMenu(w http.ResponseWriter, r *http.Request) {
+func (h *restaurantHandler) menu(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	restaurantID, err := strconv.Atoi(chi.URLParam(r, "restaurantID"))
@@ -43,7 +43,7 @@ func (h *restaurantHandler) restaurantMenu(w http.ResponseWriter, r *http.Reques
 	respondJSON(w, http.StatusOK, restaurantMenu)
 }
 
-func (h *restaurantHandler) getRestaurant(w http.ResponseWriter, r *http.Request) {
+func (h *restaurantHandler) get(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	restaurantID, err := strconv.Atoi(chi.URLParam(r, "restaurantID"))
