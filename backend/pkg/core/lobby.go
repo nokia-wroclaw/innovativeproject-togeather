@@ -39,13 +39,13 @@ type (
 			address string,
 		) (*Lobby, error)
 
-		Join(ctx context.Context, lobbyID int, userName string)(*User, error)
+		Join(ctx context.Context, lobbyID int, userName string) error
 
-		Get(ctx context.Context, lobbyID int)(*Lobby, error)
+		Get(ctx context.Context, lobbyID int) (*Lobby, error)
 
 		Clean(ctx context.Context)
 
-		BelongsToLobby(ctx context.Context, userID int, lobbyID int)(bool, error)
+		BelongsToLobby(ctx context.Context, userID int, lobbyID int) (bool, error)
 	}
 
 	LobbyStore interface {

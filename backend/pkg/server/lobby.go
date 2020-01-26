@@ -113,6 +113,10 @@ func (h *lobbyHandler) join(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	user := ctx.Value(UserKey).(*core.User)
+	if user == nil {
+		respondError(w, http.StatusBadRequest,
+			errors.New("join lobby: unauthorized"))
+	}
 
 	lobbyID, err := strconv.Atoi(chi.URLParam(r, "lobbyID"))
 	if err != nil {
@@ -126,7 +130,7 @@ func (h *lobbyHandler) join(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.lobbyService.Join(ctx, lobbyID, request.UserName)
+	err = h.lobbyService.Join(ctx, lobbyID, request.UserName)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return

@@ -52,7 +52,7 @@ func (s *service) Edit(
 	return s.lobbyStore.Edit(ctx, lobbyID, restaurantID, ownerID, expires, address)
 }
 
-func (s *service) Join(ctx context.Context, lobbyID int, userName string)(*core.User, error){
+func (s *service) Join(ctx context.Context, lobbyID int, userName string) error {
 	return s.userService.Create(ctx, userName, lobbyID, false)
 }
 

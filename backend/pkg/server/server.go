@@ -66,10 +66,9 @@ func New(
 			r.Get("/", lobbyHandler.list)
 			r.Post("/", lobbyHandler.create)
 			r.Route("/{lobbyID}", func(r chi.Router){
-				r.Use(lobbyMiddleware.cookiesMiddleware)
-				r.Put("/", lobbyHandler.edit)
-				r.Post("/", lobbyHandler.join)
-				r.Get("/", lobbyHandler.get)
+				//r.Put("/", authMiddleware(lobbyHandler.edit, lobbyMiddleware))
+				r.Post("/", authMiddleware(lobbyHandler.join, lobbyMiddleware))
+				r.Get("/", authMiddleware(lobbyHandler.get, lobbyMiddleware))
 			})
 		})
 
