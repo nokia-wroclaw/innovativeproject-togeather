@@ -68,3 +68,11 @@ func (s *service) Clean(ctx context.Context) {
 func (s *service) BelongsToLobby(ctx context.Context, userID int, lobbyID int) (bool, error) {
 	return s.lobbyStore.BelongsToLobby(ctx, userID, lobbyID)
 }
+
+func (s *service) AddToCart(ctx context.Context, userID int, lobbyID int, mealID int) error {
+	return s.lobbyStore.AddToCart(ctx, userID, lobbyID, mealID)
+}
+
+func (s *service) DelFromCart(ctx context.Context, userID int, lobbyID int, mealID int) error {
+	return s.lobbyStore.DelFromCart(ctx, userID, lobbyID, mealID)
+}
