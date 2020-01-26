@@ -14,7 +14,7 @@ type (
 		Get(ctx context.Context, id int) (*User, error)
 		List(ctx context.Context) ([]*User, error)
 		Create(ctx context.Context, userName string) (*User, error)
-		Login(ctx context.Context, id int) error
+		Login(ctx context.Context, id int) (*User, error)
 	}
 
 	UserStore interface {

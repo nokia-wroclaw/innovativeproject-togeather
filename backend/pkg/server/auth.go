@@ -48,7 +48,7 @@ func (h *authHandler) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := h.userService.Login(ctx, payload.UserID)
+	u, err := h.userService.Login(ctx, payload.UserID)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return
@@ -64,7 +64,7 @@ func (h *authHandler) login(w http.ResponseWriter, r *http.Request) {
 		HttpOnly:   true,
 	}
 	http.SetCookie(w, c)
-	respondJSON(w, http.StatusOK, payload.UserID)
+	respondJSON(w, http.StatusOK, u)
 }
 
 func (h *authHandler) logout(w http.ResponseWriter, r *http.Request) {

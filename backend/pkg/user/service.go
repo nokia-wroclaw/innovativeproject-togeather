@@ -15,17 +15,17 @@ func NewService(userStore core.UserStore) core.UserService {
 	return &service{userStore: userStore}
 }
 
-func (s *service) Login(ctx context.Context, id int) error {
+func (s *service) Login(ctx context.Context, id int) (*core.User, error) {
 	u, err := s.userStore.Get(ctx, id)
 	if err != nil {
-		return fmt.Errorf("user %v does not exist: %w", id, err)
+		return nil, fmt.Errorf("user %v does not exist: %w", id, err)
 	}
 
 	if u == nil {
-		return fmt.Errorf("user %v does not exist", id)
+		return nil, fmt.Errorf("user %v does not exist", id)
 	}
 
-	return nil
+	return u, nil
 }
 
 func (s *service) Get(ctx context.Context, id int) (*core.User, error) {
