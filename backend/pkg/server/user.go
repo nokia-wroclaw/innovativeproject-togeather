@@ -12,7 +12,7 @@ type userHandler struct {
 	userService core.UserService
 }
 
-func (h *userHandler) listUsers(w http.ResponseWriter, r *http.Request) {
+func (h *userHandler) list(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	usersList, err := h.userService.List(ctx)
