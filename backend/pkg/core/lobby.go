@@ -46,6 +46,10 @@ type (
 		Clean(ctx context.Context)
 
 		BelongsToLobby(ctx context.Context, userID int, lobbyID int) (bool, error)
+
+		AddToCart(ctx context.Context, userID int, lobbyID int, mealID int) error
+
+		DelFromCart(ctx context.Context, userID int, lobbyID int, mealID int) error
 	}
 
 	LobbyStore interface {
@@ -74,5 +78,9 @@ type (
 		Clean(ctx context.Context)
 
 		BelongsToLobby(ctx context.Context, userID int, lobbyID int)(bool, error)
+
+		AddToCart(ctx context.Context, userID int, lobbyID int, mealID int) error
+
+		DelFromCart(ctx context.Context, userID int, lobbyID int, mealID int) error
 	}
 )

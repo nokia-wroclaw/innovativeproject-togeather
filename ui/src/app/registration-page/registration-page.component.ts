@@ -20,9 +20,11 @@ export class RegistrationPageComponent {
   ) { }
 
   register() {
+    this.name.setValue(this.name.value.trim());
+
     if (this.name.valid) {
       this.disableButton = true;
-      this.api.register(this.name.value).subscribe(
+      this.api.register(this.name.value.trim()).subscribe(
           (user: User) => {
             this.user = user;
             this.toaster.success('You can now log in', 'Successfully registered!');
