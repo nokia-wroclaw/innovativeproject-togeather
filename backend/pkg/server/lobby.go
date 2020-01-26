@@ -56,10 +56,10 @@ func (h *lobbyHandler) create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	lobby, _, err := h.lobbyService.Create(
+	lobby, err := h.lobbyService.Create(
 		ctx,
 		request.RestaurantID,
-		user.Name,
+		user.ID,
 		&request.Expires,
 		request.Address,
 	)
@@ -124,7 +124,7 @@ func (h *lobbyHandler) join(w http.ResponseWriter, r *http.Request) {
 	//	return
 	//}
 
-	err = h.lobbyService.Join(ctx, lobbyID, user.Name)
+	err = h.lobbyService.Join(ctx, lobbyID, user.ID)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return
