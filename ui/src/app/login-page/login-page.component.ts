@@ -41,6 +41,10 @@ export class LoginPageComponent implements OnInit {
             this.userService.loggedInUser = user.name;
             this.toaster.success('Successfully logged in');
             this.redirectionService.redirectToHomePage();
+          },
+          error => {
+            this.toaster.error(error);
+            this.disableLoginButton = false;
           }
       );
     }
