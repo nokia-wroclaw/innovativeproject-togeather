@@ -25,10 +25,10 @@ type (
 		Create(
 			ctx context.Context,
 			restaurantID int,
-			ownerName string,
+			ownerID int,
 			expires *time.Time,
 			address string,
-		) (*Lobby, int, error)
+		) (*Lobby, error)
 
 		Edit(
 			ctx context.Context,
@@ -39,7 +39,7 @@ type (
 			address string,
 		) (*Lobby, error)
 
-		Join(ctx context.Context, lobbyID int, userName string) error
+		Join(ctx context.Context, lobbyID int, userID int) error
 
 		Get(ctx context.Context, lobbyID int) (*Lobby, error)
 
@@ -58,6 +58,7 @@ type (
 		Create(
 			ctx context.Context,
 			restaurantID int,
+			ownerID int,
 			expires *time.Time,
 			address string,
 		) (*Lobby, error)
@@ -71,7 +72,7 @@ type (
 			address string,
 		) (*Lobby, error)
 
-		Join(ctx context.Context) error
+		Join(ctx context.Context, lobbyID int, userID int) error
 
 		Get(ctx context.Context, lobbyID int)(*Lobby, error)
 
