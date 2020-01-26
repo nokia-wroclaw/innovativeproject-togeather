@@ -163,6 +163,7 @@ func (h *lobbyHandler) addToCart(w http.ResponseWriter, r *http.Request) {
 	if user == nil {
 		respondError(w, http.StatusBadRequest,
 			errors.New("add to cart: unauthorized"))
+		return
 	}
 
 	lobbyID, err := strconv.Atoi(chi.URLParam(r, "lobbyID"))
@@ -193,6 +194,7 @@ func (h *lobbyHandler) delFromCart(w http.ResponseWriter, r *http.Request) {
 	if user == nil {
 		respondError(w, http.StatusBadRequest,
 			errors.New("delete from cart: unauthorized"))
+		return
 	}
 
 	lobbyID, err := strconv.Atoi(chi.URLParam(r, "lobbyID"))
