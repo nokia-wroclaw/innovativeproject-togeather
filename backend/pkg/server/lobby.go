@@ -34,6 +34,10 @@ type createLobbyRequest struct {
 	Address      string    `json:"address, required"`
 }
 
+type orderRequest struct {
+	MealID int `json:"meal_id"`
+}
+
 //type editLobbyRequest struct {
 //	RestaurantID int       `json:"restaurant_id, required"`
 //	OwnerID    	 int       `json:"owner_id, required"`
@@ -150,4 +154,66 @@ func (h *lobbyHandler) get(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondJSON(w, http.StatusOK, lobby)
+}
+
+func (h *lobbyHandler) addToCart(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	user := ctx.Value(UserKey).(*core.User)
+	if user == nil {
+		respondError(w, http.StatusBadRequest,
+			errors.New("add to cart: unauthorized"))
+		return
+	}
+
+	lobbyID, err := strconv.Atoi(chi.URLParam(r, "lobbyID"))
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	var request orderRequest
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	err = h.lobbyService.AddToCart(ctx, user.ID, lobbyID, request.MealID)
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	respondJSON(w, http.StatusOK, nil)
+}
+
+func (h *lobbyHandler) delFromCart(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	user := ctx.Value(UserKey).(*core.User)
+	if user == nil {
+		respondError(w, http.StatusBadRequest,
+			errors.New("delete from cart: unauthorized"))
+		return
+	}
+
+	lobbyID, err := strconv.Atoi(chi.URLParam(r, "lobbyID"))
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	var request orderRequest
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	err = h.lobbyService.DelFromCart(ctx, user.ID, lobbyID, request.MealID)
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	respondJSON(w, http.StatusOK, nil)
 }

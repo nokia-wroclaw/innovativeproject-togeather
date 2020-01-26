@@ -167,3 +167,25 @@ func (s *lobbyStore) BelongsToLobby(ctx context.Context, userID int, lobbyID int
 
 	return exists, nil
 }
+
+func (s *lobbyStore) AddToCart(ctx context.Context, userID int, lobbyID int, mealID int) error {
+	_, err := s.db.ExecContext(ctx, `INSERT INTO orders(client_id, lobby_id, meal_id)
+		VALUES ($1, $2, $3)`, userID, lobbyID, mealID)
+	if err != nil{
+		return err
+	}
+
+	return nil
+}
+
+func (s *lobbyStore) DelFromCart(ctx context.Context, userID int, lobbyID int, mealID int) error {
+	_, err := s.db.ExecContext(ctx, `DELETE FROM orders WHERE id IN 
+		(SELECT id FROM orders 
+		WHERE client_id = $1 AND lobby_id = $2 AND meal_id = $3 LIMIT 1)`,
+		userID, lobbyID, mealID)
+	if err != nil{
+		return err
+	}
+
+	return nil
+}
