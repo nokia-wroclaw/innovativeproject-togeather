@@ -58,4 +58,18 @@ export class RedirectionService {
           this.handleError('lobby', error);
         });
   }
+
+  redirectToLoginPage(): void {
+    this.router.navigateByUrl('/login')
+      .catch(error => {
+        this.handleError('login', error);
+    });
+  }
+
+  redirectToRegistrationPage(): void {
+    this.router.navigateByUrl('/register')
+      .catch(error => {
+        this.handleError('registration', error);
+      });
+  }
 }

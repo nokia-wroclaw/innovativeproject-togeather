@@ -12,7 +12,7 @@ import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
 @Component({
   selector: 'app-create-lobby',
   templateUrl: './create-lobby.component.html',
-  styleUrls: ['./create-lobby.component.scss']
+  styleUrls: ['../../styles/global/centered-form.scss']
 })
 export class CreateLobbyComponent implements OnInit {
 
@@ -20,7 +20,6 @@ export class CreateLobbyComponent implements OnInit {
   restaurants$: Observable<Restaurant[]> = of([]);
 
   lobbyForm = this.fb.group({
-    ownerName: ['', Validators.required ],
     street: [ '', Validators.required ],
     nr: [ '', Validators.required ],
     city: [ '', Validators.required ],
@@ -77,7 +76,6 @@ export class CreateLobbyComponent implements OnInit {
 
       const newLobby: PostLobbyDto = {
         restaurant_id: this.lobbyForm.controls['restaurantId'].value,
-        owner_name: this.lobbyForm.controls['ownerName'].value,
         expires: expirationDate.toISOString(),
         address: address
       };

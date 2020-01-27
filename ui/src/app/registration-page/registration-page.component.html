@@ -1,0 +1,24 @@
+<h3>Register</h3>
+
+<div class="info" *ngIf="user">
+    <h4>Successfully registered!</h4>
+    <div class="user-id">Please remember your id: {{ user.id }}</div>
+    <strong>It is needed to later login!</strong>
+</div>
+
+<div class="centered-form-container">
+
+    <form class="centered-form">
+
+        <mat-form-field class="centered-form__field">
+            <mat-label>Nickname</mat-label>
+            <input [formControl]="name" matInput placeholder="Type in your nickname">
+            <mat-error>
+                Nickname is <strong>required</strong> to register
+            </mat-error>
+        </mat-form-field>
+
+        <button [disabled]="disableButton" (click)="register()" mat-raised-button color="primary">Register</button>
+
+    </form>
+</div>

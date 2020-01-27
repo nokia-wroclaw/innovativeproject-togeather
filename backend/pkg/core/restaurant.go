@@ -18,7 +18,7 @@ type (
 		RestaurantID int	 `json:"restaurant_id,omitempty"`
 		Name         string	 `json:"name"`
 		Price        float32 `json:"price"`
-		Description	 string	 `json:"description"`
+		Description	 string	 `json:"description,omitempty"`
 	}
 
 	RestaurantService interface {

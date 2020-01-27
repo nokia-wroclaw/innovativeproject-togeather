@@ -1,7 +1,9 @@
 package server
 
 import (
+	"context"
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -12,8 +14,85 @@ import (
 
 type lobbyMiddleware struct {
 	lobbyService core.LobbyService
+	userService core.UserService
 }
 
+var CookieUserIDKey = "user-id"
+var UserKey = "user"
+
+func authMiddleware(next http.HandlerFunc, m lobbyMiddleware) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+
+		userCookie, err := r.Cookie(CookieUserIDKey)
+		if err != nil {
+			respondError(w, http.StatusBadRequest,
+				fmt.Errorf("unauthorized: user not logged in"))
+			return
+		}
+
+		if userCookie == nil {
+			respondError(w, http.StatusBadRequest,
+				errors.New("unauthorized: no user found"))
+			return
+		}
+
+		userID, err := strconv.Atoi(userCookie.Value)
+		if err != nil {
+			respondError(w, http.StatusBadRequest,
+				errors.New("incorrect cookie value: not a number"))
+			return
+		}
+
+		user, err := m.userService.Get(ctx, userID)
+		if err != nil {
+			respondError(w, http.StatusBadRequest,
+				fmt.Errorf("error retrieving given user " +
+					"from database: %v", userID))
+			return
+		}
+
+		newCtx := context.WithValue(ctx, UserKey, user)
+		next.ServeHTTP(w, r.WithContext(newCtx))
+	}
+}
+
+//func authMiddleware(m lobbyMiddleware, h http.Handler) http.Handler {
+//	return http.HandlerFunc(func (w http.ResponseWriter, r *http.Request) {
+//		ctx := r.Context()
+//
+//		userCookie, err := r.Cookie("user-id")
+//		if err != nil {
+//			h.ServeHTTP(w, r)
+//			return
+//		}
+//
+//		if userCookie == nil {
+//			respondError(w, http.StatusBadRequest,
+//				errors.New("unauthorized: no user found"))
+//			return
+//		}
+//
+//		userID, err := strconv.Atoi(userCookie.Value)
+//		if err != nil {
+//			respondError(w, http.StatusBadRequest,
+//				 errors.New("incorrect cookie value: not a number"))
+//			return
+//		}
+//
+//		user, err := m.userService.Get(ctx, userID)
+//		if err != nil {
+//			respondError(w, http.StatusBadRequest,
+//				fmt.Errorf("error retrieving given user " +
+//					"from database: %v", userID))
+//			return
+//		}
+//
+//		newCtx := context.WithValue(ctx, UserKey, user)
+//		h.ServeHTTP(w, r.WithContext(newCtx))
+//	})
+//}
+//
 func (m *lobbyMiddleware) cookiesMiddleware(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("user-id")

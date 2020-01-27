@@ -16,8 +16,22 @@ header {
     font-size: 1.6rem;
   }
 
-  &:hover {
+  a:hover {
     color: $dark-gray;
     cursor: pointer;
+  }
+}
+
+.profile-information {
+  display: flex;
+  align-items: center;
+
+  &__current-user {
+    margin-right: 10px;
+
+    .user-information {
+      color: $dark-gray;
+      font-size: 0.85rem;
+    }
   }
 }

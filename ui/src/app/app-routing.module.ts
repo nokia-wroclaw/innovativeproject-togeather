@@ -7,6 +7,8 @@ import { LobbiesListComponent } from './lobbies-list/lobbies-list.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { RestaurantContainerComponent } from './restaurant/restaurant-container.component';
 import { JoinLobbyLinkComponent } from './join-lobby-link/join-lobby-link.component';
+import { LoginPageComponent } from './login-page/login-page.component';
+import { RegistrationPageComponent } from './registration-page/registration-page.component';
 
 
 const routes: Routes = [
@@ -17,6 +19,8 @@ const routes: Routes = [
     { path: 'open-lobbies', component: LobbiesListComponent },
     { path: 'lobbies/:lobbyId', component: LobbyComponent },
     { path: 'lobbies/:lobbyId/join', component: JoinLobbyLinkComponent },
+    { path: 'login', component: LoginPageComponent },
+    { path: 'register', component: RegistrationPageComponent },
 ];
 
 @NgModule({

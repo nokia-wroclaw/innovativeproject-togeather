@@ -15,6 +15,17 @@ func NewStore(db *sqlx.DB) core.UserStore {
 	return &userStore{db: db}
 }
 
+func (s *userStore) Get(ctx context.Context, id int) (*core.User, error) {
+	var user core.User
+	err := s.db.QueryRowContext(ctx, `SELECT id, name 
+		FROM clients WHERE id = $1`, id).Scan(&user.ID, &user.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
 func (s *userStore) List(ctx context.Context) ([]*core.User, error) {
 	rows, err := s.db.QueryContext(ctx, `SELECT id, name FROM clients`)
 	if err != nil{
@@ -40,11 +51,10 @@ func (s *userStore) List(ctx context.Context) ([]*core.User, error) {
 	return users, nil
 }
 
-func (s *userStore) Create(ctx context.Context, userName string, lobbyID int,
-	isOwner bool) (*core.User, error) {
+func (s *userStore) Create(ctx context.Context, userName string) (*core.User, error) {
 	var userID int
-	err := s.db.QueryRowContext(ctx, `INSERT INTO clients(name, lobby, is_owner) 
-		VALUES ($1, $2, $3) RETURNING id`, userName, lobbyID, isOwner).Scan(&userID)
+	err := s.db.QueryRowContext(ctx, `INSERT INTO
+    	clients(name) VALUES ($1) RETURNING id`, userName).Scan(&userID)
 	if err != nil {
 		return nil, err
 	}

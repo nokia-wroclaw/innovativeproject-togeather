@@ -1,4 +1,4 @@
-<ng-container *ngIf="lobby$ | async as lobby">
+<ng-container *ngIf="lobby">
     <mat-card class="lobby-card">
         <mat-card-header>
             <mat-card-title>Lobby address: {{ lobby.address | beautifyAddress }}</mat-card-title>
@@ -19,9 +19,15 @@
         <app-restaurant
                 class="restaurant"
                 [restaurantId]="lobby.restaurant.id.toString()"
+                [showAddToCart]="true"
+                (orderProduct)="addProductToCart($event)"
         ></app-restaurant>
 
-        <app-cart class="cart"></app-cart>
+        <app-cart
+                class="cart"
+                [cartState]="cartState"
+                (delete)="deleteProductFromCart($event)"
+        ></app-cart>
     </div>
 
 </ng-container>

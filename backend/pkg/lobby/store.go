@@ -2,6 +2,7 @@ package lobby
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/jasonwinn/geocoder"
@@ -17,6 +18,22 @@ type lobbyStore struct {
 func NewStore(db *sqlx.DB) core.LobbyStore {
 	geocoder.SetAPIKey("PdBSQAE97uUFd6NKJYsBO35voZcXX0qD")
 	return &lobbyStore{db: db}
+}
+
+func (s *lobbyStore) Available(ctx context.Context, lobbyID int) error {
+	limitTime := time.Now().Format(time.RFC3339)
+	var check int
+	err := s.db.QueryRowContext(ctx, `SELECT id FROM lobbies
+		WHERE expires >= $1 AND id = $2 LIMIT 1`,
+		limitTime, lobbyID).Scan(&check)
+	if err != nil {
+		return err
+	}
+	if check != lobbyID {
+		return fmt.Errorf("lobby %v is no longer available", lobbyID)
+	}
+
+	return nil
 }
 
 func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
@@ -58,6 +75,7 @@ func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
 func (s *lobbyStore) Create(
 	ctx context.Context,
 	restaurantID int,
+	userID int,
 	expires *time.Time,
 	address string,
 ) (*core.Lobby, error) {
@@ -74,6 +92,11 @@ func (s *lobbyStore) Create(
 	if err != nil {
 		return nil, err
 	}
+
+	_, err = s.db.ExecContext(ctx, `INSERT INTO 
+    	lobbys_users (lobby_id, client_id, is_owner) VALUES ($1, $2, $3)`,
+		lobbyID, userID, true,
+	)
 
 	return &core.Lobby{
 		ID:		lobbyID,
@@ -125,8 +148,13 @@ func (s *lobbyStore) Edit(
 	}, nil
 }
 
-func (s *lobbyStore) Join(ctx context.Context) error {
-	return nil
+func (s *lobbyStore) Join(ctx context.Context, userID int, lobbyID int) error {
+	_, err := s.db.ExecContext(ctx, `INSERT INTO 
+    	lobbys_users (lobby_id, client_id, is_owner) VALUES ($1, $2, $3)`,
+    	lobbyID, userID, false,
+	)
+
+	return err
 }
 
 func (s *lobbyStore) Get(ctx context.Context, lobbyID int) (*core.Lobby, error) {
@@ -159,11 +187,84 @@ func (s *lobbyStore) Clean(ctx context.Context) {
 
 func (s *lobbyStore) BelongsToLobby(ctx context.Context, userID int, lobbyID int) (bool, error) {
 	var exists bool
-	err := s.db.QueryRowContext(ctx, `SELECT EXISTS(SELECT 1 FROM clients 
-		WHERE id = $1 AND lobby = $2)`, userID, lobbyID).Scan(&exists)
+	err := s.db.QueryRowContext(ctx, `SELECT EXISTS(SELECT 1 FROM lobbys_users 
+		WHERE client_id = $1 AND lobby_id = $2)`, userID, lobbyID).Scan(&exists)
 	if err != nil{
 		return false, err
 	}
 
 	return exists, nil
+}
+
+func (s *lobbyStore) AddToCart(ctx context.Context, userID int, lobbyID int, mealID int) error {
+	_, err := s.db.ExecContext(ctx, `INSERT INTO orders(client_id, lobby_id, meal_id)
+		VALUES ($1, $2, $3)`, userID, lobbyID, mealID)
+	if err != nil{
+		return err
+	}
+
+	return nil
+}
+
+func (s *lobbyStore) DelFromCart(ctx context.Context, userID int, lobbyID int, mealID int) error {
+	_, err := s.db.ExecContext(ctx, `DELETE FROM orders WHERE id IN 
+		(SELECT id FROM orders 
+		WHERE client_id = $1 AND lobby_id = $2 AND meal_id = $3 LIMIT 1)`,
+		userID, lobbyID, mealID)
+	if err != nil{
+		return err
+	}
+
+	return nil
+}
+
+func (s *lobbyStore) CollectCartInfo(ctx context.Context, userID int, lobbyID int) (*core.CartState, error) {
+	rows, err := s.db.QueryContext(ctx, `SELECT m.id, m.name, m.price 
+		FROM meals m JOIN orders o on m.id = o.meal_id
+		WHERE o.client_id = $1 AND o.lobby_id = $2`, userID, lobbyID)
+	if err != nil{
+		return nil, err
+	}
+	defer rows.Close()
+
+	cartValue := float32(0.0)
+	meals := make([]*core.Meal, 0)
+	for rows.Next(){
+		m := core.Meal{}
+
+		err := rows.Scan(&m.ID, &m.Name, &m.Price)
+		if err != nil{
+			return nil, err
+		}
+
+		cartValue += m.Price
+		meals = append(meals, &m)
+	}
+	if err = rows.Err(); err != nil{
+		return nil, err
+	}
+
+	var lobbyCount int
+	err = s.db.QueryRowContext(ctx, `SELECT COUNT(*) FROM lobbys_users
+		WHERE lobby_id = $1`, lobbyID).Scan(&lobbyCount)
+	if err != nil{
+		return nil, err
+	}
+
+	var restDelivery float32
+	err = s.db.QueryRowContext(ctx, `SELECT r.delivery FROM restaurants r 
+		JOIN lobbies l on r.id = l.restaurant WHERE l.id = $1`, lobbyID).Scan(&restDelivery)
+	if err != nil{
+		return nil, err
+	}
+
+	cartDelivery := restDelivery / float32(lobbyCount)
+	cartDelivery = float32(int(cartDelivery * 100)) / 100
+	cartValue  = float32(int(cartValue * 100)) / 100
+
+	return &core.CartState{
+			Meals: meals,
+			CartValue: cartValue,
+			DeliveryCost: cartDelivery,
+			LobbyCount: lobbyCount}, nil
 }

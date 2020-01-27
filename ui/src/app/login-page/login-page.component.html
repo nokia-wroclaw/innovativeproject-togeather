@@ -1,0 +1,17 @@
+<h3>Login</h3>
+
+<div class="centered-form-container">
+    <form class="centered-form">
+
+        <mat-form-field class="centered-form__field">
+            <mat-label>Your id</mat-label>
+            <input [formControl]="id" matInput placeholder="Type in the id you received during registration">
+            <mat-error>
+                Your <strong>id</strong> is <strong>required</strong> to log in
+            </mat-error>
+        </mat-form-field>
+
+        <button [disabled]="disableLoginButton" (click)="logIn()" mat-raised-button color="primary">Log in</button>
+
+    </form>
+</div>

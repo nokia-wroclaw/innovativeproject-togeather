@@ -1,8 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ApiService } from '../_services/api.service';
 import { Restaurant } from '../_models/restaurant';
 import { Product } from '../_models/product';
-import { CartService } from '../_services/cart.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -13,11 +12,12 @@ import { Observable } from 'rxjs';
 export class RestaurantComponent implements OnInit {
 
   @Input() restaurantId: string;
+  @Input() showAddToCart: boolean = false;
+  @Output() orderProduct = new EventEmitter<Product>();
   restaurant$: Observable<Restaurant>;
 
   constructor(
     private apiService: ApiService,
-    private cartService: CartService,
   ) {
   }
 
@@ -26,6 +26,6 @@ export class RestaurantComponent implements OnInit {
   }
 
   addToCart(dish: Product) {
-    this.cartService.addToCart(dish);
+    this.orderProduct.emit(dish);
   }
 }

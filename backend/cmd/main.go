@@ -41,15 +41,15 @@ func main() {
 
 func runApp() {
 	// do all the connections here, pass config
-	redis, err := redisConnect()
-	if err != nil {
-		log.Fatalf("redis connection error: %s", err.Error())
-	}
-	defer redis.Close()
+	//redis, err := redisConnect()
+	//if err != nil {
+	//	log.Fatalf("redis connection error: %s", err.Error())
+	//}
+	//defer redis.Close()
 
 	db, err := dbConnect()
 	if err != nil {
-		log.Fatalf("db connection error: %s", err)
+		log.Printf("db connection error: %s", err)
 	}
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(5)

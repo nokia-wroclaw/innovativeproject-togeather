@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Restaurant } from '../_models/restaurant';
 import { Lobby } from '../_models/lobby';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, pluck } from 'rxjs/operators';
 import { PostLobbyDto } from '../_models/post-lobby-dto';
 import { environment } from '../../environments/environment';
+import { User } from '../_models/user';
+import { UserDto } from '../_models/user-dto';
 
 @Injectable({
     providedIn: 'root'
@@ -14,15 +16,76 @@ export class ApiService {
 
     readonly baseUrl = environment.apiUrl;
 
+    static handleError(error: HttpErrorResponse) {
+        if (error.error instanceof ErrorEvent) {
+            // A client-side or network error occurred. Handle it accordingly.
+            console.error('A client-side or network error occurred:', error.error.message);
+        } else {
+            // The backend returned an unsuccessful response code.
+            // The response body may contain clues as to what went wrong,
+            console.error('Backend returned code' + error.status);
+            console.error('body was: ', error.error);
+        }
+        // return an observable with a user-facing error message
+        return throwError(`Error ${error.status}: ${error.error.error}`);
+    }
+
     constructor(
         private http: HttpClient,
     ) { }
+
+    logIn(id: number): Observable<User> {
+        return this.http.post<UserDto>(
+            this.baseUrl + '/auth/login',
+            { id: id },
+            { withCredentials: true }
+        ).pipe(
+            map(userDto => {
+                return {
+                    id: userDto.user_id,
+                    name: userDto.user_name
+                };
+            }),
+            catchError(ApiService.handleError)
+        );
+    }
+
+    logOut(): Observable<void> {
+        return this.http.delete<void>(this.baseUrl + '/auth/logout', { withCredentials: true })
+            .pipe(catchError(ApiService.handleError));
+    }
+
+    register(name: string): Observable<User> {
+        return this.http.post<UserDto>(
+            this.baseUrl + '/auth/register',
+            { name: name }
+        ).pipe(
+            map(userDto => {
+                return {
+                    id: userDto.user_id,
+                    name: userDto.user_name,
+                };
+            }),
+            catchError(ApiService.handleError)
+        );
+    }
+
+    checkUserLogin(): Observable<boolean> {
+        return this.http.get(
+            this.baseUrl + '/ping',
+            { withCredentials: true }
+        ).pipe(
+            map(response => {
+                return response === 'pong';
+            }),
+        );
+    }
 
     getRestaurants(): Observable<Restaurant[]> {
         return this.http.get<Restaurant[]>(
             this.baseUrl + '/restaurants'
         ).pipe(
-            catchError(this.handleError)
+            catchError(ApiService.handleError)
         );
     }
 
@@ -30,7 +93,7 @@ export class ApiService {
         return this.http.get<Restaurant>(
             this.baseUrl + '/restaurants/' + id
         ).pipe(
-            catchError(this.handleError)
+            catchError(ApiService.handleError)
         );
     }
 
@@ -49,7 +112,7 @@ export class ApiService {
                     };
                 });
             }),
-            catchError(this.handleError)
+            catchError(ApiService.handleError)
         );
     }
 
@@ -67,7 +130,7 @@ export class ApiService {
                     address: data.location.lobby_address
                 };
             }),
-            catchError(this.handleError)
+            catchError(ApiService.handleError)
         );
     }
 
@@ -79,31 +142,19 @@ export class ApiService {
             lobby,
             { withCredentials: true },
         ).pipe(
-            catchError(this.handleError)
+            catchError(ApiService.handleError)
         );
     }
 
-    joinLobby(lobbyId: number, userName: string): Observable<void> {
-        return this.http.post<void>(
+    joinLobby(lobbyId: number, userName?: string) {
+        return this.http.post<{ id: number }>(
             this.baseUrl + `/lobbies/${lobbyId}`,
             { user_name: userName },
             { withCredentials: true },
         ).pipe(
-            catchError(this.handleError)
+            pluck('id'),
+            catchError(ApiService.handleError)
         );
     }
 
-    private handleError(error: HttpErrorResponse) {
-        if (error.error instanceof ErrorEvent) {
-            // A client-side or network error occurred. Handle it accordingly.
-            console.error('A client-side or network error occurred:', error.error.message);
-        } else {
-            // The backend returned an unsuccessful response code.
-            // The response body may contain clues as to what went wrong,
-            console.error('Backend returned code' + error.status);
-            console.error('body was: ', error.error);
-        }
-        // return an observable with a user-facing error message
-        return throwError(`Error ${error.status}: ${error.error.error}`);
-    }
 }

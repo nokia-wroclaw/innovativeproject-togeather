@@ -32,22 +32,29 @@ CREATE TABLE IF NOT EXISTS lobbies
 CREATE TABLE IF NOT EXISTS clients
 (
     id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
-    lobby INT NOT NULL,
-    is_owner BOOLEAN NOT NULL,
+    name TEXT NOT NULL
+);
 
-    FOREIGN KEY (lobby) REFERENCES lobbies(id) ON DELETE CASCADE
+
+CREATE TABLE IF NOT EXISTS lobbys_users
+(
+--     id SERIAL PRIMARY KEY,
+    lobby_id INT NOT NULL,
+    client_id INT NOT NULL,
+    is_owner BOOL NOT NULL DEFAULT FALSE,
+
+    PRIMARY KEY (client_id, lobby_id)
 );
 
 
 CREATE TABLE IF NOT EXISTS orders
 (
     id SERIAL PRIMARY KEY,
-    lobby INT NOT NULL,
-    meal INT NOT NULL,
-    client INT NOT NULL,
+    client_id INT NOT NULL,
+    lobby_id INT NOT NULL,
+    meal_id INT NOT NULL,
 
-    FOREIGN KEY (lobby) REFERENCES lobbies(id),
-    FOREIGN KEY (meal) REFERENCES meals(id),
-    FOREIGN KEY (client) REFERENCES clients(id)
+    FOREIGN KEY (lobby_id) REFERENCES lobbies(id),
+    FOREIGN KEY (meal_id) REFERENCES meals(id),
+    FOREIGN KEY (client_id) REFERENCES clients(id)
 );
