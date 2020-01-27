@@ -84,7 +84,7 @@ func New(
 		r.Route("/auth", func (r chi.Router) {
 			r.Post("/register", authHandler.register)
 			r.Post("/login", authHandler.login)
-			r.Delete("/logout", authHandler.logout)
+			r.Delete("/logout", authMiddleware(authHandler.logout, lobbyMiddleware))
 		})
 
 		r.Route("/ping", func(r chi.Router) {

@@ -24,7 +24,7 @@ func authMiddleware(next http.HandlerFunc, m lobbyMiddleware) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 
-		userCookie, err := r.Cookie("user-id")
+		userCookie, err := r.Cookie(CookieUserIDKey)
 		if err != nil {
 			respondError(w, http.StatusBadRequest,
 				fmt.Errorf("unauthorized: user not logged in"))

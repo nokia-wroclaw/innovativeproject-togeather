@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -67,6 +68,23 @@ func (h *authHandler) login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *authHandler) logout(w http.ResponseWriter, r *http.Request) {
-	w.Header().Add("Set-Cookie", "user-id=deleted; Path=/; Max-Age=0")
-	respondJSON(w, http.StatusOK, nil)
+	ctx := r.Context()
+
+	_, ok := ctx.Value(UserKey).(*core.User)
+	if !ok {
+		respondError(w, http.StatusBadRequest, errors.New("unauthorized"))
+		return
+	}
+
+	c, err := r.Cookie(CookieUserIDKey)
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	c.Value = ""
+	c.MaxAge = -1
+
+	http.SetCookie(w, c)
+	respondJSON(w, http.StatusNoContent, nil)
 }
