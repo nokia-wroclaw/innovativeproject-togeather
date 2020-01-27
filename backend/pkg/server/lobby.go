@@ -203,13 +203,13 @@ func (h *lobbyHandler) delFromCart(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var request orderRequest
-	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+	mealID, err := strconv.Atoi(r.URL.Query().Get("meal_id"))
+	if err != nil{
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
 
-	cart, err := h.lobbyService.DelFromCart(ctx, user.ID, lobbyID, request.MealID)
+	cart, err := h.lobbyService.DelFromCart(ctx, user.ID, lobbyID, mealID)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return
