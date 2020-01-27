@@ -14,11 +14,11 @@ type (
 	}
 
 	Meal struct {
-		ID      	 int	 `json:"id"`
+		ID      	 int	 `json:"id,omitempty"`
 		RestaurantID int	 `json:"restaurant_id,omitempty"`
 		Name         string	 `json:"name"`
 		Price        float32 `json:"price"`
-		Description	 string	 `json:"description"`
+		Description	 string	 `json:"description,omitempty"`
 	}
 
 	RestaurantService interface {

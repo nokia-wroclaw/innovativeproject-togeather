@@ -19,7 +19,15 @@ type (
 		Address string `json:"lobby_address" db:"address"`
 	}
 
-	LobbyService interface {
+	CartState struct {
+		Meals			[]*Meal	`json:"meals"`
+		CartValue		float32	`json:"cart_value"`
+		DeliveryCost	float32	`json:"delivery_cost"`
+		LobbyCount		int		`json:"lobby_count"`
+	}
+
+
+LobbyService interface {
 		List(ctx context.Context) ([]*Lobby, error)
 
 		Create(
@@ -47,9 +55,11 @@ type (
 
 		BelongsToLobby(ctx context.Context, userID int, lobbyID int) (bool, error)
 
-		AddToCart(ctx context.Context, userID int, lobbyID int, mealID int) error
+		AddToCart(ctx context.Context, userID int, lobbyID int, mealID int) (*CartState, error)
 
-		DelFromCart(ctx context.Context, userID int, lobbyID int, mealID int) error
+		DelFromCart(ctx context.Context, userID int, lobbyID int, mealID int) (*CartState, error)
+
+		CollectCartInfo(ctx context.Context, userID int, lobbyID int) (*CartState, error)
 	}
 
 	LobbyStore interface {
@@ -82,5 +92,7 @@ type (
 		AddToCart(ctx context.Context, userID int, lobbyID int, mealID int) error
 
 		DelFromCart(ctx context.Context, userID int, lobbyID int, mealID int) error
+
+		CollectCartInfo(ctx context.Context, userID int, lobbyID int) (*CartState, error)
 	}
 )
