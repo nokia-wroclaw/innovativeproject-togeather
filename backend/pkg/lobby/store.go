@@ -202,7 +202,7 @@ func (s *lobbyStore) DelFromCart(ctx context.Context, userID int, lobbyID int, m
 }
 
 func (s *lobbyStore) CollectCartInfo(ctx context.Context, userID int, lobbyID int) (*core.CartState, error) {
-	rows, err := s.db.QueryContext(ctx, `SELECT m.name, m.price 
+	rows, err := s.db.QueryContext(ctx, `SELECT m.id, m.name, m.price 
 		FROM meals m JOIN orders o on m.id = o.meal_id
 		WHERE o.client_id = $1 AND o.lobby_id = $2`, userID, lobbyID)
 	if err != nil{
@@ -215,7 +215,7 @@ func (s *lobbyStore) CollectCartInfo(ctx context.Context, userID int, lobbyID in
 	for rows.Next(){
 		m := core.Meal{}
 
-		err := rows.Scan(&m.Name, &m.Price)
+		err := rows.Scan(&m.ID, &m.Name, &m.Price)
 		if err != nil{
 			return nil, err
 		}
@@ -228,7 +228,7 @@ func (s *lobbyStore) CollectCartInfo(ctx context.Context, userID int, lobbyID in
 	}
 
 	var lobbyCount int
-	err = s.db.QueryRowContext(ctx, `SELECT COUNT(*) FROM lobby_users
+	err = s.db.QueryRowContext(ctx, `SELECT COUNT(*) FROM lobbys_users
 		WHERE lobby_id = $1`, lobbyID).Scan(&lobbyCount)
 	if err != nil{
 		return nil, err

@@ -14,7 +14,7 @@ type (
 	}
 
 	Meal struct {
-		ID      	 int	 `json:"id,omitempty"`
+		ID      	 int	 `json:"id"`
 		RestaurantID int	 `json:"restaurant_id,omitempty"`
 		Name         string	 `json:"name"`
 		Price        float32 `json:"price"`
