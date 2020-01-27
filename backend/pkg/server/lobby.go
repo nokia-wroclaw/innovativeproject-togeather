@@ -130,7 +130,7 @@ func (h *lobbyHandler) join(w http.ResponseWriter, r *http.Request) {
 	//	return
 	//}
 
-	lobby, err := h.lobbyService.Join(ctx,user.ID, lobbyID)
+	lobby, err := h.lobbyService.Join(ctx, lobbyID, user.ID)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return

@@ -148,10 +148,10 @@ func (s *lobbyStore) Edit(
 	}, nil
 }
 
-func (s *lobbyStore) Join(ctx context.Context, userID int, lobbyID int) error {
+func (s *lobbyStore) Join(ctx context.Context, lobbyID int, clientID int) error {
 	_, err := s.db.ExecContext(ctx, `INSERT INTO 
     	lobbys_users (lobby_id, client_id, is_owner) VALUES ($1, $2, $3)`,
-    	lobbyID, userID, false,
+    	lobbyID, clientID, false,
 	)
 
 	return err

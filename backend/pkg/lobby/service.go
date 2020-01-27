@@ -44,8 +44,8 @@ func (s *service) Edit(
 	return s.lobbyStore.Edit(ctx, lobbyID, restaurantID, ownerID, expires, address)
 }
 
-func (s *service) Join(ctx context.Context, userID int, lobbyID int) (*core.Lobby, error) {
-	belongs, err := s.BelongsToLobby(ctx, userID, lobbyID)
+func (s *service) Join(ctx context.Context, lobbyID int, clientID int) (*core.Lobby, error) {
+	belongs, err := s.BelongsToLobby(ctx, clientID, lobbyID)
 	if err != nil{
 		return nil, err
 	}
@@ -54,7 +54,7 @@ func (s *service) Join(ctx context.Context, userID int, lobbyID int) (*core.Lobb
 		return nil, errors.New("join lobby: user already belongs to this lobby")
 	}
 
-	err = s.lobbyStore.Join(ctx, lobbyID, userID)
+	err = s.lobbyStore.Join(ctx, lobbyID, clientID)
 	if err != nil {
 		return nil, err
 	}
