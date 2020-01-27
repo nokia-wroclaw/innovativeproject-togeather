@@ -32,7 +32,6 @@ func (s *service) Get(ctx context.Context, id int) (*core.User, error) {
 	return s.userStore.Get(ctx, id)
 }
 
-
 func (s *service) List(ctx context.Context) ([]*core.User, error) {
 	return s.userStore.List(ctx)
 }
@@ -40,4 +39,3 @@ func (s *service) List(ctx context.Context) ([]*core.User, error) {
 func (s *service) Create(ctx context.Context, userName string) (*core.User, error) {
 	return s.userStore.Create(ctx, userName)
 }
-

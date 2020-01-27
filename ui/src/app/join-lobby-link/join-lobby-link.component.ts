@@ -22,7 +22,8 @@ export class JoinLobbyLinkComponent {
     private toaster: ToastrService,
     private redirectionService: RedirectionService,
     private route: ActivatedRoute,
-  ) { }
+  ) {
+  }
 
   onNoClick(): void {
     this.redirectionService.redirectToHomePage();
@@ -31,14 +32,14 @@ export class JoinLobbyLinkComponent {
   onJoinClick(): void {
     if (this.userName.valid) {
       this.route.params.pipe(
-          pluck('lobbyId'),
-          switchMap(lobbyId => {
-            this.lobbyId = lobbyId;
-            return this.api.joinLobby(lobbyId, this.userName.value);
-          }),
+        pluck('lobbyId'),
+        switchMap(lobbyId => {
+          this.lobbyId = lobbyId;
+          return this.api.joinLobby(lobbyId, this.userName.value);
+        }),
       ).subscribe(
-          () => this.redirectionService.redirectToSingleLobby(this.lobbyId),
-          error => this.toaster.error(error),
+        () => this.redirectionService.redirectToSingleLobby(this.lobbyId),
+        error => this.toaster.error(error),
       );
     }
   }

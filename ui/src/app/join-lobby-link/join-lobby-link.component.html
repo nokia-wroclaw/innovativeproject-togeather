@@ -1,0 +1,13 @@
+<h3>Join lobby!</h3>
+<div class="container">
+    <form class="join-lobby-form">
+        <mat-form-field class="join-lobby-form_field">
+            <mat-label>Your name: </mat-label>
+            <input matInput [formControl]="userName" placeholder="Name" required cdkFocusInitial>
+        </mat-form-field>
+        <div class="buttons">
+            <button mat-button (click)="onNoClick()">No Thanks</button>
+            <button mat-button (click)="onJoinClick()">Ok</button>
+        </div>
+    </form>
+</div>

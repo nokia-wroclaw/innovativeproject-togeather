@@ -61,3 +61,14 @@ func (s *userStore) Create(ctx context.Context, userName string) (*core.User, er
 
 	return &core.User{ID:userID, Name:userName}, nil
 }
+
+func (s *userStore) Get(ctx context.Context, userID int) (*core.User, error) {
+	var userName string
+	err := s.db.QueryRowContext(ctx, `SELECT name FROM clients 
+		WHERE id = $1`, userID).Scan(&userName)
+	if err != nil {
+		return nil, err
+	}
+
+	return &core.User{ID:userID, Name:userName}, nil
+}

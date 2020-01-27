@@ -39,6 +39,7 @@ import { RestaurantContainerComponent } from './restaurant/restaurant-container.
 import { MapContainerComponent } from './map/map-container.component';
 import { MapLobbyMarkerComponent } from './map-lobby-marker/map-lobby-marker.component';
 import { ToastrModule } from 'ngx-toastr';
+import { JoinLobbyLinkComponent } from './join-lobby-link/join-lobby-link.component';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { RegistrationPageComponent } from './registration-page/registration-page.component';
@@ -63,6 +64,7 @@ import { RegistrationPageComponent } from './registration-page/registration-page
         LobbyComponent,
         RestaurantContainerComponent,
         MapLobbyMarkerComponent,
+        JoinLobbyLinkComponent,
         LoginPageComponent,
         RegistrationPageComponent,
     ],

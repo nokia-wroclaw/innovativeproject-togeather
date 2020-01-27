@@ -56,10 +56,10 @@ func New(
 
 	r.Route("/api", func(r chi.Router) {
 		r.Route("/restaurants", func(r chi.Router) {
-			r.Get("/", restaurantHandler.listRestaurants)
+			r.Get("/", restaurantHandler.list)
 			r.Route("/{restaurantID}", func(r chi.Router){
-				r.Get("/", restaurantHandler.getRestaurant)
-				r.Get("/menu", restaurantHandler.restaurantMenu)
+				r.Get("/", restaurantHandler.get)
+				r.Get("/menu", restaurantHandler.menu)
 			})
 		})
 
@@ -78,7 +78,11 @@ func New(
 		})
 
 		r.Route("/users", func(r chi.Router) {
-			r.Get("/", userHandler.listUsers)
+			r.Get("/", userHandler.list)
+		})
+
+		r.Route("/user", func(r chi.Router) {
+			r.Get("/", userHandler.get)
 		})
 
 		r.Route("/auth", func (r chi.Router) {
