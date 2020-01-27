@@ -62,7 +62,6 @@ func (s *lobbyStore) Create(
 	expires *time.Time,
 	address string,
 ) (*core.Lobby, error) {
-
 	geolat, geolon, err := geocoder.Geocode(address)
 	if err != nil {
 		return nil, err
@@ -202,3 +201,53 @@ func (s *lobbyStore) DelFromCart(ctx context.Context, userID int, lobbyID int, m
 	return nil
 }
 
+func (s *lobbyStore) CollectCartInfo(ctx context.Context, userID int, lobbyID int) (*core.CartState, error) {
+	rows, err := s.db.QueryContext(ctx, `SELECT m.id, m.name, m.price 
+		FROM meals m JOIN orders o on m.id = o.meal_id
+		WHERE o.client_id = $1 AND o.lobby_id = $2`, userID, lobbyID)
+	if err != nil{
+		return nil, err
+	}
+	defer rows.Close()
+
+	cartValue := float32(0.0)
+	meals := make([]*core.Meal, 0)
+	for rows.Next(){
+		m := core.Meal{}
+
+		err := rows.Scan(&m.ID, &m.Name, &m.Price)
+		if err != nil{
+			return nil, err
+		}
+
+		cartValue += m.Price
+		meals = append(meals, &m)
+	}
+	if err = rows.Err(); err != nil{
+		return nil, err
+	}
+
+	var lobbyCount int
+	err = s.db.QueryRowContext(ctx, `SELECT COUNT(*) FROM lobbys_users
+		WHERE lobby_id = $1`, lobbyID).Scan(&lobbyCount)
+	if err != nil{
+		return nil, err
+	}
+
+	var restDelivery float32
+	err = s.db.QueryRowContext(ctx, `SELECT r.delivery FROM restaurants r 
+		JOIN lobbies l on r.id = l.restaurant WHERE l.id = $1`, lobbyID).Scan(&restDelivery)
+	if err != nil{
+		return nil, err
+	}
+
+	cartDelivery := restDelivery / float32(lobbyCount)
+	cartDelivery = float32(int(cartDelivery * 100)) / 100
+	cartValue  = float32(int(cartValue * 100)) / 100
+
+	return &core.CartState{
+			Meals: meals,
+			CartValue: cartValue,
+			DeliveryCost: cartDelivery,
+			LobbyCount: lobbyCount}, nil
+}

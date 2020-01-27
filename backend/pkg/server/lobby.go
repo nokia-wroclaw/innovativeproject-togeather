@@ -178,13 +178,13 @@ func (h *lobbyHandler) addToCart(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.lobbyService.AddToCart(ctx, user.ID, lobbyID, request.MealID)
+	cart, err := h.lobbyService.AddToCart(ctx, user.ID, lobbyID, request.MealID)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
 
-	respondJSON(w, http.StatusOK, nil)
+	respondJSON(w, http.StatusOK, cart)
 }
 
 func (h *lobbyHandler) delFromCart(w http.ResponseWriter, r *http.Request) {
@@ -209,11 +209,11 @@ func (h *lobbyHandler) delFromCart(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.lobbyService.DelFromCart(ctx, user.ID, lobbyID, request.MealID)
+	cart, err := h.lobbyService.DelFromCart(ctx, user.ID, lobbyID, request.MealID)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
 
-	respondJSON(w, http.StatusOK, nil)
+	respondJSON(w, http.StatusOK, cart)
 }
