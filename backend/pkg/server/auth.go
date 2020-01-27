@@ -76,15 +76,13 @@ func (h *authHandler) logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c, err := r.Cookie(CookieUserIDKey)
+	_, err := r.Cookie(CookieUserIDKey)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
 
-	c.Value = ""
-	c.MaxAge = -1
-
-	http.SetCookie(w, c)
+	//http.SetCookie(w, c)
+	addCookie(w, CookieUserIDKey, "", -1, "/")
 	respondJSON(w, http.StatusNoContent, nil)
 }

@@ -38,7 +38,7 @@ export class CartService {
         return this.http.post<CartDto>(
             this.apiBaseUrl + `/lobbies/${lobbyId}/order`,
             { meal_id: item.id },
-            { withCredentials: true }
+            { withCredentials: true },
         ).pipe(
             map(CartService.mapDtoToCart),
             catchError(ApiService.handleError)
@@ -48,7 +48,10 @@ export class CartService {
     deleteFromCart(item: Partial<Product>, lobbyId: number): Observable<Cart> {
         return this.http.delete<CartDto>(
             this.apiBaseUrl + `/lobbies/${lobbyId}/order`,
-            { withCredentials: true }
+            {
+                withCredentials: true,
+                params: { meal_id: item.id.toString() },
+            }
         ).pipe(
             map(CartService.mapDtoToCart),
             catchError(ApiService.handleError)

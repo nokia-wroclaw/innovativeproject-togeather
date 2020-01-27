@@ -21,6 +21,9 @@ export class CartComponent implements OnChanges {
   }
 
   isCartEmpty(): boolean {
-    return this.cartState.products ? this.cartState.products.length === 0 : true;
+    if (this.cartState) {
+      return this.cartState.products ? this.cartState.products.length === 0 : true;
+    }
+    return true;
   }
 }
