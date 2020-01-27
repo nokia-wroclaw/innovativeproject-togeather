@@ -1,7 +1,7 @@
 <h2>Open lobbies</h2>
 
-<div class="lobbies-container" *ngIf="lobbies$">
-    <mat-card class="lobby-card" *ngFor="let lobby of lobbies$ | async">
+<div class="lobbies-container" *ngIf="lobbies$ | async as lobbies">
+    <mat-card class="lobby-card" *ngFor="let lobby of lobbies">
         <mat-card-header>
             <mat-card-title>
                 <a (click)="redirectToLobby(lobby.id)" class="restaurant-name">Restaurant: {{ lobby.restaurant.name }}</a>
@@ -11,4 +11,8 @@
         <mat-card-subtitle class="delivery-address">Delivery address: {{ lobby.address | beautifyAddress }}</mat-card-subtitle>
         <button mat-raised-button (click)="onJoinClick(lobby.id)">Join</button>
     </mat-card>
+    <div class="no-lobbies-info" *ngIf="lobbies.length === 0">
+        Currently there are no open lobbies. <br>
+        Let's <button (click)="redirectToLobbyCreation()" mat-button color="primary">create one</button>
+    </div>
 </div>

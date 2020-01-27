@@ -44,6 +44,10 @@ export class LobbiesListComponent implements OnInit {
     });
   }
 
+  redirectToLobbyCreation() {
+    this.redirectionService.redirectToLobbyCreation();
+  }
+
   onJoinClick(lobbyId: number): void {
     this.api.joinLobby(lobbyId).subscribe(
         id => {
