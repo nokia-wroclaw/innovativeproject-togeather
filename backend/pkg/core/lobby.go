@@ -47,9 +47,9 @@ LobbyService interface {
 			address string,
 		) (*Lobby, error)
 
-		Join(ctx context.Context, lobbyID int, userID int) (*Lobby, error)
+		Join(ctx context.Context, userID int, lobbyID int) (*Lobby, error)
 
-		Get(ctx context.Context, lobbyID int) (*Lobby, error)
+		Get(ctx context.Context, userID int, lobbyID int) (*Lobby, error)
 
 		Clean(ctx context.Context)
 
@@ -82,7 +82,7 @@ LobbyService interface {
 			address string,
 		) (*Lobby, error)
 
-		Join(ctx context.Context, lobbyID int, userID int) error
+		Join(ctx context.Context, userID int, lobbyID int) error
 
 		Get(ctx context.Context, lobbyID int)(*Lobby, error)
 

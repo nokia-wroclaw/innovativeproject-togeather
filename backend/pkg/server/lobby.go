@@ -52,6 +52,7 @@ func (h *lobbyHandler) create(w http.ResponseWriter, r *http.Request) {
 	if user == nil {
 		respondError(w, http.StatusBadRequest,
 			errors.New("join lobby: unauthorized"))
+		return
 	}
 
 	var request createLobbyRequest
@@ -114,6 +115,7 @@ func (h *lobbyHandler) join(w http.ResponseWriter, r *http.Request) {
 	if user == nil {
 		respondError(w, http.StatusBadRequest,
 			errors.New("join lobby: unauthorized"))
+		return
 	}
 
 	lobbyID, err := strconv.Atoi(chi.URLParam(r, "lobbyID"))
@@ -128,7 +130,7 @@ func (h *lobbyHandler) join(w http.ResponseWriter, r *http.Request) {
 	//	return
 	//}
 
-	lobby, err := h.lobbyService.Join(ctx, lobbyID, user.ID)
+	lobby, err := h.lobbyService.Join(ctx,user.ID, lobbyID)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return
@@ -141,13 +143,20 @@ func (h *lobbyHandler) join(w http.ResponseWriter, r *http.Request) {
 func (h *lobbyHandler) get(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
+	user := ctx.Value(UserKey).(*core.User)
+	if user == nil {
+		respondError(w, http.StatusBadRequest,
+			errors.New("get lobby: unauthorized"))
+		return
+	}
+
 	lobbyID, err := strconv.Atoi(chi.URLParam(r, "lobbyID"))
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
 
-	lobby, err := h.lobbyService.Get(ctx, lobbyID)
+	lobby, err := h.lobbyService.Get(ctx, user.ID, lobbyID)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return

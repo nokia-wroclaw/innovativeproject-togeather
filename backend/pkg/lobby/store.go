@@ -131,7 +131,7 @@ func (s *lobbyStore) Edit(
 	}, nil
 }
 
-func (s *lobbyStore) Join(ctx context.Context, lobbyID int, userID int) error {
+func (s *lobbyStore) Join(ctx context.Context, userID int, lobbyID int) error {
 	_, err := s.db.ExecContext(ctx, `INSERT INTO 
     	lobbys_users (lobby_id, client_id, is_owner) VALUES ($1, $2, $3)`,
     	lobbyID, userID, false,
@@ -170,8 +170,8 @@ func (s *lobbyStore) Clean(ctx context.Context) {
 
 func (s *lobbyStore) BelongsToLobby(ctx context.Context, userID int, lobbyID int) (bool, error) {
 	var exists bool
-	err := s.db.QueryRowContext(ctx, `SELECT EXISTS(SELECT 1 FROM clients 
-		WHERE id = $1 AND lobby = $2)`, userID, lobbyID).Scan(&exists)
+	err := s.db.QueryRowContext(ctx, `SELECT EXISTS(SELECT 1 FROM lobbys_users 
+		WHERE client_id = $1 AND lobby_id = $2)`, userID, lobbyID).Scan(&exists)
 	if err != nil{
 		return false, err
 	}

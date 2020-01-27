@@ -2,6 +2,7 @@ package lobby
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
@@ -42,8 +43,17 @@ func (s *service) Edit(
 	return s.lobbyStore.Edit(ctx, lobbyID, restaurantID, ownerID, expires, address)
 }
 
-func (s *service) Join(ctx context.Context, lobbyID int, userID int) (*core.Lobby, error) {
-	err := s.lobbyStore.Join(ctx, lobbyID, userID)
+func (s *service) Join(ctx context.Context, userID int, lobbyID int) (*core.Lobby, error) {
+	belongs, err := s.BelongsToLobby(ctx, userID, lobbyID)
+	if err != nil{
+		return nil, err
+	}
+
+	if belongs{
+		return nil, errors.New("join lobby: user already belongs to this lobby")
+	}
+
+	err = s.lobbyStore.Join(ctx, lobbyID, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +61,16 @@ func (s *service) Join(ctx context.Context, lobbyID int, userID int) (*core.Lobb
 	return s.lobbyStore.Get(ctx, lobbyID)
 }
 
-func (s *service) Get(ctx context.Context, lobbyID int) (*core.Lobby, error) {
+func (s *service) Get(ctx context.Context, userID int, lobbyID int) (*core.Lobby, error) {
+	belongs, err := s.BelongsToLobby(ctx, userID, lobbyID)
+	if err != nil{
+		return nil, err
+	}
+
+	if !belongs{
+		return nil, errors.New("get lobby: user not belongs to this lobby")
+	}
+
 	return s.lobbyStore.Get(ctx, lobbyID)
 }
 
