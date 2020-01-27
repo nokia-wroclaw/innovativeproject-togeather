@@ -73,6 +73,7 @@ func New(
 				r.Route("/order", func(r chi.Router){
 					r.Post("/", authMiddleware(lobbyHandler.addToCart, lobbyMiddleware))
 					r.Delete("/", authMiddleware(lobbyHandler.delFromCart, lobbyMiddleware))
+					r.Get("/", authMiddleware(lobbyHandler.getCart, lobbyMiddleware))
 				})
 			})
 		})
