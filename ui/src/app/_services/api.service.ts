@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Restaurant } from '../_models/restaurant';
 import { Lobby } from '../_models/lobby';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
