@@ -3,6 +3,7 @@ package lobby
 import (
 	"context"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/nokia-wroclaw/innovativeproject-togeather/backend/pkg/core"
@@ -83,7 +84,12 @@ func (s *service) BelongsToLobby(ctx context.Context, userID int, lobbyID int) (
 }
 
 func (s *service) AddToCart(ctx context.Context, userID int, lobbyID int, mealID int) (*core.CartState, error) {
-	err := s.lobbyStore.AddToCart(ctx, userID, lobbyID, mealID)
+	err := s.lobbyStore.Available(ctx, lobbyID)
+	if err != nil {
+		return nil, fmt.Errorf("error adding item to cart: %w", err)
+	}
+
+	err = s.lobbyStore.AddToCart(ctx, userID, lobbyID, mealID)
 	if err != nil{
 		return nil, err
 	}
@@ -92,7 +98,12 @@ func (s *service) AddToCart(ctx context.Context, userID int, lobbyID int, mealID
 }
 
 func (s *service) DelFromCart(ctx context.Context, userID int, lobbyID int, mealID int) (*core.CartState, error) {
-	err := s.lobbyStore.DelFromCart(ctx, userID, lobbyID, mealID)
+	err := s.lobbyStore.Available(ctx, lobbyID)
+	if err != nil {
+		return nil, fmt.Errorf("error deleting item from cart: %w", err)
+	}
+
+	err = s.lobbyStore.DelFromCart(ctx, userID, lobbyID, mealID)
 	if err != nil{
 		return nil, err
 	}

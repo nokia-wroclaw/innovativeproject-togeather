@@ -95,5 +95,7 @@ LobbyService interface {
 		DelFromCart(ctx context.Context, userID int, lobbyID int, mealID int) error
 
 		CollectCartInfo(ctx context.Context, userID int, lobbyID int) (*CartState, error)
+
+		Available(ctx context.Context, id int) error
 	}
 )

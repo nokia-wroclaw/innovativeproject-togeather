@@ -2,6 +2,7 @@ package lobby
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/jasonwinn/geocoder"
@@ -17,6 +18,22 @@ type lobbyStore struct {
 func NewStore(db *sqlx.DB) core.LobbyStore {
 	geocoder.SetAPIKey("PdBSQAE97uUFd6NKJYsBO35voZcXX0qD")
 	return &lobbyStore{db: db}
+}
+
+func (s *lobbyStore) Available(ctx context.Context, lobbyID int) error {
+	limitTime := time.Now().Format(time.RFC3339)
+	var check int
+	err := s.db.QueryRowContext(ctx, `SELECT id FROM lobbies
+		WHERE expires >= $1 AND id = $2 LIMIT 1`,
+		limitTime, lobbyID).Scan(&check)
+	if err != nil {
+		return err
+	}
+	if check != lobbyID {
+		return fmt.Errorf("lobby %v is no longer available", lobbyID)
+	}
+
+	return nil
 }
 
 func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
