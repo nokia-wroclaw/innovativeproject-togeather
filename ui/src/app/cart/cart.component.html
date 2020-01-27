@@ -18,15 +18,15 @@
     <div class="cart__summary" *ngIf="!isCartEmpty()">
         <div class="cart-item--summary">
             <div class="cart-item--summary__description">Food cost: </div>
-            <div class="cart-item--summary__value">{{ cartState.cartTotal - cartState.deliveryCost }}</div>
+            <div class="cart-item--summary__value">{{ cartState.cartTotal.toPrecision(2) }}</div>
         </div>
         <div class="cart-item--summary">
             <div class="cart-item--summary__description">Delivery cost: </div>
-            <div class="cart-item--summary__value">{{ cartState.deliveryCost }}</div>
+            <div class="cart-item--summary__value">{{ cartState.deliveryCost.toPrecision(2) }}</div>
         </div>
         <div class="cart-item--summary total">
             <div class="cart-item--summary__description">Total: </div>
-            <div class="cart-item--summary__value">{{ cartState.cartTotal }}</div>
+            <div class="cart-item--summary__value">{{ (cartState.cartTotal + cartState.deliveryCost).toPrecision(2) }}</div>
         </div>
     </div>
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Product } from '../_models/product';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { Cart } from '../_models/cart';
@@ -55,6 +55,16 @@ export class CartService {
         ).pipe(
             map(CartService.mapDtoToCart),
             catchError(ApiService.handleError)
+        );
+    }
+
+    getCart(lobbyId: number): Observable<Cart> {
+        return this.http.get<CartDto>(
+            this.apiBaseUrl + `/lobbies/${lobbyId}/order`,
+            { withCredentials: true }
+        ).pipe(
+            map(CartService.mapDtoToCart),
+            catchError(error => throwError(error))
         );
     }
 }
