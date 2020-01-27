@@ -1,29 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { CartService } from '../_services/cart.service';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { Product } from '../_models/product';
+import { Cart } from '../_models/cart';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss']
 })
-export class CartComponent implements OnInit {
-  items: Product[];
+export class CartComponent implements OnChanges {
 
-  constructor(
-      private cartService: CartService,
-  ) { }
+  @Input() cartState: Cart;
+  @Output() delete = new EventEmitter<Partial<Product>>();
 
-  ngOnInit() {
-    this.items = this.cartService.getItems();
+  ngOnChanges() {
+    // TODO: Handle changes of the input
   }
 
-  deleteItem(item: Product): void {
-    this.cartService.deleteFromCart(item);
-    this.items = this.cartService.getItems();
+  deleteItem(item: Partial<Product>): void {
+    this.delete.emit(item);
   }
 
   isCartEmpty(): boolean {
-    return this.items ? this.items.length === 0 : true;
+    return this.cartState.products ? this.cartState.products.length === 0 : true;
   }
 }

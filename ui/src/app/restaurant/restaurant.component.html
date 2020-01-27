@@ -9,7 +9,7 @@
         <mat-card-content>
             <div class="restaurant-menu-item__price-and-button-container">
                 <div class="restaurant-menu-item__price">{{ dish.price }}</div>
-                <button mat-raised-button (click)="addToCart(dish)">Add to cart</button>
+                <button *ngIf="showAddToCart" mat-raised-button (click)="addToCart(dish)">Add to cart</button>
             </div>
         </mat-card-content>
     </mat-card>

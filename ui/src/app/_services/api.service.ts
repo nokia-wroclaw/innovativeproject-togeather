@@ -16,6 +16,20 @@ export class ApiService {
 
     readonly baseUrl = environment.apiUrl;
 
+    static handleError(error: HttpErrorResponse) {
+        if (error.error instanceof ErrorEvent) {
+            // A client-side or network error occurred. Handle it accordingly.
+            console.error('A client-side or network error occurred:', error.error.message);
+        } else {
+            // The backend returned an unsuccessful response code.
+            // The response body may contain clues as to what went wrong,
+            console.error('Backend returned code' + error.status);
+            console.error('body was: ', error.error);
+        }
+        // return an observable with a user-facing error message
+        return throwError(`Error ${error.status}: ${error.error.error}`);
+    }
+
     constructor(
         private http: HttpClient,
     ) { }
@@ -32,13 +46,13 @@ export class ApiService {
                     name: userDto.user_name
                 };
             }),
-            catchError(this.handleError)
+            catchError(ApiService.handleError)
         );
     }
 
     logOut(): Observable<void> {
-        return this.http.delete<void>(this.baseUrl + '/auth/logout')
-            .pipe(catchError(this.handleError));
+        return this.http.delete<void>(this.baseUrl + '/auth/logout', { withCredentials: true })
+            .pipe(catchError(ApiService.handleError));
     }
 
     register(name: string): Observable<User> {
@@ -52,7 +66,7 @@ export class ApiService {
                     name: userDto.user_name,
                 };
             }),
-            catchError(this.handleError)
+            catchError(ApiService.handleError)
         );
     }
 
@@ -71,7 +85,7 @@ export class ApiService {
         return this.http.get<Restaurant[]>(
             this.baseUrl + '/restaurants'
         ).pipe(
-            catchError(this.handleError)
+            catchError(ApiService.handleError)
         );
     }
 
@@ -79,7 +93,7 @@ export class ApiService {
         return this.http.get<Restaurant>(
             this.baseUrl + '/restaurants/' + id
         ).pipe(
-            catchError(this.handleError)
+            catchError(ApiService.handleError)
         );
     }
 
@@ -98,7 +112,7 @@ export class ApiService {
                     };
                 });
             }),
-            catchError(this.handleError)
+            catchError(ApiService.handleError)
         );
     }
 
@@ -116,7 +130,7 @@ export class ApiService {
                     address: data.location.lobby_address
                 };
             }),
-            catchError(this.handleError)
+            catchError(ApiService.handleError)
         );
     }
 
@@ -128,7 +142,7 @@ export class ApiService {
             lobby,
             { withCredentials: true },
         ).pipe(
-            catchError(this.handleError)
+            catchError(ApiService.handleError)
         );
     }
 
@@ -139,21 +153,8 @@ export class ApiService {
             { withCredentials: true },
         ).pipe(
             pluck('id'),
-            catchError(this.handleError)
+            catchError(ApiService.handleError)
         );
     }
 
-    private handleError(error: HttpErrorResponse) {
-        if (error.error instanceof ErrorEvent) {
-            // A client-side or network error occurred. Handle it accordingly.
-            console.error('A client-side or network error occurred:', error.error.message);
-        } else {
-            // The backend returned an unsuccessful response code.
-            // The response body may contain clues as to what went wrong,
-            console.error('Backend returned code' + error.status);
-            console.error('body was: ', error.error);
-        }
-        // return an observable with a user-facing error message
-        return throwError(`Error ${error.status}: ${error.error.error}`);
-    }
 }
