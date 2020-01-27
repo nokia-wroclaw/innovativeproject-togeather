@@ -3,7 +3,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { Restaurant } from '../_models/restaurant';
 import { Lobby } from '../_models/lobby';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, pluck } from 'rxjs/operators';
 import { PostLobbyDto } from '../_models/post-lobby-dto';
 import { environment } from '../../environments/environment';
 import { User } from '../_models/user';
@@ -132,12 +132,13 @@ export class ApiService {
         );
     }
 
-    joinLobby(lobbyId: number, userName: string): Observable<void> {
-        return this.http.post<void>(
+    joinLobby(lobbyId: number, userName?: string) {
+        return this.http.post<{ id: number }>(
             this.baseUrl + `/lobbies/${lobbyId}`,
             { user_name: userName },
             { withCredentials: true },
         ).pipe(
+            pluck('id'),
             catchError(this.handleError)
         );
     }
