@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { RedirectionService } from '../_services/redirection.service';
 import { MatDialog } from '@angular/material/dialog';
 import { JoinLobbyComponent } from '../join-lobby/join-lobby.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-lobbies-list',
@@ -19,6 +20,8 @@ export class LobbiesListComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private redirectionService: RedirectionService,
+    private api: ApiService,
+    private toaster: ToastrService,
     public dialog: MatDialog,
   ) { }
 
@@ -39,6 +42,17 @@ export class LobbiesListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('Dialog closed');
     });
+  }
+
+  onJoinClick(lobbyId: number): void {
+    this.api.joinLobby(lobbyId).subscribe(
+        id => {
+          this.redirectionService.redirectToSingleLobby(id);
+        },
+        error => {
+          this.toaster.error(error);
+        },
+    );
   }
 
 }

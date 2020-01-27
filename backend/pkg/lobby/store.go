@@ -58,6 +58,7 @@ func (s *lobbyStore) List(ctx context.Context) ([]*core.Lobby, error) {
 func (s *lobbyStore) Create(
 	ctx context.Context,
 	restaurantID int,
+	userID int,
 	expires *time.Time,
 	address string,
 ) (*core.Lobby, error) {
@@ -74,6 +75,11 @@ func (s *lobbyStore) Create(
 	if err != nil {
 		return nil, err
 	}
+
+	_, err = s.db.ExecContext(ctx, `INSERT INTO 
+    	lobbys_users (lobby_id, client_id, is_owner) VALUES ($1, $2, $3)`,
+		lobbyID, userID, true,
+	)
 
 	return &core.Lobby{
 		ID:		lobbyID,
@@ -125,8 +131,13 @@ func (s *lobbyStore) Edit(
 	}, nil
 }
 
-func (s *lobbyStore) Join(ctx context.Context) error {
-	return nil
+func (s *lobbyStore) Join(ctx context.Context, lobbyID int, userID int) error {
+	_, err := s.db.ExecContext(ctx, `INSERT INTO 
+    	lobbys_users (lobby_id, client_id, is_owner) VALUES ($1, $2, $3)`,
+    	lobbyID, userID, false,
+	)
+
+	return err
 }
 
 func (s *lobbyStore) Get(ctx context.Context, lobbyID int) (*core.Lobby, error) {

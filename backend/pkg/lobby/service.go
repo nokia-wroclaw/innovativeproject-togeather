@@ -24,21 +24,11 @@ func (s *service) List(ctx context.Context) ([]*core.Lobby, error) {
 func (s *service) Create(
 	ctx context.Context,
 	restaurantID int,
-	ownerName string,
+	userID int,
 	expires *time.Time,
 	address string,
-) (*core.Lobby, int, error) {
-	l, err := s.lobbyStore.Create(ctx, restaurantID, expires, address)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	u, err := s.userService.Create(ctx, ownerName)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	return l, u.ID, nil
+) (*core.Lobby, error) {
+	return s.lobbyStore.Create(ctx, restaurantID, userID, expires, address)
 }
 
 func (s *service) Edit(
@@ -52,9 +42,13 @@ func (s *service) Edit(
 	return s.lobbyStore.Edit(ctx, lobbyID, restaurantID, ownerID, expires, address)
 }
 
-func (s *service) Join(ctx context.Context, lobbyID int, userName string) error {
-	_, err := s.userService.Create(ctx, userName)
-	return err
+func (s *service) Join(ctx context.Context, lobbyID int, userID int) (*core.Lobby, error) {
+	err := s.lobbyStore.Join(ctx, lobbyID, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return s.lobbyStore.Get(ctx, lobbyID)
 }
 
 func (s *service) Get(ctx context.Context, lobbyID int) (*core.Lobby, error) {

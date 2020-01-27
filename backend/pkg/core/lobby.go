@@ -33,10 +33,10 @@ LobbyService interface {
 		Create(
 			ctx context.Context,
 			restaurantID int,
-			ownerName string,
+			ownerID int,
 			expires *time.Time,
 			address string,
-		) (*Lobby, int, error)
+		) (*Lobby, error)
 
 		Edit(
 			ctx context.Context,
@@ -47,7 +47,7 @@ LobbyService interface {
 			address string,
 		) (*Lobby, error)
 
-		Join(ctx context.Context, lobbyID int, userName string) error
+		Join(ctx context.Context, lobbyID int, userID int) (*Lobby, error)
 
 		Get(ctx context.Context, lobbyID int) (*Lobby, error)
 
@@ -68,6 +68,7 @@ LobbyService interface {
 		Create(
 			ctx context.Context,
 			restaurantID int,
+			ownerID int,
 			expires *time.Time,
 			address string,
 		) (*Lobby, error)
@@ -81,7 +82,7 @@ LobbyService interface {
 			address string,
 		) (*Lobby, error)
 
-		Join(ctx context.Context) error
+		Join(ctx context.Context, lobbyID int, userID int) error
 
 		Get(ctx context.Context, lobbyID int)(*Lobby, error)
 

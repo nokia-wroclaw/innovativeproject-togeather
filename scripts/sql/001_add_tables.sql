@@ -36,6 +36,17 @@ CREATE TABLE IF NOT EXISTS clients
 );
 
 
+CREATE TABLE IF NOT EXISTS lobbys_users
+(
+--     id SERIAL PRIMARY KEY,
+    lobby_id INT NOT NULL,
+    client_id INT NOT NULL,
+    is_owner BOOL NOT NULL DEFAULT FALSE,
+
+    PRIMARY KEY (client_id, lobby_id)
+);
+
+
 CREATE TABLE IF NOT EXISTS orders
 (
     id SERIAL PRIMARY KEY,
