@@ -226,3 +226,28 @@ func (h *lobbyHandler) delFromCart(w http.ResponseWriter, r *http.Request) {
 
 	respondJSON(w, http.StatusOK, cart)
 }
+
+func (h *lobbyHandler) getCart(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	user := ctx.Value(UserKey).(*core.User)
+	if user == nil {
+		respondError(w, http.StatusBadRequest,
+			errors.New("get cart: unauthorized"))
+		return
+	}
+
+	lobbyID, err := strconv.Atoi(chi.URLParam(r, "lobbyID"))
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+	
+	cart, err := h.lobbyService.CollectCartInfo(ctx, user.ID, lobbyID)
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	respondJSON(w, http.StatusOK, cart)
+}
